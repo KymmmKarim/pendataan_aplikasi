@@ -1,0 +1,12 @@
+.border-bottom-only {
+    border: none;
+    border-bottom: 2px solid #ccc;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: transparent;
+}
+.border-bottom-only:focus {
+    border-bottom: 2px solid #0d6efd;
+    outline: none;
+    box-shadow: none;
+}
