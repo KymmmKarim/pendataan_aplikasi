@@ -1,61 +1,148 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="UTF-8">
-    <title>Dashboard</title>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Bootstrap & Icons -->
+    <title>Dashboard - Itenas</title>
+
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+
+        #sidebar {
+            width: 250px;
+            transition: margin-left 0.3s ease;
+        }
+
+        #sidebar.hidden {
+            margin-left: -250px;
+        }
+
+        #main-content {
+            margin-left: 250px;
+            transition: margin-left 0.3s ease;
+        }
+
+        #sidebar.hidden + #main-content {
+            margin-left: 0;
+        }
+
+        #sidebar .nav-link {
+            color: #333;
+            border-radius: 5px;
+        }
+
+        #sidebar .nav-link.active,
+        #sidebar .nav-link:hover {
+            background-color: #01255C;
+            color: white !important;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+        }
+
+        .navbar {
+            height: 64px;
+        }
+
+        .topbar {
+            height: 64px;
+            background-color: #004aad;
+        }
+
+        .logo-section {
+            width: 250px;
+            background-color: white;
+            z-index: 1030;
+        }
+    </style>
 </head>
 <body>
+
+<!-- Navbar Atas -->
 <div class="d-flex">
-    <!-- Sidebar -->
-    <div class="bg-primary text-white p-3" style="width: 250px; min-height: 100vh;">
-        <h4 class="mb-4"><i class="fas fa-university me-2"></i>itenas</h4>
-        <ul class="nav flex-column">
-            <li class="nav-item mb-2">
-                <a class="nav-link text-white" href="#"><i class="fas fa-home me-2"></i>Dashboard</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" href="#"><i class="fas fa-globe me-2"></i>Unit 1</a>
-            </li>
-        </ul>
+    <!-- Logo Kiri -->
+    <div class="logo-section d-flex align-items-center px-3 border-end">
+        <button class="btn btn-outline-primary me-3" id="toggleSidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+        <a class="navbar-brand d-flex align-items-center m-0" href="#">
+            <img src="{{ asset('img/logo-itenas.png') }}" alt="Logo">
+        </a>
     </div>
 
-    <!-- Content -->
-    <div class="flex-grow-1">
-        <!-- Header -->
-        <nav class="navbar navbar-expand-lg bg-primary text-white px-4">
-            <div class="container-fluid">
-                <span class="navbar-brand text-white">Dashboard</span>
-                <div class="dropdown">
-                    <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        Admin 1
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a></li>
-                        <li>
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button class="dropdown-item" type="submit">Logout</button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <!-- Page Content -->
-        <div class="p-4">
-            {{ $slot }}
+    <!-- Topbar Kanan -->
+    <div class="flex-grow-1 d-flex justify-content-between align-items-center topbar px-4">
+        <span class="fw-bold text-white">Dashboard</span>
+        <div class="dropdown">
+            <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                Admin 1
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a></li>
+                <li>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button class="dropdown-item" type="submit">Logout</button>
+                    </form>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
 
-<!-- Bootstrap JS + Chart.js -->
+<!-- Body -->
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div id="sidebar" class="bg-white border-end position-fixed h-100">
+        <ul class="nav flex-column p-3 pt-4">
+            <li class="nav-item mb-1">
+                <a class="nav-link active" href="#"><i class="fas fa-home me-2"></i>Dashboard</a>
+            </li>
+            <li class="nav-item mb-1">
+                <a class="nav-link" href="#"><i class="fas fa-globe me-2"></i>Unit 1</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content" class="flex-grow-1 bg-light min-vh-100 p-4">
+        {{ $slot }}
+    </div>
+</div>
+
+<!-- JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const toggleBtn = document.getElementById('toggleSidebar');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('main-content');
+
+    toggleBtn.addEventListener('click', function () {
+        sidebar.classList.toggle('hidden');
+        if (sidebar.classList.contains('hidden')) {
+            mainContent.style.marginLeft = '0';
+        } else {
+            mainContent.style.marginLeft = '250px';
+        }
+    });
+
+    // Active Sidebar
+    const links = document.querySelectorAll('#sidebar .nav-link');
+    links.forEach(link => {
+        link.addEventListener('click', () => {
+            links.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+        });
+    });
+</script>
 @stack('scripts')
 </body>
 </html>
