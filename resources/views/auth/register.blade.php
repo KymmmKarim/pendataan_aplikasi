@@ -6,14 +6,16 @@
     <!-- Container -->
     <div class="d-flex justify-content-center align-items-center min-vh-100 flex-column">
         
-        <!-- Logo Itenas -->
-        <div class="mb-4">
-            <img src="{{ asset('img/logo-itenas.png') }}" alt="Itenas Logo" style="height: 30px;">
-        </div>
-
         <!-- Card Register -->
         <div class="card bg-light shadow rounded-4 p-4 w-100" style="max-width: 400px;">
-            <h4 class="text-center mb-4 fw-bold">Register</h4>
+            
+            <!-- Logo Itenas di dalam card -->
+            <div class="text-center mb-3 mx-auto d-block">
+                <img src="{{ asset('img/logo-itenas.png') }}" alt="Itenas Logo" style="height: 35px;">
+            </div>
+
+            <!-- Title -->
+            <h4 class="text-left mb-4 fw-bold">Register</h4>
 
             <!-- Session Status -->
             @if (session('status'))
@@ -60,8 +62,8 @@
 
                 <!-- Login Link + Register Button -->
                 <div class="d-flex justify-content-between align-items-center">
-                    <a href="{{ route('login') }}" class="text-decoration-none">Already registered?</a>
-                    <button type="submit" class="btn btn-primary px-4">Register</button>
+                    <a href="{{ route('login') }}" class="text-decoration-none" style="color: #004aad;">Already registered?</a>
+                    <button type="submit" class="btn" style="background-color: #004aad; color: white;">Register</button>
                 </div>
             </form>
         </div>
