@@ -5,15 +5,16 @@
 
     <!-- Container tanpa bg-light -->
     <div class="d-flex justify-content-center align-items-center min-vh-100 flex-column">
-        
-        <!-- Logo Itenas (bebas background) -->
-        <div class="mb-4">
-            <img src="{{ asset('img/logo-itenas.png') }}" alt="Itenas Logo" style="height: 30px;">
-        </div>
 
         <!-- Card Login dengan background putih -->
         <div class="card bg-light shadow rounded-4 p-4 w-100" style="max-width: 400px;">
-            <h4 class="text-center mb-4 fw-bold">Login</h4>
+            
+            <!-- Logo Itenas di dalam card -->
+            <div class="text-center mb-3 mx-auto d-block">
+                <img src="{{ asset('img/logo-itenas.png') }}" alt="Itenas Logo" style="height: 35px;">
+            </div>
+
+            <h4 class="text-left mb-4 fw-bold">Login</h4>
 
             <!-- Session Status -->
             @if (session('status'))
@@ -52,10 +53,10 @@
                 <!-- Forgot Password + Button -->
                 <div class="d-flex justify-content-between align-items-center">
                     @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}" class="text-decoration-none">Forgot password?</a>
+                        <a href="{{ route('password.request') }}" class="text-decoration-none" style="color: #004aad;">Forgot password?</a>
                     @endif
 
-                    <button type="submit" class="btn btn-primary px-4">Login</button>
+                    <button type="submit" class="btn" style="background-color: #004aad; color: white;">Login</button>
                 </div>
             </form>
         </div>
