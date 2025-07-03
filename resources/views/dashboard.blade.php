@@ -1,61 +1,73 @@
 <x-app-layout>
-    <!-- Stat Cards -->
-    <div class="row mb-4">
-        @php
-            $stats = [
-                ['icon' => 'fa-building', 'text' => 'Jumlah Unit', 'value' => 18, 'color' => 'primary'],
-                ['icon' => 'fa-folder', 'text' => 'Total Aplikasi', 'value' => 36, 'color' => 'warning'],
-                ['icon' => 'fa-check-circle', 'text' => 'Aplikasi Aktif', 'value' => 20, 'color' => 'success'],
-                ['icon' => 'fa-times-circle', 'text' => 'Aplikasi Nonaktif', 'value' => 20, 'color' => 'danger'],
-            ];
-        @endphp
-        @foreach ($stats as $s)
-            <div class="col-md-3 mb-3">
-                <div class="card border-0 shadow">
-                    <div class="card-body d-flex align-items-center">
-                        <div class="me-3 text-{{ $s['color'] }} fs-2"><i class="fas {{ $s['icon'] }}"></i></div>
-                        <div>
-                            <div class="fs-5 fw-bold">{{ $s['value'] }}</div>
-                            <div class="text-muted">{{ $s['text'] }}</div>
-                        </div>
+    <div class="container-fluid">
+        <div class="row g-4 mb-4 mt-2">
+            <!-- Card 1 -->
+            <div class="col-md-3">
+                <div class="bg-white rounded shadow-sm p-3 d-flex align-items-center">
+                    <div class="me-3 text-primary fs-3"><i class="fas fa-building"></i></div>
+                    <div>
+                        <div class="fw-bold fs-5">18</div>
+                        <div class="text-muted">Jumlah Unit</div>
                     </div>
                 </div>
             </div>
-        @endforeach
-    </div>
-
-    <!-- Chart & Todo -->
-    <div class="row">
-        <!-- Line Chart -->
-        <div class="col-md-8 mb-4">
-            <div class="card shadow">
-                <div class="card-header fw-bold">Jumlah Aplikasi per Unit</div>
-                <div class="card-body">
-                    <canvas id="lineChart" height="120"></canvas>
+            <!-- Card 2 -->
+            <div class="col-md-3">
+                <div class="bg-white rounded shadow-sm p-3 d-flex align-items-center">
+                    <div class="me-3 text-warning fs-3"><i class="fas fa-folder"></i></div>
+                    <div>
+                        <div class="fw-bold fs-5">36</div>
+                        <div class="text-muted">Total Aplikasi</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Card 3 -->
+            <div class="col-md-3">
+                <div class="bg-white rounded shadow-sm p-3 d-flex align-items-center">
+                    <div class="me-3 text-success fs-3"><i class="fas fa-check-circle"></i></div>
+                    <div>
+                        <div class="fw-bold fs-5">20</div>
+                        <div class="text-muted">Aplikasi Aktif</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Card 4 -->
+            <div class="col-md-3">
+                <div class="bg-white rounded shadow-sm p-3 d-flex align-items-center">
+                    <div class="me-3 text-danger fs-3"><i class="fas fa-times-circle"></i></div>
+                    <div>
+                        <div class="fw-bold fs-5">20</div>
+                        <div class="text-muted">Aplikasi Nonaktif</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Todo List -->
-        <div class="col-md-4 mb-4">
-            <div class="card shadow">
-                <div class="card-header fw-bold">Todo List</div>
-                <ul class="list-group list-group-flush">
-                    @foreach (['APK 1', 'APK 1', 'APK 1', 'APK 1', 'APK 1'] as $item)
-                        <li class="list-group-item">
-                            <input type="checkbox" class="form-check-input me-2">{{ $item }}
-                        </li>
-                    @endforeach
-                </ul>
+        <!-- Charts -->
+        <div class="row g-4">
+            <div class="col-md-8">
+                <div class="bg-white rounded shadow-sm p-3">
+                    <h5>Jumlah Aplikasi per Unit</h5>
+                    <canvas id="lineChart" height="150"></canvas>
+                </div>
             </div>
-        </div>
-
-        <!-- Bar Chart -->
-        <div class="col-md-12 mb-4">
-            <div class="card shadow">
-                <div class="card-header fw-bold">Perbandingan Item</div>
-                <div class="card-body">
-                    <canvas id="barChart" height="120"></canvas>
+            <div class="col-md-4">
+                <div class="bg-white rounded shadow-sm p-3">
+                    <h5>Todo List</h5>
+                    <ul class="list-unstyled">
+                        @foreach (['APK 1', 'APK 1', 'APK 1', 'APK 1', 'APK 1'] as $item)
+                            <li class="form-check">
+                                <input class="form-check-input" type="checkbox" id="{{ $item }}">
+                                <label class="form-check-label" for="{{ $item }}">{{ $item }}</label>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="bg-white rounded shadow-sm p-3">
+                    <h5>Perbandingan Item</h5>
+                    <canvas id="barChart" height="150"></canvas>
                 </div>
             </div>
         </div>
@@ -63,8 +75,7 @@
 
     @push('scripts')
     <script>
-        const ctxLine = document.getElementById('lineChart').getContext('2d');
-        new Chart(ctxLine, {
+        new Chart(document.getElementById('lineChart'), {
             type: 'line',
             data: {
                 labels: ['UNIT 1', 'UNIT 2', 'UNIT 3', 'UNIT 4', 'UNIT 5', 'UNIT 6', 'UNIT 7', 'UNIT 8'],
@@ -78,15 +89,14 @@
             }
         });
 
-        const ctxBar = document.getElementById('barChart').getContext('2d');
-        new Chart(ctxBar, {
+        new Chart(document.getElementById('barChart'), {
             type: 'bar',
             data: {
                 labels: ['Item 1', 'Item 2'],
                 datasets: [{
                     label: 'Seri 1',
                     data: [3, 8],
-                    backgroundColor: '#0dcaf0'
+                    backgroundColor: '#06b6d4'
                 }]
             }
         });
