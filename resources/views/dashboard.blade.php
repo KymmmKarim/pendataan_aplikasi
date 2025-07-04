@@ -89,17 +89,21 @@
             }
         });
 
-        new Chart(document.getElementById('barChart'), {
-            type: 'bar',
-            data: {
-                labels: ['Item 1', 'Item 2'],
-                datasets: [{
-                    label: 'Seri 1',
-                    data: [3, 8],
-                    backgroundColor: '#06b6d4'
-                }]
-            }
-        });
+       new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: {
+        labels: ['Item 1', 'Item 2'],
+        datasets: [{
+            label: 'Seri 1',
+            data: [3, 8],
+            backgroundColor: '#06b6d4'
+        }]
+    },
+    options: {
+        indexAxis: 'y' // Membuat chart jadi horizontal
+    }
+});
+
     </script>
     @endpush
 </x-app-layout>
