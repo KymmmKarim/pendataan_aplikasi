@@ -6,6 +6,9 @@
     <title>{{ $header ?? 'Dashboard' }} - Itenas</title>
     <link rel="icon" href="{{ asset('img/logo_itenas.png') }}" type="image/png">
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -49,7 +52,7 @@
         <button class="btn btn-outline-primary me-3" id="toggleSidebar">
             <i class="fas fa-bars"></i>
         </button>
-        <a class="navbar-brand d-flex align-items-center m-0" href="#">
+        <a class="navbar-brand d-flex align-items-center m-0" href="dashboard">
             <img src="{{ asset('img/logo-itenas.png') }}" alt="Logo" style="height: 30px;">
         </a>
     </div>
@@ -87,7 +90,7 @@
                 </a>
             </li>
             <li class="nav-item mb-1">
-                <a class="nav-link" href="#"><i class="fas fa-globe me-2"></i>Unit 1</a>
+                <a class="nav-link" href="unit"><i class="fas fa-globe me-2"></i>UPT-TIK</a>
             </li>
         </ul>
     </div>
