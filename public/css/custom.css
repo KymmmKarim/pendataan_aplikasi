@@ -1,3 +1,101 @@
+/* General Layout */
+body {
+    overflow-x: hidden;
+}
+
+.container-fluid {
+    padding: 1rem 2rem;
+}
+
+/* Cards */
+.card-custom {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.icon-container {
+    font-size: 1.75rem;
+}
+.card-value {
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+.card-label {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+/* Chart containers */
+.chart-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    padding: 1rem;
+}
+.chart-wrapper {
+    position: relative;
+    height: 150px;
+    width: 100%;
+}
+.chart-wrapper.large {
+    height: 150px;
+}
+
+/* Sidebar */
+#sidebar {
+    width: 250px;
+    transition: margin-left 0.3s ease;
+}
+#sidebar.hidden {
+    margin-left: -250px;
+}
+#main-content {
+    margin-left: 250px;
+    margin-top: 64px;
+    transition: margin-left 0.3s ease;
+}
+#sidebar.hidden + #main-content {
+    margin-left: 0;
+}
+#sidebar .nav-link {
+    color: #333;
+    border-radius: 5px;
+}
+#sidebar .nav-link.active,
+#sidebar .nav-link:hover {
+    background-color: #004aad;
+    color: white !important;
+}
+
+/* Topbar & Header */
+.navbar {
+    height: 64px;
+}
+.topbar {
+    height: 64px;
+    background-color: #004aad;
+}
+.logo-section {
+    width: 250px;
+    background-color: white;
+    z-index: 1030;
+}
+.navbar-brand img {
+    height: 25px;
+}
+.header-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1030;
+}
+
+/* Custom input border bawah saja */
 .border-bottom-only {
     border: none;
     border-bottom: 2px solid #ccc;
@@ -9,75 +107,4 @@
     border-bottom: 2px solid #004aad;
     outline: none;
     box-shadow: none;
-}
-body {
-    overflow-x: hidden;
-}
-
-/* Sidebar */
-#sidebar {
-    width: 250px;
-    transition: margin-left 0.3s ease;
-}
-
-#sidebar.hidden {
-    margin-left: -250px;
-}
-
-#main-content {
-    margin-left: 250px;
-    margin-top: 64px; /* tinggi header */
-    transition: margin-left 0.3s ease;
-}
-
-#sidebar.hidden + #main-content {
-    margin-left: 0;
-}
-
-#sidebar .nav-link {
-    color: #333;
-    border-radius: 5px;
-}
-
-#sidebar .nav-link.active,
-#sidebar .nav-link:hover {
-    background-color: #004aad;
-    color: white !important;
-}
-
-/* Header & topbar */
-.navbar {
-    height: 64px;
-}
-
-.topbar {
-    height: 64px;
-    background-color: #004aad;
-}
-
-.logo-section {
-    width: 250px;
-    background-color: white;
-    z-index: 1030;
-}
-
-.navbar-brand img {
-    height: 25px;
-}
-
-/* Tambahan: header tetap di atas */
-.header-fixed {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1030;
-}
-.card-header {
-    background-color: #f8f9fa;
-    font-weight: bold;
-}
-
-img.rounded-circle.border {
-    border: 2px solid #ccc;
 }
