@@ -73,4 +73,11 @@ body {
     width: 100%;
     z-index: 1030;
 }
+.card-header {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
 
+img.rounded-circle.border {
+    border: 2px solid #ccc;
+}
