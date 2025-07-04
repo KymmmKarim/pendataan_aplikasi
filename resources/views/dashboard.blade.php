@@ -6,7 +6,7 @@
                 <div class="bg-white rounded shadow-sm p-3 d-flex align-items-center">
                     <div class="me-3 text-primary fs-3"><i class="fas fa-building"></i></div>
                     <div>
-                        <div class="fw-bold fs-5">18</div>
+                        <div class="fw-bold fs-5">18..</div>
                         <div class="text-muted">Jumlah Unit</div>
                     </div>
                 </div>
