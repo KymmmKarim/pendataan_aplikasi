@@ -7,68 +7,19 @@
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
-    <style>
-        body {
-            overflow-x: hidden;
-        }
-
-        #sidebar {
-            width: 250px;
-            transition: margin-left 0.3s ease;
-        }
-
-        #sidebar.hidden {
-            margin-left: -250px;
-        }
-
-        #main-content {
-            margin-left: 250px;
-            transition: margin-left 0.3s ease;
-        }
-
-        #sidebar.hidden + #main-content {
-            margin-left: 0;
-        }
-
-        #sidebar .nav-link {
-            color: #333;
-            border-radius: 5px;
-        }
-
-        #sidebar .nav-link.active,
-        #sidebar .nav-link:hover {
-            background-color: #01255C;
-            color: white !important;
-        }
-
-        .navbar-brand img {
-            height: 40px;
-        }
-
-        .navbar {
-            height: 64px;
-        }
-
-        .topbar {
-            height: 64px;
-            background-color: #004aad;
-        }
-
-        .logo-section {
-            width: 250px;
-            background-color: white;
-            z-index: 1030;
-        }
-    </style>
+    <!-- Custom CSS -->
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 </head>
+
 <body>
 
-<!-- Navbar Atas -->
-<div class="d-flex">
-    <!-- Logo Kiri -->
+<!-- Header (logo + topbar) -->
+<div class="d-flex header-fixed">
+    <!-- Logo kiri -->
     <div class="logo-section d-flex align-items-center px-3 border-end">
         <button class="btn btn-outline-primary me-3" id="toggleSidebar">
             <i class="fas fa-bars"></i>
@@ -78,7 +29,7 @@
         </a>
     </div>
 
-    <!-- Topbar Kanan -->
+    <!-- Topbar kanan -->
     <div class="flex-grow-1 d-flex justify-content-between align-items-center topbar px-4">
         <span class="fw-bold text-white">Dashboard</span>
         <div class="dropdown">
@@ -101,7 +52,7 @@
 <!-- Body -->
 <div class="d-flex">
     <!-- Sidebar -->
-    <div id="sidebar" class="bg-white border-end position-fixed h-100">
+    <div id="sidebar" class="bg-white border-end position-fixed h-100" style="top: 64px;">
         <ul class="nav flex-column p-3 pt-4">
             <li class="nav-item mb-1">
                 <a class="nav-link active" href="#"><i class="fas fa-home me-2"></i>Dashboard</a>
@@ -118,8 +69,10 @@
     </div>
 </div>
 
-<!-- JS -->
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
     const toggleBtn = document.getElementById('toggleSidebar');
     const sidebar = document.getElementById('sidebar');
@@ -134,7 +87,7 @@
         }
     });
 
-    // Active Sidebar
+    // Highlight active sidebar
     const links = document.querySelectorAll('#sidebar .nav-link');
     links.forEach(link => {
         link.addEventListener('click', () => {
@@ -143,6 +96,7 @@
         });
     });
 </script>
+
 @stack('scripts')
 </body>
 </html>
