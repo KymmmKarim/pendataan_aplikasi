@@ -1,9 +1,7 @@
 <x-app-layout>
     {{-- Slot header: menggantikan "Dashboard" menjadi "Profile" --}}
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Profile') }}
-        </h2>
+     <x-slot name="header">
+        Profile
     </x-slot>
 
     <div class="container mt-4">

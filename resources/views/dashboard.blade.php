@@ -1,4 +1,7 @@
 <x-app-layout>
+     <x-slot name="header">
+        Dashboard
+    </x-slot>
     <div class="container-fluid">
         <div class="row g-4 mb-4 mt-2">
             <!-- Card Section -->

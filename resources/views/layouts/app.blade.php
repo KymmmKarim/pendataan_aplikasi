@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $headerTitle ?? 'Dashboard' }} - Itenas</title>
+    <title>{{ $header ?? 'Dashboard' }} - Itenas</title>
     <link rel="icon" href="{{ asset('img/logo_itenas.png') }}" type="image/png">
 
     <!-- Bootstrap -->
@@ -57,7 +57,7 @@
     <!-- Topbar kanan -->
     <div class="flex-grow-1 d-flex justify-content-between align-items-center topbar px-4 text-white">
         <span class="fw-bold fs-5">
-            {{ $headerTitle ?? 'Dashboard' }}
+            {{ $header ?? 'Dashboard' }}
         </span>
         <div class="dropdown">
             <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
