@@ -8,7 +8,6 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -19,27 +18,7 @@
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 
     <style>
-        .topbar {
-            background-color: #004aad;
-            height: 64px;
-        }
-        .header-fixed {
-            height: 64px;
-        }
-        #sidebar {
-            top: 64px;
-            width: 250px;
-        }
-        #sidebar.hidden {
-            display: none !important;
-        }
-        #main-content {
-            margin-left: 250px;
-        }
-        .nav-link.active {
-            background-color: #e9ecef;
-            font-weight: bold;
-        }
+        
     </style>
 </head>
 
@@ -90,7 +69,9 @@
                 </a>
             </li>
             <li class="nav-item mb-1">
-                <a class="nav-link" href="unit"><i class="fas fa-globe me-2"></i>UPT-TIK</a>
+                <a class="nav-link {{ request()->is('unit') ? 'active' : '' }}" href="{{ url('unit') }}">
+                    <i class="fas fa-globe me-2"></i>UPT-TIK
+                </a>
             </li>
         </ul>
     </div>
