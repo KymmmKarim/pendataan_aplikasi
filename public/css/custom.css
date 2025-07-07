@@ -77,7 +77,7 @@ body {
 }
 .topbar {
     height: 64px;
-    background-color: #004aad;
+    background: linear-gradient(90deg, #004aad, #0094e0);
 }
 .logo-section {
     width: 250px;
