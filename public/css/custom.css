@@ -108,3 +108,24 @@ body {
     outline: none;
     box-shadow: none;
 }
+.topbar {
+    background-color: #004aad;
+    height: 64px;
+}
+.header-fixed {
+    height: 64px;
+}
+#sidebar {
+    top: 64px;
+    width: 250px;
+}
+#sidebar.hidden {
+    display: none !important;
+}
+#main-content {
+    margin-left: 250px;
+}
+.nav-link.active {
+    background-color: #e9ecef;
+    font-weight: bold;
+}
