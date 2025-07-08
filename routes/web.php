@@ -32,4 +32,9 @@ Route::get('/unit', function () {
     return view('unit');
 });
 
+Route::get('/unit/{id}/detail', function ($id) {
+    return view('detail');
+});
+
+
 require __DIR__.'/auth.php';

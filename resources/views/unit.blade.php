@@ -35,9 +35,10 @@
                                         <a href="#" class="btn btn-sm btn-outline-primary me-1"data-bs-toggle="modal" data-bs-target="#editData" title="Edit">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
-                                        <a href="#" class="btn btn-sm btn-outline-dark me-1" title="Detail">
+                                        <a href="{{ url('unit/1/detail') }}" class="btn btn-sm btn-outline-dark me-1" title="Detail">
                                             <i class="bi bi-people"></i>
                                         </a>
+
                                         <a href="#" class="btn btn-sm btn-outline-danger" title="Hapus">
                                             <i class="bi bi-trash"></i>
                                         </a>
