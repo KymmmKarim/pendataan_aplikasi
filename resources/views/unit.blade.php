@@ -152,17 +152,6 @@
         </div>
     </div>
 
-    <!-- Custom CSS langsung di halaman -->
-    <style>
-        .custom-table td, .custom-table th {
-            border-top: none !important;
-            border-bottom: 1px solid #dee2e6;
-        }
-        .custom-table thead th {
-            border-bottom: 2px solid #dee2e6;
-        }
-    </style>
-
     <!-- Pastikan Bootstrap JS aktif -->
     @push('scripts')
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

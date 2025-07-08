@@ -129,3 +129,19 @@ body {
     background-color: #e9ecef;
     font-weight: bold;
 }
+.custom-tab {
+    color: black !important;
+    font-weight: bold;
+    border: none;
+}
+.custom-tab.active {
+    color: #004aad !important;
+    border-bottom: 2px solid #004aad !important;
+}
+.custom-table td, .custom-table th {
+    border-top: none !important;
+    border-bottom: 1px solid #dee2e6;
+}
+.custom-table thead th {
+    border-bottom: 2px solid #dee2e6;
+}

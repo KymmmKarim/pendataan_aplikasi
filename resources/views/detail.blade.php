@@ -59,18 +59,4 @@
             </a>
         </div>
     </div>
-
-    <style>
-        .custom-tab {
-        color: black !important;
-        font-weight: bold;
-        border: none;
-        }
-        .custom-tab.active {
-        color: #004aad !important;
-        border-bottom: 2px solid #004aad !important;
-        }
-    </style>
-
-
 </x-app-layout>

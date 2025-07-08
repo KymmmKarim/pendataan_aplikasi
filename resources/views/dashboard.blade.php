@@ -6,10 +6,10 @@
         <div class="row g-4 mb-4 mt-2">
             <!-- Card Section -->
             @foreach ([
-                ['icon' => 'fas fa-building', 'color' => 'text-primary', 'value' => 18, 'label' => 'Jumlah Unit'],
-                ['icon' => 'fas fa-folder', 'color' => 'text-warning', 'value' => 36, 'label' => 'Total Aplikasi'],
-                ['icon' => 'fas fa-check-circle', 'color' => 'text-success', 'value' => 20, 'label' => 'Aplikasi Aktif'],
-                ['icon' => 'fas fa-times-circle', 'color' => 'text-danger', 'value' => 20, 'label' => 'Aplikasi Nonaktif']
+                ['icon' => 'fas fa-building', 'color'       => 'text-primary', 'value'  => 18, 'label' => 'Jumlah Unit'],
+                ['icon' => 'fas fa-folder', 'color'         => 'text-warning', 'value'  => 36, 'label' => 'Total Aplikasi'],
+                ['icon' => 'fas fa-check-circle', 'color'   => 'text-success', 'value'  => 20, 'label' => 'Aplikasi Aktif'],
+                ['icon' => 'fas fa-times-circle', 'color'   => 'text-danger', 'value'   => 20, 'label' => 'Aplikasi Nonaktif']
             ] as $card)
                 <div class="col-md-3">
                     <div class="card-custom">
