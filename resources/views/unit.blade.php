@@ -32,7 +32,7 @@
                                     <td>1.0</td>
                                     <td>Unit</td>
                                     <td class="text-center">
-                                        <a href="#" class="btn btn-sm btn-outline-primary me-1" title="Edit">
+                                        <a href="#" class="btn btn-sm btn-outline-primary me-1"data-bs-toggle="modal" data-bs-target="#editData" title="Edit">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
                                         <a href="#" class="btn btn-sm btn-outline-dark me-1" title="Detail">
@@ -56,6 +56,56 @@
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content p-4">
                 <h4 class="mb-4 fw-bold">Tambah Data</h4>
+                <form method="POST" action="#" enctype="multipart/form-data">
+                    @csrf
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Nama Aplikasi</label>
+                            <input type="text" name="nama_aplikasi" class="form-control" placeholder="Tambahkan Text">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Harga</label>
+                            <input type="text" name="harga" class="form-control" placeholder="Tambahkan Text">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Versi</label>
+                            <input type="text" name="versi" class="form-control" placeholder="Tambahkan Text">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Lokasi Pembelian</label>
+                            <input type="text" name="lokasi_pembelian" class="form-control" placeholder="Tambahkan Text">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Kategori</label>
+                            <input type="text" name="kategori" class="form-control" placeholder="Tambahkan Text">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Tanggal Pembelian</label>
+                            <input type="date" name="tanggal_pembelian" class="form-control">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Deskripsi</label>
+                            <input type="text" name="deskripsi" class="form-control" placeholder="Tambahkan Text">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Bukti Pembelian</label>
+                            <input type="file" name="bukti_pembelian" class="form-control">
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edit Data -->
+    <div class="modal fade" id="editData" tabindex="-1" aria-labelledby="editDataLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content p-4">
+                <h4 class="mb-4 fw-bold">Edit Data</h4>
                 <form method="POST" action="#" enctype="multipart/form-data">
                     @csrf
                     <div class="row g-3">
