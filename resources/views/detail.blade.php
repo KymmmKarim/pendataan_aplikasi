@@ -4,7 +4,6 @@
     </x-slot>
 
     <div class="container mt-4">
-        <!-- Tabs -->
         <ul class="nav nav-tabs mb-3 border-bottom">
             <li class="nav-item">
                 <a class="nav-link active custom-tab" aria-current="page" href="#">
@@ -18,9 +17,6 @@
             </li>
         </ul>
 
-
-
-        <!-- Card detail -->
         <div class="card shadow-sm">
             <div class="card-body p-4">
                 <div class="table-responsive">
@@ -52,7 +48,6 @@
             </div>
         </div>
 
-        <!-- Tombol kembali -->
         <div class="mt-3">
             <a href="{{ url('/unit') }}" class="btn btn-light">
                 <i class="bi bi-arrow-left"></i> Kembali
