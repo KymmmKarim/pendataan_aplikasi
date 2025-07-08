@@ -1,14 +1,15 @@
 <x-app-layout>
-   <x-slot name="header">
+    <x-slot name="header">
         UPT-TIK
     </x-slot>
 
     <div class="container mt-4">
-
         <!-- Judul dan tombol tambah -->
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="fw-bold mb-0">Data Aplikasi</h4>
-            <a href="#" class="btn btn-primary">Tambah Data</a>
+            <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahData">
+                Tambah Data
+            </a>
         </div>
 
         <!-- Card berisi tabel -->
@@ -28,7 +29,7 @@
                             @for ($i = 0; $i < 7; $i++)
                                 <tr>
                                     <td><strong>Info Dasar</strong></td>
-                                    <td>Pria</td>
+                                    <td>1.0</td>
                                     <td>Unit</td>
                                     <td class="text-center">
                                         <a href="#" class="btn btn-sm btn-outline-primary me-1" title="Edit">
@@ -48,7 +49,56 @@
                 </div>
             </div>
         </div>
+    </div>
 
+    <!-- Modal Tambah Data -->
+    <div class="modal fade" id="tambahData" tabindex="-1" aria-labelledby="tambahDataLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content p-4">
+                <h4 class="mb-4 fw-bold">Tambah Data</h4>
+                <form method="POST" action="#" enctype="multipart/form-data">
+                    @csrf
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Nama Aplikasi</label>
+                            <input type="text" name="nama_aplikasi" class="form-control" placeholder="Tambahkan Text">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Harga</label>
+                            <input type="text" name="harga" class="form-control" placeholder="Tambahkan Text">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Versi</label>
+                            <input type="text" name="versi" class="form-control" placeholder="Tambahkan Text">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Lokasi Pembelian</label>
+                            <input type="text" name="lokasi_pembelian" class="form-control" placeholder="Tambahkan Text">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Kategori</label>
+                            <input type="text" name="kategori" class="form-control" placeholder="Tambahkan Text">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Tanggal Pembelian</label>
+                            <input type="date" name="tanggal_pembelian" class="form-control">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Deskripsi</label>
+                            <input type="text" name="deskripsi" class="form-control" placeholder="Tambahkan Text">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Bukti Pembelian</label>
+                            <input type="file" name="bukti_pembelian" class="form-control">
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <!-- Custom CSS langsung di halaman -->
@@ -61,4 +111,9 @@
             border-bottom: 2px solid #dee2e6;
         }
     </style>
+
+    <!-- Pastikan Bootstrap JS aktif -->
+    @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    @endpush
 </x-app-layout>
