@@ -7,7 +7,7 @@
     <div class="d-flex justify-content-center align-items-center min-vh-100 flex-column">
         
         <!-- Card Register -->
-        <div class="card bg-light shadow rounded-4 p-4 w-100" style="max-width: 400px;">
+        <div class="card bg-white shadow rounded-4 p-4 w-100" style="max-width: 460px;">
             
             <!-- Logo Itenas di dalam card -->
             <div class="text-center mb-3 mx-auto d-block">
