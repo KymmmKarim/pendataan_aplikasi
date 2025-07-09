@@ -15,14 +15,15 @@
 </head>
 <body>
 <div class="d-flex header-fixed">
-    <div class="logo-section d-flex align-items-center px-3 border-end bg-white" style="width: 250px;">
-        <button class="btn btn-outline-primary me-3" id="toggleSidebar">
-            <i class="fas fa-bars"></i>
-        </button>
-        <a class="navbar-brand d-flex align-items-center m-0" href="dashboard">
-            <img src="{{ asset('img/logo-itenas.png') }}" alt="Logo" style="height: 30px;">
-        </a>
-    </div>
+    <div class="logo-section d-flex align-items-center justify-content-between px-3 border-end bg-white" style="width: 250px; height: 70px;">
+    <button class="btn btn-outline-primary" id="toggleSidebar">
+        <i class="fas fa-bars"></i>
+    </button>
+    <a class="navbar-brand mx-auto" href="dashboard">
+        <img src="{{ asset('img/logoitenas.png') }}" alt="Logo" style="height: 45px;">
+    </a>
+</div>
+
     <div class="flex-grow-1 d-flex justify-content-between align-items-center topbar px-4 text-white">
         <span class="fw-bold fs-5">{{ $header ?? 'Dashboard' }}</span>
         <div class="dropdown">
