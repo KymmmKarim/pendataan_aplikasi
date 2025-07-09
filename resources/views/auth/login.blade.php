@@ -3,11 +3,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet"> <!-- Custom CSS -->
 
-    <!-- Container tanpa bg-light -->
-    <div class="d-flex justify-content-center align-items-center min-vh-100 flex-column">
+    <style>
+       
+    </style>
+
+    <!-- Container -->
+    <div class="d-flex justify-content-center align-items-center min-vh-100">
 
         <!-- Card Login dengan background putih -->
-        <div class="card bg-light shadow rounded-4 p-4 w-100" style="max-width: 400px;">
+        <div class="card bg-white p-4 rounded-4 shadow-sm" style="width: 100%; max-width: 460px;">
             
             <!-- Logo Itenas di dalam card -->
             <div class="text-center mb-3 mx-auto d-block">
