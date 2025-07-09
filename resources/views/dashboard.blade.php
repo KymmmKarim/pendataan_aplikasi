@@ -1,19 +1,21 @@
 <x-app-layout>
-     <x-slot name="header">
+    <x-slot name="header">
         Dashboard
     </x-slot>
+
     <div class="container-fluid">
         <div class="row g-4 mb-4 mt-2">
-            <!-- Card Section -->
             @foreach ([
-                ['icon' => 'fas fa-building', 'color'       => 'text-primary', 'value'  => 18, 'label' => 'Jumlah Unit'],
-                ['icon' => 'fas fa-folder', 'color'         => 'text-warning', 'value'  => 36, 'label' => 'Total Aplikasi'],
-                ['icon' => 'fas fa-check-circle', 'color'   => 'text-success', 'value'  => 20, 'label' => 'Aplikasi Aktif'],
-                ['icon' => 'fas fa-times-circle', 'color'   => 'text-danger', 'value'   => 20, 'label' => 'Aplikasi Nonaktif']
+                ['icon' => 'fas fa-building',       'color' => 'text-primary', 'value' => 18, 'label' => 'Jumlah Unit'],
+                ['icon' => 'fas fa-folder',         'color' => 'text-warning', 'value' => 36, 'label' => 'Total Aplikasi'],
+                ['icon' => 'fas fa-check-circle',   'color' => 'text-success', 'value' => 20, 'label' => 'Aplikasi Aktif'],
+                ['icon' => 'fas fa-times-circle',   'color' => 'text-danger',  'value' => 20, 'label' => 'Aplikasi Nonaktif']
             ] as $card)
                 <div class="col-md-3">
                     <div class="card-custom">
-                        <div class="icon-container {{ $card['color'] }}"><i class="{{ $card['icon'] }}"></i></div>
+                        <div class="icon-container {{ $card['color'] }}">
+                            <i class="{{ $card['icon'] }}"></i>
+                        </div>
                         <div>
                             <div class="card-value">{{ $card['value'] }}</div>
                             <div class="card-label">{{ $card['label'] }}</div>
@@ -23,7 +25,6 @@
             @endforeach
         </div>
 
-        <!-- Charts -->
         <div class="row g-4">
             <div class="col-md-8">
                 <div class="chart-card">
@@ -33,6 +34,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-md-4">
                 <div class="chart-card">
                     <h5>Todo List</h5>
@@ -46,6 +48,7 @@
                     </ul>
                 </div>
             </div>
+
             <div class="col-12">
                 <div class="chart-card">
                     <h5>Perbandingan Item</h5>
