@@ -41,7 +41,7 @@ body.login-page, html.login-page {
 
 #sidebar .nav-link.active,
 #sidebar .nav-link:hover {
-    background-color: #004badcb;
+    background-color: #0064e7e5;
     color: white !important;
 }
 
@@ -68,7 +68,7 @@ body.login-page, html.login-page {
 
 .topbar {
     height: 64px;
-    background: linear-gradient(90deg, #004aad, #0094dfe7);
+    background: linear-gradient(90deg, #0048a7, #0056c7, #005eeb, #008cfff8);
 }
 
 .logo-section {
