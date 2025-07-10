@@ -27,9 +27,11 @@
     <div class="flex-grow-1 d-flex justify-content-between align-items-center topbar px-4 text-white">
         <span class="fw-bold fs-5">{{ $header ?? 'Dashboard' }}</span>
         <div class="dropdown">
-            <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            <button class="btn profile-dropdown d-flex align-items-center" type="button" data-bs-toggle="dropdown">
                 {{ Auth::user()->name ?? 'Admin' }}
+                <i class="fas fa-user-circle ms-3"></i>
             </button>
+
             <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a></li>
                 <li>
