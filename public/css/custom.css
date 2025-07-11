@@ -206,3 +206,30 @@ body.login-page, html.login-page {
     background: none;
     box-shadow: none;
 }
+body.login-page, html.login-page {
+    overflow: hidden;
+    background-color: #f3f4f6 !important;
+}
+
+@media (max-width: 576px) {
+    .login-page .card {
+        padding: 1rem !important;
+        border-radius: 10px;
+        margin: 0 1rem;
+    }
+
+    .login-page .btn-login {
+        font-size: 1rem;
+        padding: 0.4rem 1.5rem;
+        min-width: 1px;
+        
+    }
+
+    .login-page .btn {
+        width: 45%;
+    }
+
+    .login-page .form-label {
+        font-size: 0.9rem;
+    }
+}
