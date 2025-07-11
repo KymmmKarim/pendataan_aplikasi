@@ -41,7 +41,7 @@ body.login-page, html.login-page {
 
 #sidebar .nav-link.active,
 #sidebar .nav-link:hover {
-    background-color: #0064e7d5;
+    background-color: #0064e7e5;
     color: white !important;
 }
 
@@ -68,7 +68,7 @@ body.login-page, html.login-page {
 
 .topbar {
     height: 64px;
-    background: linear-gradient(90deg, #004fb6, #0056c7, #005eeb, #008cfff8);
+    background: linear-gradient(90deg, #0048a7, #0056c7, #005eeb, #008cfff8);
 }
 
 .logo-section {
@@ -205,31 +205,4 @@ body.login-page, html.login-page {
     color: #e0e0e0 !important;  /* sedikit abu saat hover */
     background: none;
     box-shadow: none;
-}
-body.login-page, html.login-page {
-    overflow: hidden;
-    background-color: #f3f4f6 !important;
-}
-
-@media (max-width: 576px) {
-    .login-page .card {
-        padding: 1rem !important;
-        border-radius: 10px;
-        margin: 0 1rem;
-    }
-
-    .login-page .btn-login {
-        font-size: 1rem;
-        padding: 0.4rem 1.5rem;
-        min-width: 1px;
-        
-    }
-
-    .login-page .btn {
-        width: 45%;
-    }
-
-    .login-page .form-label {
-        font-size: 0.9rem;
-    }
 }
