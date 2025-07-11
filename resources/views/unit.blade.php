@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        UPT-TIK
+        Application List
     </x-slot>
 
     <div class="container mt-4">
