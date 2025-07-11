@@ -55,7 +55,7 @@
             </li>
             <li class="nav-item mb-1">
                 <a class="nav-link {{ request()->is('unit') ? 'active' : '' }}" href="{{ url('unit') }}">
-                    <i class="fas fa-globe me-2"></i>UPT-TIK
+                    <i class="fas fa-globe me-2"></i>Application List
                 </a>
             </li>
         </ul>
