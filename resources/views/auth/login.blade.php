@@ -3,22 +3,19 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet"> <!-- Custom CSS -->
 
-    <style>
-       
-    </style>
+    <!-- Login Wrapper -->
+    <div class="login-wrapper d-flex justify-content-center align-items-center min-vh-100">
 
-    <!-- Container -->
-    <div class="d-flex justify-content-center align-items-center min-vh-100">
-
-        <!-- Card Login dengan background putih -->
-        <div class="card bg-white p-4 rounded-4 shadow-sm" style="width: 100%; max-width: 460px;">
+        <!-- Card Login -->
+        <div class="card bg-white p-4 rounded-4 shadow-sm w-100" style="max-width: 460px;">
             
-            <!-- Logo Itenas di dalam card -->
-            <div class="text-center mb-3 mx-auto d-block">
+            <!-- Logo -->
+            <div class="text-center mb-3">
                 <img src="{{ asset('img/logo-itenas.png') }}" alt="Itenas Logo" style="height: 35px;">
             </div>
 
-            <h4 class="text-left mb-4 fw-bold">Login</h4>
+            <!-- Judul -->
+            <h4 class="mb-4 fw-bold">Login</h4>
 
             <!-- Session Status -->
             @if (session('status'))
@@ -27,6 +24,7 @@
                 </div>
             @endif
 
+            <!-- Form Login -->
             <form method="POST" action="{{ route('login') }}">
                 @csrf
 
@@ -54,13 +52,13 @@
                     <label class="form-check-label" for="remember_me">Remember me</label>
                 </div>
 
-                <!-- Forgot Password + Button -->
+                <!-- Forgot + Login -->
                 <div class="d-flex justify-content-between align-items-center">
                     @if (Route::has('password.request'))
                         <a href="{{ route('password.request') }}" class="text-decoration-none" style="color: #004aad;">Forgot password?</a>
                     @endif
 
-                    <button type="submit" class="btn" style="background-color: #004aad; color: white;">Login</button>
+                    <button type="submit" class="btn btn-login" style="background-color: #004aad; color: white;">Login</button>
                 </div>
             </form>
         </div>
