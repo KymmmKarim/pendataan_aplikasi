@@ -65,26 +65,23 @@
                 </div>
             </div>
 
-            <!-- Konten tambahan di samping perbandingan -->
             <div class="col-md-4">
                 <div class="chart-card">
-                    <h5>Info Ringkasan</h5>
-                    <p class="mb-2">Beberapa aplikasi sedang maintenance.</p>
+                    <h5>Aplikasi Terbaru</h5>
+                    <p class="mb-2">Aplikasi yang baru saja ditambahkan.</p>
                     <ul class="list-group list-group-flush small">
                         <li class="list-group-item d-flex justify-content-between">
-                            <span>Yang aktif:</span><strong>20</strong>
+                            <span>SIPengadaan</span><span class="text-muted">01 Jul 2025</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
-                            <span>Nonaktif:</span><strong>20</strong>
+                            <span>Simpeg v2</span><span class="text-muted">29 Jun 2025</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
-                            <span>Total:</span><strong>40</strong>
+                            <span>e-Arsip</span><span class="text-muted">28 Jun 2025</span>
                         </li>
                     </ul>
                 </div>
             </div>
-        </div>
-    </div>
 
     @push('scripts')
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
