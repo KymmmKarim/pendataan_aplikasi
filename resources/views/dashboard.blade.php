@@ -4,13 +4,12 @@
     </x-slot>
 
     <div class="container-fluid">
-        <!-- Stat Cards -->
         <div class="row g-4 mb-4 mt-2">
             @foreach ([
-                ['icon' => 'fas fa-building',     'color' => 'text-primary', 'value' => 18, 'label' => 'Jumlah Unit'],
-                ['icon' => 'fas fa-folder',       'color' => 'text-warning', 'value' => 36, 'label' => 'Total Aplikasi'],
-                ['icon' => 'fas fa-check-circle', 'color' => 'text-success', 'value' => 20, 'label' => 'Aplikasi Aktif'],
-                ['icon' => 'fas fa-times-circle', 'color' => 'text-danger',  'value' => 20, 'label' => 'Aplikasi Nonaktif']
+                ['icon' => 'fas fa-building',       'color' => 'text-primary', 'value' => 18, 'label' => 'Jumlah Unit'],
+                ['icon' => 'fas fa-folder',         'color' => 'text-warning', 'value' => 36, 'label' => 'Total Aplikasi'],
+                ['icon' => 'fas fa-check-circle',   'color' => 'text-success', 'value' => 20, 'label' => 'Aplikasi Aktif'],
+                ['icon' => 'fas fa-times-circle',   'color' => 'text-danger',  'value' => 20, 'label' => 'Aplikasi Nonaktif']
             ] as $card)
                 <div class="col-md-3">
                     <div class="card-custom">
@@ -26,10 +25,9 @@
             @endforeach
         </div>
 
-        <!-- Chart & Todo -->
         <div class="row g-4">
             <div class="col-md-8">
-                <div class="chart-card h-100">
+                <div class="chart-card">
                     <h5>Jumlah Aplikasi per Unit</h5>
                     <div class="chart-wrapper">
                         <canvas id="lineChart"></canvas>
@@ -37,50 +35,26 @@
                 </div>
             </div>
 
-            <div class="col-md-4 d-flex flex-column">
-                <div class="chart-card h-100">
-                    <h5 class="mb-3">Todo List</h5>
-                    <ul class="list-unstyled" style="max-height: 150px; overflow-y: auto; padding-left: 0.5rem;">
-                        @foreach (['APK 1', 'APK 2', 'APK 3', 'APK 4', 'APK 5', 'APK 6', 'APK 7', 'APK 8'] as $item)
-                            <li class="form-check mb-1" style="font-size: 0.9rem;">
-                                <input class="form-check-input me-1" type="checkbox" id="{{ $item }}" style="transform: scale(0.9);">
-                                <label class="form-check-label" for="{{ $item }}" style="font-weight: 500;">
-                                    {{ $item }}
-                                </label>
+            <div class="col-md-4">
+                <div class="chart-card">
+                    <h5>Todo List</h5>
+                    <ul class="list-unstyled">
+                        @foreach (['APK 1', 'APK 2', 'APK 3', 'APK 4', 'APK 5'] as $item)
+                            <li class="form-check">
+                                <input class="form-check-input" type="checkbox" id="{{ $item }}">
+                                <label class="form-check-label" for="{{ $item }}">{{ $item }}</label>
                             </li>
                         @endforeach
                     </ul>
                 </div>
             </div>
-        </div>
 
-        <!-- Perbandingan + Samping -->
-        <div class="row g-4 mt-2">
-            <div class="col-md-8 d-flex flex-column">
+            <div class="col-12">
                 <div class="chart-card">
                     <h5>Perbandingan Item</h5>
                     <div class="chart-wrapper large">
                         <canvas id="barChart"></canvas>
                     </div>
-                </div>
-            </div>
-
-            <!-- Konten tambahan di samping perbandingan -->
-            <div class="col-md-4">
-                <div class="chart-card">
-                    <h5>Info Ringkasan</h5>
-                    <p class="mb-2">Beberapa aplikasi sedang maintenance.</p>
-                    <ul class="list-group list-group-flush small">
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>Yang aktif:</span><strong>20</strong>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>Nonaktif:</span><strong>20</strong>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>Total:</span><strong>40</strong>
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>
