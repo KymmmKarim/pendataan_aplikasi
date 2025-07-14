@@ -3,28 +3,26 @@
         Dashboard
     </x-slot>
 
-    <div class="container-fluid">
-        <!-- Stat Cards -->
-        <div class="row g-4 mb-4 mt-2">
-            @foreach ([
-                ['icon' => 'fas fa-building',     'color' => 'text-primary', 'value' => 18, 'label' => 'Jumlah Unit'],
-                ['icon' => 'fas fa-folder',       'color' => 'text-warning', 'value' => 36, 'label' => 'Total Aplikasi'],
-                ['icon' => 'fas fa-check-circle', 'color' => 'text-success', 'value' => 20, 'label' => 'Aplikasi Aktif'],
-                ['icon' => 'fas fa-times-circle', 'color' => 'text-danger',  'value' => 20, 'label' => 'Aplikasi Nonaktif']
-            ] as $card)
-                <div class="col-md-3">
-                    <div class="card-custom">
-                        <div class="icon-container {{ $card['color'] }}">
-                            <i class="{{ $card['icon'] }}"></i>
-                        </div>
-                        <div>
-                            <div class="card-value">{{ $card['value'] }}</div>
-                            <div class="card-label">{{ $card['label'] }}</div>
-                        </div>
-                    </div>
+    <div class="row">
+    @foreach ([
+        ['icon' => 'far fa-building',       'color' => 'icon-blue',  'value' => 18, 'label' => 'Jumlah Unit'],
+        ['icon' => 'far fa-folder',           'color' => 'icon-yellow',   'value' => 36, 'label' => 'Total Aplikasi'],
+        ['icon' => 'fas fa-check',  'color' => 'icon-green', 'value' => 20, 'label' => 'Aplikasi Aktif'],
+        ['icon' => 'fas fa-times',      'color' => 'icon-red', 'value' => 36, 'label' => 'Aplikasi Nonaktif']
+    ] as $card)
+        <div class="col-md-3 mb-3">
+            <div class="card-custom">
+                <div class="icon-box {{ $card['color'] }}">
+                    <i class="{{ $card['icon'] }}"></i>
                 </div>
-            @endforeach
+                <div>
+                    <div class="card-value">{{ $card['value'] }}</div>
+                    <div class="card-label">{{ $card['label'] }}</div>
+                </div>
+            </div>
         </div>
+    @endforeach
+</div>
 
         <!-- Chart & Todo -->
         <div class="row g-4">
