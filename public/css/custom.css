@@ -248,3 +248,41 @@ body.login-page, html.login-page {
         font-size: 0.9rem;
     }
 }
+
+.icon-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background-color: #f9f9f9;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+/* Warna Ikon dengan Border dan Background Pastel */
+.icon-blue {
+    border-color: #3b82f6;            /* biru terang */
+    color: #3b82f6;                   /* warna icon */
+    background-color: #dbeafe;        /* biru pastel */
+}
+
+
+.icon-yellow {
+    border-color: #eab308;            /* kuning */
+    color: #eab308;
+    background-color: #fef9c3;        /* kuning pastel */
+}
+
+.icon-green {
+     border-color: #22c55e;            /* hijau */
+    color: #22c55e;
+    background-color: #ddffe9;        /* hijau pastel */
+}
+
+.icon-red {
+    border-color: #ef4444;            /* merah */
+    color: #ef4444;
+    background-color: #fee2e2;        /* merah pastel */
+}
