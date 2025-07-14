@@ -4,13 +4,26 @@
     </x-slot>
 
     <div class="container mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
+        <!-- Header + Search + Tambah -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
             <h4 class="fw-bold mb-0">Data Aplikasi</h4>
-            <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahData">
-                Tambah Data
-            </a>
+            <div class="d-flex flex-wrap gap-2">
+                <form method="GET" action="{{ url()->current() }}" class="d-flex">
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control" placeholder="Cari aplikasi..." value="{{ request('search') }}">
+                        <button class="btn btn-outline-secondary" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahData">
+    Tambah Data
+</a>
+
+            </div>
         </div>
 
+        <!-- Tabel -->
         <div class="card shadow-sm">
             <div class="card-body">
                 <div class="table-responsive">
@@ -49,6 +62,7 @@
         </div>
     </div>
 
+    <!-- Modal Tambah -->
     <div class="modal fade" id="tambahData" tabindex="-1" aria-labelledby="tambahDataLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content p-4">
@@ -70,7 +84,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Lokasi Pembelian</label>
-                            <select name="status" class="form-select">
+                            <select name="lokasi_pembelian" class="form-select">
                                 <option value="">Pilih Lokasi Pembelian</option>
                                 <option value="Official">Official</option>
                                 <option value="E-Commerce">E-Commerce</option>
@@ -84,7 +98,7 @@
                             <label class="form-label">Tanggal Pembelian</label>
                             <input type="date" name="tanggal_pembelian" class="form-control">
                         </div>
-                         <div class="col-md-6">
+                        <div class="col-md-6">
                             <label class="form-label">Status</label>
                             <select name="status" class="form-select">
                                 <option value="">Pilih Status</option>
@@ -110,6 +124,7 @@
         </div>
     </div>
 
+    <!-- Modal Edit -->
     <div class="modal fade" id="editData" tabindex="-1" aria-labelledby="editDataLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content p-4">
@@ -131,7 +146,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Lokasi Pembelian</label>
-                            <select name="status" class="form-select">
+                            <select name="lokasi_pembelian" class="form-select">
                                 <option value="">Pilih Lokasi Pembelian</option>
                                 <option value="Official">Official</option>
                                 <option value="E-Commerce">E-Commerce</option>
@@ -145,7 +160,7 @@
                             <label class="form-label">Tanggal Pembelian</label>
                             <input type="date" name="tanggal_pembelian" class="form-control">
                         </div>
-                         <div class="col-md-6">
+                        <div class="col-md-6">
                             <label class="form-label">Status</label>
                             <select name="status" class="form-select">
                                 <option value="">Pilih Status</option>
@@ -170,7 +185,7 @@
             </div>
         </div>
     </div>
-    
+
     @push('scripts')
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     @endpush
