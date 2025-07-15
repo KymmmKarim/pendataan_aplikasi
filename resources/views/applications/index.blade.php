@@ -37,6 +37,9 @@
                                     <td>{{ $app->versi }}</td>
                                     <td>{{ $app->kategori }}</td>
                                     <td class="text-center">
+                                        <a href="{{ route('applications.show', $app->id) }}" class="btn btn-sm btn-outline-dark me-1" title="Lihat Detail">
+                                            <i class="bi bi-info-circle"></i>
+                                        </a>
                                         <button type="button" class="btn btn-sm btn-outline-primary me-1"
                                             data-bs-toggle="modal"
                                             data-bs-target="#modalEdit{{ $app->id }}">
