@@ -46,6 +46,11 @@ class ApplicationController extends Controller
         return redirect()->back()->with('success', 'Data berhasil ditambahkan.');
     }
 
+    public function show(Application $application)
+    {
+        return view('applications.show', compact('application'));
+    }
+
     public function update(Request $request, Application $application)
     {
         $validated = $request->validate([
