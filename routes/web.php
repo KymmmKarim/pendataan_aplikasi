@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/profile/photo/delete', [ProfileController::class, 'deletePhoto'])->name('profile.photo.delete');
+});
+
+Route::prefix('applications')->name('applications.')->group(function () {
+    Route::get('/', [ApplicationController::class, 'index'])->name('index');       // Tampilkan semua data
+    Route::post('/', [ApplicationController::class, 'store'])->name('store');       // Simpan data baru
+    Route::put('/{application}', [ApplicationController::class, 'update'])->name('update'); // Update data
+    Route::delete('/{application}', [ApplicationController::class, 'destroy'])->name('destroy'); // Hapus data
 });
 
 Route::get('/unit', function () {
