@@ -12,17 +12,16 @@ class ApplicationController extends Controller
     {
         $query = Application::query();
 
-        // Search (cari di nama, versi, atau kategori)
+        // Search (cari di nama, versi, atau masa_berlaku)
         if ($request->has('search') && $request->search !== '') {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('nama_aplikasi', 'like', '%' . $search . '%')
                   ->orWhere('versi', 'like', '%' . $search . '%')
-                  ->orWhere('kategori', 'like', '%' . $search . '%');
+                  ->orWhere('masa_berlaku', 'like', '%' . $search . '%');
             });
         }
 
-        // Pakai pagination supaya hasilnya lebih enak dilihat dan efisien
         $applications = $query->latest()->paginate(10)->withQueryString();
 
         return view('applications.index', compact('applications'));
@@ -33,7 +32,7 @@ class ApplicationController extends Controller
         $validated = $request->validate([
             'nama_aplikasi'     => 'required',
             'versi'             => 'nullable',
-            'kategori'          => 'nullable',
+            'masa_berlaku'      => 'nullable|date',
             'status'            => 'nullable|in:Aktif,Non-Aktif',
             'harga'             => 'nullable',
             'tanggal_pembelian' => 'nullable|date',
@@ -61,7 +60,7 @@ class ApplicationController extends Controller
         $validated = $request->validate([
             'nama_aplikasi'     => 'required',
             'versi'             => 'nullable',
-            'kategori'          => 'nullable',
+            'masa_berlaku'      => 'nullable|date',
             'status'            => 'nullable|in:Aktif,Non-Aktif',
             'harga'             => 'nullable',
             'tanggal_pembelian' => 'nullable|date',

@@ -30,8 +30,8 @@
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Kategori</label>
-                        <input type="text" name="kategori" value="{{ $app->kategori }}" class="form-control border-dark" placeholder="Masukkan Kategori">
+                        <label class="form-label fw-semibold">Masa Berlaku</label>
+                        <input type="date" name="masa_berlaku" value="{{ $app->masa_berlaku }}" class="form-control border-dark">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Tanggal Pembelian</label>
