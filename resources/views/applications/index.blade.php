@@ -33,7 +33,7 @@
                             <tr>
                                 <th>Nama Aplikasi</th>
                                 <th>Versi</th>
-                                <th>Kategori</th>
+                                <th>Masa Berlaku</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -42,7 +42,9 @@
                                 <tr>
                                     <td><strong>{{ $app->nama_aplikasi }}</strong></td>
                                     <td>{{ $app->versi }}</td>
-                                    <td>{{ $app->kategori }}</td>
+                                    <td>
+                                        {{ $app->masa_berlaku ? \Carbon\Carbon::parse($app->masa_berlaku)->format('d F Y') : '-' }}
+                                    </td>
                                     <td class="text-center">
                                         <a href="{{ route('applications.show', $app->id) }}" class="btn btn-sm btn-outline-dark me-1" title="Lihat Detail">
                                             <i class="bi bi-info-circle"></i>
@@ -65,7 +67,6 @@
 
                                 {{-- Modal Edit --}}
                                 @include('applications.partials.modal-edit', ['app' => $app])
-
                             @empty
                                 <tr>
                                     <td colspan="4" class="text-center">Belum ada data aplikasi.</td>
