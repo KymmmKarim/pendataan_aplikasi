@@ -9,7 +9,14 @@
 
             <div class="d-flex gap-2">
                 <form action="{{ route('applications.index') }}" method="GET">
-                    <input type="text" name="search" placeholder="Cari aplikasi..." class="form-control" value="{{ request('search') }}">
+                    <div class="input-group">
+                        <input type="text" id="search-input" name="search" placeholder="Cari aplikasi..." class="form-control" value="{{ request('search') }}">
+                        <span class="input-group-text">
+                            <button type="submit" style="border: none; background: none; padding: 0; margin: 0;">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </span>
+                    </div>
                 </form>
 
                 <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahData">
@@ -45,7 +52,6 @@
                                             data-bs-target="#modalEdit{{ $app->id }}">
                                             <i class="bi bi-pencil-square"></i>
                                         </button>
-
                                         <form action="{{ route('applications.destroy', $app->id) }}" method="POST" class="d-inline"
                                             onsubmit="return confirm('Yakin ingin menghapus?')">
                                             @csrf
@@ -68,10 +74,27 @@
                         </tbody>
                     </table>
                 </div>
+
+                {{-- Pagination --}}
+                <div class="mt-3">
+                    {{ $applications->links() }}
+                </div>
             </div>
         </div>
     </div>
 
     {{-- Modal Tambah --}}
     @include('applications.partials.modal-create')
+
+    {{-- Script agar saat input kosong langsung refresh --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('search-input');
+            input.addEventListener('input', function() {
+                if (input.value === '') {
+                    input.form.submit();
+                }
+            });
+        });
+    </script>
 </x-app-layout>

@@ -12,12 +12,18 @@ class ApplicationController extends Controller
     {
         $query = Application::query();
 
-        // Search berdasarkan nama aplikasi
+        // Search (cari di nama, versi, atau kategori)
         if ($request->has('search') && $request->search !== '') {
-            $query->where('nama_aplikasi', 'like', '%' . $request->search . '%');
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_aplikasi', 'like', '%' . $search . '%')
+                  ->orWhere('versi', 'like', '%' . $search . '%')
+                  ->orWhere('kategori', 'like', '%' . $search . '%');
+            });
         }
 
-        $applications = $query->latest()->get();
+        // Pakai pagination supaya hasilnya lebih enak dilihat dan efisien
+        $applications = $query->latest()->paginate(10)->withQueryString();
 
         return view('applications.index', compact('applications'));
     }
@@ -36,7 +42,6 @@ class ApplicationController extends Controller
             'bukti_pembelian'   => 'nullable|file|mimes:jpg,jpeg,png,pdf',
         ]);
 
-        // Simpan bukti jika ada file
         if ($request->hasFile('bukti_pembelian')) {
             $validated['bukti_pembelian'] = $request->file('bukti_pembelian')->store('bukti', 'public');
         }
@@ -65,7 +70,6 @@ class ApplicationController extends Controller
             'bukti_pembelian'   => 'nullable|file|mimes:jpg,jpeg,png,pdf',
         ]);
 
-        // Jika user upload file baru, hapus yang lama
         if ($request->hasFile('bukti_pembelian')) {
             if ($application->bukti_pembelian) {
                 Storage::disk('public')->delete($application->bukti_pembelian);
