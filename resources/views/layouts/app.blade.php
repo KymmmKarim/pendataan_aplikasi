@@ -29,7 +29,16 @@
         <div class="dropdown">
             <button class="btn profile-dropdown d-flex align-items-center" type="button" data-bs-toggle="dropdown">
                 {{ Auth::user()->name ?? 'Admin' }}
-                <i class="fas fa-user-circle ms-3"></i>
+                @if(Auth::user()->photo)
+                    <img src="{{ asset('storage/' . Auth::user()->photo) }}" 
+                        alt="Foto Profil" 
+                        class="rounded-circle object-fit-cover ms-2" 
+                        style="width:40px; height:40px;">
+
+                @else
+                    <i class="fas fa-user-circle ms-3"></i>
+                @endif
+
             </button>
 
             <ul class="dropdown-menu dropdown-menu-end">
