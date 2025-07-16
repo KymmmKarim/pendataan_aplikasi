@@ -34,7 +34,7 @@ class ProfileController extends Controller
             'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Update data dasar dari request yang tervalidasi
+        // Update data dasar dari request yang tervalidasi (nama/email)
         $user->fill($request->validated());
 
         // Reset verifikasi email jika email diubah
@@ -42,7 +42,7 @@ class ProfileController extends Controller
             $user->email_verified_at = null;
         }
 
-        // Jika pengguna mengunggah foto baru
+        // Tambahan: jika pengguna mengunggah foto baru
         if ($request->hasFile('photo')) {
             // Hapus foto lama jika ada
             if ($user->photo && Storage::disk('public')->exists($user->photo)) {
