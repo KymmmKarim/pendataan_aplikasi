@@ -5,7 +5,7 @@
 
     <div class="row">
     @foreach ([
-        ['icon' => 'far fa-building',       'color' => 'icon-blue',  'value' => 18, 'label' => 'Total Biaya Aplikasi'],
+        ['icon' => 'far fa-building',       'color' => 'icon-blue',  'value' => 10, 'label' => 'Total Biaya Aplikasi'],
         ['icon' => 'far fa-folder',           'color' => 'icon-yellow',   'value' => 36, 'label' => 'Total Aplikasi'],
         ['icon' => 'fas fa-check',  'color' => 'icon-green', 'value' => 20, 'label' => 'Aplikasi Aktif'],
         ['icon' => 'fas fa-times',      'color' => 'icon-red', 'value' => 36, 'label' => 'Aplikasi Nonaktif']
