@@ -5,7 +5,7 @@
 
     <div class="row">
     @foreach ([
-        ['icon' => 'far fa-building',       'color' => 'icon-blue',  'value' => 18, 'label' => 'Jumlah Unit'],
+        ['icon' => 'far fa-building',       'color' => 'icon-blue',  'value' => 18, 'label' => 'Total Biaya Aplikasi'],
         ['icon' => 'far fa-folder',           'color' => 'icon-yellow',   'value' => 36, 'label' => 'Total Aplikasi'],
         ['icon' => 'fas fa-check',  'color' => 'icon-green', 'value' => 20, 'label' => 'Aplikasi Aktif'],
         ['icon' => 'fas fa-times',      'color' => 'icon-red', 'value' => 36, 'label' => 'Aplikasi Nonaktif']
@@ -36,20 +36,69 @@
             </div>
 
             <div class="col-md-4 d-flex flex-column">
-                <div class="chart-card h-100">
-                    <h5 class="mb-3">Todo List</h5>
-                    <ul class="list-unstyled" style="max-height: 150px; overflow-y: auto; padding-left: 0.5rem;">
-                        @foreach (['APK 1', 'APK 2', 'APK 3', 'APK 4', 'APK 5', 'APK 6', 'APK 7', 'APK 8'] as $item)
-                            <li class="form-check mb-1" style="font-size: 0.9rem;">
-                                <input class="form-check-input me-1" type="checkbox" id="{{ $item }}" style="transform: scale(0.9);">
-                                <label class="form-check-label" for="{{ $item }}" style="font-weight: 500;">
-                                    {{ $item }}
-                                </label>
-                            </li>
-                        @endforeach
-                    </ul>
+    <div class="chart-card h-100">
+        <h5 class="mb-3">Aplikasi Hampir Expired</h5>
+        <ul class="list-unstyled" style="max-height: 200px; overflow-y: auto; padding-left: 0.5rem;">
+            <li class="py-2 border-bottom" style="font-size: 0.9rem;">
+                <div class="row">
+                    <div class="col-4 text-start">SIPengadaan</div>
+                    <div class="col-4 text-center">20 Jul 2025</div>
+                    <div class="col-4 text-end">4 hari lagi</div>
                 </div>
-            </div>
+            </li>
+            <li class="py-2 border-bottom" style="font-size: 0.9rem;">
+                <div class="row">
+                    <div class="col-4 text-start">e-Arsip</div>
+                    <div class="col-4 text-center">30 Jul 2025</div>
+                    <div class="col-4 text-end">14 hari lagi</div>
+                </div>
+            </li>
+            <li class="py-2 border-bottom" style="font-size: 0.9rem;">
+                <div class="row">
+                    <div class="col-4 text-start">Simpeg</div>
+                    <div class="col-4 text-center">10 Jul 2025</div>
+                    <div class="col-4 text-end">Expired</div>
+                </div>
+            </li>
+            <li class="py-2 border-bottom" style="font-size: 0.9rem;">
+                <div class="row">
+                    <div class="col-4 text-start">Simpeg</div>
+                    <div class="col-4 text-center">10 Jul 2025</div>
+                    <div class="col-4 text-end">Expired</div>
+                </div>
+            </li>
+            <li class="py-2 border-bottom" style="font-size: 0.9rem;">
+                <div class="row">
+                    <div class="col-4 text-start">Simpeg</div>
+                    <div class="col-4 text-center">10 Jul 2025</div>
+                    <div class="col-4 text-end">Expired</div>
+                </div>
+            </li>
+            <li class="py-2 border-bottom" style="font-size: 0.9rem;">
+                <div class="row">
+                    <div class="col-4 text-start">Simpeg</div>
+                    <div class="col-4 text-center">10 Jul 2025</div>
+                    <div class="col-4 text-end">Expired</div>
+                </div>
+            </li>
+            <li class="py-2 border-bottom" style="font-size: 0.9rem;">
+                <div class="row">
+                    <div class="col-4 text-start">Simpeg</div>
+                    <div class="col-4 text-center">10 Jul 2025</div>
+                    <div class="col-4 text-end">Expired</div>
+                </div>
+            </li>
+            <li class="py-2 border-bottom" style="font-size: 0.9rem;">
+                <div class="row">
+                    <div class="col-4 text-start">Simpeg</div>
+                    <div class="col-4 text-center">10 Jul 2025</div>
+                    <div class="col-4 text-end">Expired</div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
         </div>
 
         <!-- Perbandingan + Samping -->

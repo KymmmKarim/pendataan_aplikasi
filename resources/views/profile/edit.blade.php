@@ -67,30 +67,62 @@
         </form>
 
         <!-- Informasi Profil -->
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <span><strong>Informasi Profil</strong></span>
-                <a href="{{ route('profile.edit') }}" class="text-primary">Edit Informasi Profil</a>
-            </div>
-            <div class="card-body">
-                <div class="mb-2">
-                    <strong>Nama lengkap:</strong>
-                    <p>{{ Auth::user()->name }}</p>
-                </div>
-                <div class="mb-2">
-                    <strong>Email:</strong>
-                    <p>{{ Auth::user()->email }}</p>
-                </div>
-                <div class="mb-2">
-                    <strong>Role:</strong>
-                    <p>{{ Auth::user()->getRoleNames()->first() ?? '-' }}</p>
-                </div>
-            </div>
-        </div>
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span><strong>Informasi Profil</strong></span>
+        <a href="#" class="text-primary" id="edit-profile-info">Edit Informasi Profil</a>
     </div>
+    <div class="card-body">
+        <form method="POST" action="{{ route('profile.update') }}">
+            @csrf
+            @method('PATCH')
+
+            <div class="mb-2">
+                <strong>Nama lengkap:</strong>
+                <p>{{ Auth::user()->name }}</p>
+            </div>
+
+            <div class="mb-2">
+                <strong>Email:</strong>
+                <p id="email-display">{{ Auth::user()->email }}</p>
+
+                <input type="email" name="email" id="email-input" class="form-control form-control-sm w-50 d-none"
+                       value="{{ old('email', Auth::user()->email) }}">
+                @error('email')
+                <div class="text-danger small">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-2">
+                <strong>Role:</strong>
+                <p>{{ Auth::user()->getRoleNames()->first() ?? '-' }}</p>
+            </div>
+
+            <div id="save-profile-info" class="mt-2 d-none">
+                <button type="submit" class="btn btn-sm btn-success">Simpan Perubahan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 
     @push('scripts')
         <script>
+document.getElementById('edit-profile-info').addEventListener('click', function (e) {
+        e.preventDefault();
+
+        const emailDisplay = document.getElementById('email-display');
+        const emailInput = document.getElementById('email-input');
+        const saveButton = document.getElementById('save-profile-info');
+
+        if (emailDisplay && emailInput && saveButton) {
+            emailDisplay.classList.add('d-none');
+            emailInput.classList.remove('d-none');
+            saveButton.classList.remove('d-none');
+            this.classList.add('d-none'); // sembunyikan tombol edit
+        }
+    });
+
             function triggerFileInput() {
                 document.getElementById('photo').click();
             }
