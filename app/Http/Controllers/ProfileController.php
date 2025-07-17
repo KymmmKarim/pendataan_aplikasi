@@ -6,8 +6,10 @@ use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -29,34 +31,43 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        // Validasi tambahan untuk file foto
         $request->validate([
             'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Update data dasar dari request yang tervalidasi (nama/email)
-        $user->fill($request->validated());
+        try {
+            DB::beginTransaction();
 
-        // Reset verifikasi email jika email diubah
-        if ($user->isDirty('email')) {
-            $user->email_verified_at = null;
-        }
+            // Update field dasar (nama, email, dll)
+            $user->fill($request->validated());
 
-        // Tambahan: jika pengguna mengunggah foto baru
-        if ($request->hasFile('photo')) {
-            // Hapus foto lama jika ada
-            if ($user->photo && Storage::disk('public')->exists($user->photo)) {
-                Storage::disk('public')->delete($user->photo);
+            if ($user->isDirty('email')) {
+                $user->email_verified_at = null;
             }
 
-            // Simpan foto baru
-            $path = $request->file('photo')->store('photos', 'public');
-            $user->photo = $path;
+            // Jika ada upload foto
+            if ($request->hasFile('photo')) {
+                // Hapus foto lama jika ada
+                if ($user->photo && Storage::disk('public')->exists($user->photo)) {
+                    Storage::disk('public')->delete($user->photo);
+                }
+
+                // Simpan foto baru
+                $path = $request->file('photo')->store('photos', 'public');
+                $user->photo = $path;
+            }
+
+            $user->save();
+            DB::commit();
+
+            return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Gagal memperbarui profil: ' . $e->getMessage());
+
+            return Redirect::route('profile.edit')
+                ->with('error', 'Terjadi kesalahan saat memperbarui profil. Silakan coba lagi.');
         }
-
-        $user->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
     /**
@@ -66,13 +77,24 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        if ($user->photo && Storage::disk('public')->exists($user->photo)) {
-            Storage::disk('public')->delete($user->photo);
-            $user->photo = null;
-            $user->save();
-        }
+        try {
+            DB::beginTransaction();
 
-        return Redirect::route('profile.edit')->with('status', 'photo-deleted');
+            if ($user->photo && Storage::disk('public')->exists($user->photo)) {
+                Storage::disk('public')->delete($user->photo);
+                $user->photo = null;
+                $user->save();
+            }
+
+            DB::commit();
+            return Redirect::route('profile.edit')->with('status', 'photo-deleted');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Gagal menghapus foto: ' . $e->getMessage());
+
+            return Redirect::route('profile.edit')
+                ->with('error', 'Terjadi kesalahan saat menghapus foto. Silakan coba lagi.');
+        }
     }
 
     /**
@@ -84,15 +106,27 @@ class ProfileController extends Controller
             'password' => ['required', 'current-password'],
         ]);
 
-        $user = $request->user();
+        try {
+            $user = $request->user();
 
-        Auth::logout();
+            Auth::logout();
 
-        $user->delete();
+            // Hapus foto jika ada
+            if ($user->photo && Storage::disk('public')->exists($user->photo)) {
+                Storage::disk('public')->delete($user->photo);
+            }
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+            $user->delete();
 
-        return Redirect::to('/');
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return Redirect::to('/');
+        } catch (\Exception $e) {
+            Log::error('Gagal menghapus akun: ' . $e->getMessage());
+
+            return Redirect::route('profile.edit')
+                ->with('error', 'Terjadi kesalahan saat menghapus akun. Silakan coba lagi.');
+        }
     }
 }
