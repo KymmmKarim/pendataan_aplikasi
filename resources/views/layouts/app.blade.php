@@ -10,19 +10,17 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
-
-    <style></style>
 </head>
 <body>
 <div class="d-flex header-fixed">
     <div class="logo-section d-flex align-items-center justify-content-between px-3 border-end bg-white" style="width: 250px; height: 70px;">
-    <button class="btn btn-outline-primary" id="toggleSidebar">
-        <i class="fas fa-bars"></i>
-    </button>
-    <a class="navbar-brand mx-auto" href="dashboard">
-        <img src="{{ asset('img/logoitenas.png') }}" alt="Logo" style="height: 45px;">
-    </a>
-</div>
+        <button class="btn btn-outline-primary" id="toggleSidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+        <a class="navbar-brand mx-auto" href="dashboard">
+            <img src="{{ asset('img/logoitenas.png') }}" alt="Logo" style="height: 45px;">
+        </a>
+    </div>
 
     <div class="flex-grow-1 d-flex justify-content-between align-items-center topbar px-4 text-white">
         <span class="fw-bold fs-5">{{ $header ?? 'Dashboard' }}</span>
@@ -34,11 +32,9 @@
                         alt="Foto Profil" 
                         class="rounded-circle object-fit-cover ms-2" 
                         style="width:40px; height:40px;">
-
                 @else
                     <i class="fas fa-user-circle ms-3"></i>
                 @endif
-
             </button>
 
             <ul class="dropdown-menu dropdown-menu-end">
@@ -55,7 +51,7 @@
 </div>
 
 <div class="d-flex">
-    <div id="sidebar" class="bg-white border-end position-fixed h-100">
+    <div id="sidebar" class="bg-white border-end position-fixed h-100" style="width: 250px;">
         <ul class="nav flex-column p-3 pt-4">
             <li class="nav-item mb-1">
                 <a class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
@@ -67,9 +63,42 @@
                     <i class="fas fa-globe me-2"></i>Application List
                 </a>
             </li>
+
+            <!-- Manajemen Pengguna Dropdown -->
+            <li class="nav-item mb-1">
+    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#userManagementMenu" role="button" aria-expanded="false" aria-controls="userManagementMenu">
+        <div class="d-flex align-items-center">
+            <div class="me-3 d-flex align-items-center justify-content-center" style="width: 30px; height: 40px;">
+                <i class="fas fa-users fa-lg"></i>
+            </div>
+            <div class="d-flex flex-column lh-sm">
+                <span class="fw-semibold">Manajemen</span>
+                <span class="fw-semibold">Pengguna</span>
+            </div>
+        </div>
+        <i class="fas fa-chevron-down small ms-2"></i>
+    </a>
+    <div class="collapse ps-4 {{ request()->is('roles*') || request()->is('users*') ? 'show' : '' }}" id="userManagementMenu">
+        <ul class="nav flex-column mt-2">
+            <li class="nav-item mb-2">
+                <a class="nav-link d-flex align-items-center {{ request()->is('roles') ? 'active-custom' : '' }}" href="{{ url('roles') }}">
+                    <i class="fas fa-user-shield me-2"></i>Hak Akses
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+                <a class="nav-link d-flex align-items-center {{ request()->is('users') ? 'active-custom' : '' }}" href="{{ url('users') }}">
+                    <i class="fas fa-user me-2"></i>Pengguna
+                </a>
+            </li>
         </ul>
     </div>
-    <div id="main-content" class="flex-grow-1 bg-light min-vh-100 p-4">
+</li>
+
+
+
+    </div>
+
+    <div id="main-content" class="flex-grow-1 bg-light min-vh-100 p-4" style="margin-left: 250px;">
         {{ $slot }}
     </div>
 </div>
