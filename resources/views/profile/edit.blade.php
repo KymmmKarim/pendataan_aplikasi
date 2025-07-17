@@ -83,7 +83,7 @@
                 </div>
                 <div class="mb-2">
                     <strong>Role:</strong>
-                    {{-- Tambahkan role jika tersedia --}}
+                    <p>{{ Auth::user()->getRoleNames()->first() ?? '-' }}</p>
                 </div>
             </div>
         </div>
