@@ -10,12 +10,12 @@
                     <i class="fas fa-user-shield me-2"></i>Daftar Role
                 </h5>
                 <a href="role/create" class="btn btn-sm btn-primary">
-                    <i></i> Tambah Role
+                    <i></i> Tambah Data
                 </a>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-hover align-middle" id="rolesTable">
+                    <table class="table table-bordered table-hover align-middle w-100" id="rolesTable">
                         <thead class="table-light text-center text-dark">
                             <tr>
                                 <th>NO</th>
@@ -27,12 +27,13 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @for ($i = 1; $i <= 20; $i++) <!-- contoh isi banyak -->
                             <tr>
-                                <td class="text-center">1</td>
-                                <td><span class="fw-semibold">Admin</span></td>
+                                <td class="text-center">{{ $i }}</td>
+                                <td><span class="fw-semibold">Role {{ $i }}</span></td>
                                 <td><span class="text-dark">web</span></td>
-                                <td><span class="text-muted small">2025-07-10</span></td>
-                                <td><span class="text-muted small">2025-07-15</span></td>
+                                <td><span class="text-muted small">2025-07-{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</span></td>
+                                <td><span class="text-muted small">2025-07-18</span></td>
                                 <td class="text-center">
                                     <a href="role/edit" class="btn btn-sm btn-outline-primary me-1" title="Edit">
                                         <i class="fas fa-edit"></i>
@@ -42,22 +43,7 @@
                                     </button>
                                 </td>
                             </tr>
-                            <tr>
-                                <td class="text-center">2</td>
-                                <td><span class="fw-semibold">Editor</span></td>
-                                <td><span class="text-dark">web</span></td>
-                                <td><span class="text-muted small">2025-07-01</span></td>
-                                <td><span class="text-muted small">2025-07-15</span></td>
-                                <td class="text-center">
-                                    <a href="role/edit" class="btn btn-sm btn-outline-primary me-1" title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <button class="btn btn-sm btn-outline-danger" title="Hapus">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <!-- Tambahkan baris lain di sini jika perlu -->
+                            @endfor
                         </tbody>
                     </table>
                 </div>
@@ -74,11 +60,14 @@
     <script>
         $(document).ready(function () {
             $('#rolesTable').DataTable({
+                scrollY: '300px', // << scroll hanya di isi tabel
+                scrollCollapse: true,
+                paging: false,    // nonaktifkan pagination (optional)
+                info: false,      // nonaktifkan info bawah
                 language: {
                     search: "_INPUT_",
                     searchPlaceholder: "Cari role...",
                     lengthMenu: "Tampilkan _MENU_ data",
-                    info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
                     paginate: {
                         previous: "<",
                         next: ">"
