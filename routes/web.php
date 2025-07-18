@@ -29,6 +29,16 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{application}', [ApplicationController::class, 'destroy'])->name('destroy'); // hapus
     });
 
+    Route::view('/managemen-pengguna/role', 'managemen-pengguna.role.index')->name('role.index');
+    Route::view('/managemen-pengguna/role/create', 'managemen-pengguna.role.create')->name('role.create');
+    Route::view('/managemen-pengguna/role/edit', 'managemen-pengguna.role.edit')->name('role.edit');
+
+
+    Route::view('/managemen-pengguna/user', 'managemen-pengguna.user.index')->name('user.index');
+    Route::view('/managemen-pengguna/user/create', 'managemen-pengguna.user.create')->name('user.create');
+    Route::view('/managemen-pengguna/user/edit', 'managemen-pengguna.user.edit')->name('user.edit');
+
+
     // Unit (khusus tampilan unit)
     Route::get('/unit', function () {
         return view('unit');

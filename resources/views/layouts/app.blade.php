@@ -78,15 +78,15 @@
         </div>
         <i class="fas fa-chevron-down small ms-2"></i>
     </a>
-    <div class="collapse ps-4 {{ request()->is('roles*') || request()->is('users*') ? 'show' : '' }}" id="userManagementMenu">
+    <div class="collapse ps-4 {{ request()->is('managemen-pengguna/role*') || request()->is('managemen-pengguna/user*') ? 'show' : '' }}" id="userManagementMenu">
         <ul class="nav flex-column mt-2">
             <li class="nav-item mb-2">
-                <a class="nav-link d-flex align-items-center {{ request()->is('roles') ? 'active-custom' : '' }}" href="{{ url('roles') }}">
+                <a class="nav-link d-flex align-items-center {{ request()->is('managemen-pengguna/role') ? 'active-custom' : '' }}" href="{{ url('managemen-pengguna/role') }}">
                     <i class="fas fa-user-shield me-2"></i>Hak Akses
                 </a>
             </li>
             <li class="nav-item mb-2">
-                <a class="nav-link d-flex align-items-center {{ request()->is('users') ? 'active-custom' : '' }}" href="{{ url('users') }}">
+                <a class="nav-link d-flex align-items-center {{ request()->is('managemen-pengguna/user') ? 'active-custom' : '' }}" href="{{ url('managemen-pengguna/user') }}">
                     <i class="fas fa-user me-2"></i>Pengguna
                 </a>
             </li>
