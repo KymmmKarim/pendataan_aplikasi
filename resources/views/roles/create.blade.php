@@ -58,7 +58,7 @@
 
                     <div class="mt-3">
                         <button type="submit" class="btn btn-primary">
-                            <i></i> Simpan
+                             Simpan
                         </button>
                         <a href="{{ route('roles.index') }}" class="btn btn-secondary ms-2">
                             Batal

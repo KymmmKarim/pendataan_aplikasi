@@ -10,7 +10,7 @@
                     <i class="fas fa-users me-2"></i>Daftar Pengguna
                 </h5>
                 <a href="{{ route('users.create') }}" class="btn btn-sm btn-primary">
-                    <i class="fas fa-plus"></i> Tambah Data
+                Tambah Data
                 </a>
             </div>
 
