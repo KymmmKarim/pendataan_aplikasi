@@ -53,24 +53,31 @@ class UserController extends Controller
     }
 
     public function update(Request $request, User $user)
-    {
-        $validated = $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:6',
-            'role'     => 'required|exists:roles,name',
-        ]);
+{
+    $validated = $request->validate([
+        'name'     => 'required|string|max:255',
+        'username' => 'required|string|max:255|unique:users,username,' . $user->id,
+        'unit'     => 'required|string|max:255',
+        'email'    => 'required|email|unique:users,email,' . $user->id,
+        'password' => 'nullable|string|min:6',
+        'role'     => 'required|exists:roles,name',
+    ]);
 
-        $user->update([
-            'name'     => $validated['name'],
-            'email'    => $validated['email'],
-            'password' => $validated['password'] ? Hash::make($validated['password']) : $user->password,
-        ]);
+    $user->update([
+        'name'     => $validated['name'],
+        'username' => $validated['username'],
+        'unit'     => $validated['unit'],
+        'email'    => $validated['email'],
+        'password' => $validated['password']
+            ? Hash::make($validated['password'])
+            : $user->password,
+    ]);
 
-        $user->syncRoles([$validated['role']]);
+    $user->syncRoles([$validated['role']]);
 
-        return redirect()->route('users.index')->with('success', 'User berhasil diperbarui.');
-    }
+    return redirect()->route('users.index')->with('success', 'User berhasil diperbarui.');
+}
+
 
     public function destroy(User $user)
     {

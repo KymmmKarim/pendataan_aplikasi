@@ -10,7 +10,7 @@
                     @csrf
                     @method('PUT')
 
-                    <!-- Data Diri -->
+                    <!-- SECTION 1: Data Diri -->
                     <h6 class="fw-bold mb-3">1. Data Diri</h6>
                     <div class="row mb-3">
                         <div class="col-md-6 mb-3">
@@ -18,53 +18,54 @@
                             <input type="text" name="name" class="form-control" id="name"
                                 value="{{ old('name', $user->name) }}" placeholder="ex. Admin Itenas">
                         </div>
+
                         <div class="col-md-6 mb-3">
                             <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
                             <input type="email" name="email" class="form-control" id="email"
                                 value="{{ old('email', $user->email) }}" placeholder="admin@example.com">
                         </div>
+
                         <div class="col-md-6 mb-3">
                             <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
                             <input type="text" name="username" class="form-control" id="username"
                                 value="{{ old('username', $user->username) }}" placeholder="ex. adminitenas">
                         </div>
+
                         <div class="col-md-6 mb-3">
-                            <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
-                            <input type="password" name="password" class="form-control" id="password" placeholder="****">
+                            <label for="unit" class="form-label">Unit <span class="text-danger">*</span></label>
+                            <input type="text" name="unit" class="form-control" id="unit"
+                                value="{{ old('unit', $user->unit) }}" placeholder="ex. Sistem Informasi">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label">Password (Kosongkan jika tidak diubah)</label>
+                            <input type="password" name="password" class="form-control" id="password"
+                                placeholder="*******">
                         </div>
                     </div>
 
                     <hr>
 
-                    <!-- Hak Akses -->
+                    <!-- SECTION 2: Hak Akses -->
                     <h6 class="fw-bold mb-3">2. Hak Akses (Role)</h6>
-                    <div class="row">
-                        <div class="col-md-6">
-                            @foreach (['admin', 'prodi', 'kaprodi', 'bka', 'w_rektor'] as $role)
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="radio" name="role" id="role_{{ $role }}"
-                                        value="{{ $role }}"
-                                        {{ $user->roles->first()?->name === $role ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="role_{{ $role }}">
-                                        {{ ucfirst(str_replace('_', ' ', $role)) }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                        <div class="col-md-6">
-                            @foreach (['pembimbing', 'penguji', 'mahasiswa'] as $role)
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="radio" name="role" id="role_{{ $role }}"
-                                        value="{{ $role }}"
-                                        {{ $user->roles->first()?->name === $role ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="role_{{ $role }}">
-                                        {{ ucfirst(str_replace('_', ' ', $role)) }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
+<div class="row">
+    @foreach ($roles->chunk(ceil($roles->count() / 2)) as $chunk)
+        <div class="col-md-6">
+            @foreach ($chunk as $role)
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="role" id="role_{{ $role->name }}"
+                        value="{{ $role->name }}"
+                        {{ $user->roles->first()?->name === $role->name ? 'checked' : '' }}>
+                    <label class="form-check-label" for="role_{{ $role->name }}">
+                        {{ ucfirst(str_replace('_', ' ', $role->name)) }}
+                    </label>
+                </div>
+            @endforeach
+        </div>
+    @endforeach
+</div>
 
+                    <!-- Submit -->
                     <div class="mt-4">
                         <button class="btn btn-primary">
                             <i class="fas fa-save"></i> Simpan
