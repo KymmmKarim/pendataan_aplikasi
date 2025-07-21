@@ -101,6 +101,9 @@
         </div>
     </div>
 
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- Script Tambah Permission via AJAX -->
     <script>
         document.getElementById('addPermissionForm').addEventListener('submit', function(e) {
@@ -163,26 +166,39 @@
         });
     </script>
 
-    <!-- Script Hapus Permission -->
+    <!-- Script Hapus Permission dengan SweetAlert -->
     <script>
         document.addEventListener('click', function (e) {
             if (e.target.classList.contains('btn-delete-permission')) {
                 const permissionId = e.target.dataset.id;
 
-                if (confirm('Yakin ingin menghapus permission ini?')) {
-                    fetch(`/permissions/${permissionId}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Accept': 'application/json'
-                        }
-                    })
-                    .then(response => {
-                        if (!response.ok) throw new Error('Gagal menghapus permission');
-                        document.getElementById(`perm_wrapper_${permissionId}`).remove();
-                    })
-                    .catch(error => alert(error.message));
-                }
+                Swal.fire({
+                    title: 'Yakin ingin menghapus?',
+                    text: 'Permission akan dihapus secara permanen.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, hapus',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(`/permissions/${permissionId}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Accept': 'application/json'
+                            }
+                        })
+                        .then(response => {
+                            if (!response.ok) throw new Error('Gagal menghapus permission');
+                            document.getElementById(`perm_wrapper_${permissionId}`).remove();
+                        })
+                        .catch(error => {
+                            Swal.fire('Gagal!', error.message, 'error');
+                        });
+                    }
+                });
             }
         });
     </script>
