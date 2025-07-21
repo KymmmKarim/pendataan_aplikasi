@@ -54,11 +54,10 @@
                                             data-bs-target="#modalEdit{{ $app->id }}">
                                             <i class="bi bi-pencil-square"></i>
                                         </button>
-                                        <form action="{{ route('applications.destroy', $app->id) }}" method="POST" class="d-inline"
-                                            onsubmit="return confirm('Yakin ingin menghapus?')">
+                                        <form id="delete-app-{{ $app->id }}" action="{{ route('applications.destroy', $app->id) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="btn btn-sm btn-outline-danger">
+                                            <button type="button" class="btn btn-sm btn-outline-danger btn-delete-app" data-id="{{ $app->id }}">
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         </form>
@@ -76,7 +75,7 @@
                     </table>
                 </div>
 
-                {{-- Pagination (optional, bisa dinonaktifkan kalau datanya cukup sedikit) --}}
+                {{-- Pagination --}}
                 <div class="mt-3">
                     {{ $applications->links() }}
                 </div>
@@ -87,7 +86,9 @@
     {{-- Modal Tambah --}}
     @include('applications.partials.modal-create')
 
-    {{-- Script agar pencarian langsung filter baris tanpa reload --}}
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const searchInput = document.getElementById('search-input');
@@ -95,16 +96,34 @@
 
             searchInput.addEventListener('input', function () {
                 const keyword = this.value.toLowerCase();
-
                 tableRows.forEach(row => {
                     const rowText = row.innerText.toLowerCase();
                     row.style.display = rowText.includes(keyword) ? '' : 'none';
                 });
-
-                // Jika kosong, tampilkan semua
                 if (keyword === '') {
                     tableRows.forEach(row => row.style.display = '');
                 }
+            });
+
+            // SweetAlert konfirmasi hapus aplikasi
+            document.querySelectorAll('.btn-delete-app').forEach(button => {
+                button.addEventListener('click', function () {
+                    const appId = this.dataset.id;
+                    Swal.fire({
+                        title: 'Yakin ingin menghapus?',
+                        text: "Data tidak dapat dikembalikan!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Ya, hapus',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById('delete-app-' + appId).submit();
+                        }
+                    });
+                });
             });
         });
     </script>

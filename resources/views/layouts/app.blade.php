@@ -40,9 +40,9 @@
             <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a></li>
                 <li>
-                    <form method="POST" action="{{ route('logout') }}">
+                    <form id="logout-form" method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button class="dropdown-item" type="submit">Logout</button>
+                        <button class="dropdown-item" type="button" id="btnLogout">Logout</button>
                     </form>
                 </li>
             </ul>
@@ -101,8 +101,10 @@
     </div>
 </div>
 
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     const toggleBtn = document.getElementById('toggleSidebar');
@@ -119,6 +121,29 @@
         link.addEventListener('click', () => {
             links.forEach(l => l.classList.remove('active'));
             link.classList.add('active');
+        });
+    });
+
+    // Konfirmasi logout dengan SweetAlert
+    const logoutBtn = document.getElementById('btnLogout');
+    const logoutForm = document.getElementById('logout-form');
+
+    logoutBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        Swal.fire({
+            title: 'Yakin ingin logout?',
+            text: "Kamu akan keluar dari sistem.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, logout',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                logoutForm.submit();
+            }
         });
     });
 </script>
