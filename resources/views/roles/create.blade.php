@@ -14,7 +14,7 @@
                     <div class="row mb-4">
                         <div class="col-md-6">
                             <label for="name" class="form-label">Nama Role <span class="text-danger">*</span></label>
-                            <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" placeholder="cth: admin" value="{{ old('name') }}" required>
+                            <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" placeholder="Masukkan Nama Role" value="{{ old('name') }}" required>
                             @error('name')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
