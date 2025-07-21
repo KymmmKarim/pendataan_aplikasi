@@ -41,6 +41,9 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::resource('roles', RolePermissionController::class)->middleware('auth');
+Route::post('/permissions/ajax-create', [App\Http\Controllers\RolePermissionController::class, 'ajaxStore'])->name('permissions.ajax.store');
+Route::delete('/permissions/{id}', [RolePermissionController::class, 'destroyPermission'])->name('permissions.destroy');
+
     // Unit (khusus tampilan unit)
     Route::get('/unit', function () {
         return view('unit');
