@@ -36,6 +36,22 @@
                     @enderror
                 </div>
 
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
+                    <input type="text" name="username" id="username" class="form-control border-bottom-only" required value="{{ old('username') }}">
+                    @error('username')
+                        <div class="text-danger small">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="unit" class="form-label">Unit <span class="text-danger">*</span></label>
+                    <input type="text" name="unit" id="unit" class="form-control border-bottom-only" required value="{{ old('unit') }}">
+                    @error('unit')
+                        <div class="text-danger small">{{ $message }}</div>
+                    @enderror
+                </div>
+
                 <!-- Email -->
                 <div class="mb-3">
                     <label for="email" class="form-label">Email <span class="text-danger">*</span></label>

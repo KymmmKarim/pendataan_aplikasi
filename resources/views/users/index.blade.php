@@ -9,12 +9,19 @@
                 <h5 class="mb-0 text-dark fw-semibold">
                     <i class="fas fa-users me-2"></i>Daftar Pengguna
                 </h5>
-                <a href="role/create" class="btn btn-sm btn-primary">
-                    <i></i> Tambah Data
+                <a href="{{ route('users.create') }}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-plus"></i> Tambah Data
                 </a>
             </div>
 
             <div class="card-body">
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover align-middle" id="usersTable">
                         <thead class="table-light text-center text-dark">
@@ -29,28 +36,34 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @for ($i = 1; $i <= 20; $i++)
+                            @foreach ($users as $index => $user)
                                 <tr>
-                                    <td class="text-center">{{ $i }}</td>
-                                    <td>Admin Itenas {{ $i }}</td>
-                                    <td>admin{{ $i }}@example.com</td>
-                                    <td>adminitenas{{ $i }}</td>
+                                    <td class="text-center">{{ $index + 1 }}</td>
+                                    <td>{{ $user->name }}</td>
+                                    <td>{{ $user->email }}</td>
+                                    <td>{{ $user->username ?? '-' }}</td>
                                     <td class="text-center">
-                                        <span>Admin</span>
+                                        @foreach ($user->getRoleNames() as $role)
+                                            <span>{{ $role }}</span>
+                                        @endforeach
                                     </td>
                                     <td class="text-center">
-                                        Teknik Informatika
+                                        {{ $user->unit ?? '-' }}
                                     </td>
                                     <td class="text-center">
-                                        <a href="#" class="btn btn-sm btn-outline-primary me-1" title="Edit">
+                                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-outline-primary me-1" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <button class="btn btn-sm btn-outline-danger" title="Hapus" onclick="return confirm('Yakin ingin menghapus?')">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
+                                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-outline-danger" title="Hapus">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
-                            @endfor
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -67,10 +80,11 @@
     <script>
         $(document).ready(function () {
             $('#usersTable').DataTable({
-                scrollY: '300px',
-                scrollCollapse: true,
-                paging: false,
-                info: false,
+                paging: true,
+                ordering: false,
+                responsive: true,
+                lengthMenu: [10, 25, 50, 100],
+                pageLength: 10,
                 language: {
                     search: "_INPUT_",
                     searchPlaceholder: "Cari pengguna...",

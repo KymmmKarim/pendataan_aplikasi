@@ -81,12 +81,12 @@
     <div class="collapse ps-4 {{ request()->is('managemen-pengguna/role*') || request()->is('managemen-pengguna/user*') ? 'show' : '' }}" id="userManagementMenu">
         <ul class="nav flex-column mt-2">
             <li class="nav-item mb-2">
-                <a class="nav-link d-flex align-items-center {{ request()->is('managemen-pengguna/role') ? 'active' : '' }}" href="{{ url('managemen-pengguna/role') }}">
+                <a class="nav-link d-flex align-items-center {{ request()->is('roles') ? 'active' : '' }}" href="{{ url('roles') }}">
                     <i class="fas fa-user-shield me-2"></i>Hak Akses
                 </a>
             </li>
             <li class="nav-item mb-2">
-                <a class="nav-link d-flex align-items-center {{ request()->is('managemen-pengguna/user') ? 'active' : '' }}" href="{{ url('managemen-pengguna/user') }}">
+                <a class="nav-link d-flex align-items-center {{ request()->is('users') ? 'active' : '' }}" href="{{ url('users') }}">
                     <i class="fas fa-user me-2"></i>Pengguna
                 </a>
             </li>
