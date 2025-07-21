@@ -10,10 +10,16 @@
                     <i class="fas fa-user-shield me-2"></i>Daftar Role
                 </h5>
                 <a href="{{ route('roles.create') }}" class="btn btn-sm btn-primary">
-                    <i class="fas fa-plus"></i> Tambah Data
+                    <i></i> Tambah Data
                 </a>
             </div>
             <div class="card-body">
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover align-middle w-100" id="rolesTable">
                         <thead class="table-light text-center text-dark">
