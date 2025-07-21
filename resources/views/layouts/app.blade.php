@@ -66,36 +66,34 @@
 
             <!-- Manajemen Pengguna Dropdown -->
             <li class="nav-item mb-1">
-    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#userManagementMenu" role="button" aria-expanded="false" aria-controls="userManagementMenu">
-        <div class="d-flex align-items-center">
-            <div class="me-3 d-flex align-items-center justify-content-center" style="width: 30px; height: 40px;">
-                <i class="fas fa-users fa-lg"></i>
-            </div>
-            <div class="d-flex flex-column lh-sm">
-                <span class="fw">Manajemen</span>
-                <span class="fw">Pengguna</span>
-            </div>
-        </div>
-        <i class="fas fa-chevron-down small ms-2"></i>
-    </a>
-    <div class="collapse ps-4 {{ request()->is('managemen-pengguna/role*') || request()->is('managemen-pengguna/user*') ? 'show' : '' }}" id="userManagementMenu">
-        <ul class="nav flex-column mt-2">
-            <li class="nav-item mb-2">
-                <a class="nav-link d-flex align-items-center {{ request()->is('roles') ? 'active' : '' }}" href="{{ url('roles') }}">
-                    <i class="fas fa-user-shield me-2"></i>Hak Akses
+                <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#userManagementMenu" role="button" aria-expanded="false" aria-controls="userManagementMenu">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3 d-flex align-items-center justify-content-center" style="width: 30px; height: 40px;">
+                            <i class="fas fa-users fa-lg"></i>
+                        </div>
+                        <div class="d-flex flex-column lh-sm">
+                            <span class="fw">Manajemen</span>
+                            <span class="fw">Pengguna</span>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-down small ms-2"></i>
                 </a>
-            </li>
-            <li class="nav-item mb-2">
-                <a class="nav-link d-flex align-items-center {{ request()->is('users') ? 'active' : '' }}" href="{{ url('users') }}">
-                    <i class="fas fa-user me-2"></i>Pengguna
-                </a>
+                <div class="collapse ps-4 {{ request()->is('roles*') || request()->is('users*') ? 'show' : '' }}" id="userManagementMenu">
+                    <ul class="nav flex-column mt-2">
+                        <li class="nav-item mb-2">
+                            <a class="nav-link d-flex align-items-center {{ request()->is('roles*') ? 'active' : '' }}" href="{{ url('roles') }}">
+                                <i class="fas fa-user-shield me-2"></i>Hak Akses
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link d-flex align-items-center {{ request()->is('users*') ? 'active' : '' }}" href="{{ url('users') }}">
+                                <i class="fas fa-user me-2"></i>Pengguna
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
         </ul>
-    </div>
-</li>
-
-
-
     </div>
 
     <div id="main-content" class="flex-grow-1 bg-light min-vh-100 p-4" style="margin-left: 250px;">

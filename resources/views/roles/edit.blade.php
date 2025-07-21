@@ -76,10 +76,10 @@
 
                     <div class="mt-4">
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save me-1"></i> Simpan Perubahan
+                            <i></i> Simpan Perubahan
                         </button>
                         <a href="{{ route('roles.index') }}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left me-1"></i> Kembali
+                            <i></i> Kembali
                         </a>
                     </div>
                 </form>

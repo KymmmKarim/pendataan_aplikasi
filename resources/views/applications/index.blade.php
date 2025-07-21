@@ -37,7 +37,7 @@
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="applications-table-body">
                             @forelse ($applications as $app)
                                 <tr>
                                     <td><strong>{{ $app->nama_aplikasi }}</strong></td>
@@ -76,7 +76,7 @@
                     </table>
                 </div>
 
-                {{-- Pagination --}}
+                {{-- Pagination (optional, bisa dinonaktifkan kalau datanya cukup sedikit) --}}
                 <div class="mt-3">
                     {{ $applications->links() }}
                 </div>
@@ -87,13 +87,23 @@
     {{-- Modal Tambah --}}
     @include('applications.partials.modal-create')
 
-    {{-- Script agar saat input kosong langsung refresh --}}
+    {{-- Script agar pencarian langsung filter baris tanpa reload --}}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const input = document.getElementById('search-input');
-            input.addEventListener('input', function() {
-                if (input.value === '') {
-                    input.form.submit();
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('search-input');
+            const tableRows = document.querySelectorAll('#applications-table-body tr');
+
+            searchInput.addEventListener('input', function () {
+                const keyword = this.value.toLowerCase();
+
+                tableRows.forEach(row => {
+                    const rowText = row.innerText.toLowerCase();
+                    row.style.display = rowText.includes(keyword) ? '' : 'none';
+                });
+
+                // Jika kosong, tampilkan semua
+                if (keyword === '') {
+                    tableRows.forEach(row => row.style.display = '');
                 }
             });
         });

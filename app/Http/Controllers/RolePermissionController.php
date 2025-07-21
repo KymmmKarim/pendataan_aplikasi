@@ -24,28 +24,26 @@ class RolePermissionController extends Controller
     }
 
     // Simpan role baru (dan optional permission)
-    public function store(Request $request)
+   public function store(Request $request)
     {
-        $request->validate([
-            'role_name' => 'required|unique:roles,name',
-            'role_guard' => 'required',
-            'permission_name' => 'nullable|unique:permissions,name',
-            'permission_guard' => 'required_with:permission_name'
-        ]);
+    $request->validate([
+        'name' => 'required|unique:roles,name',
+        'guard_name' => 'required',
+        'permissions' => 'nullable|array',
+        'permissions.*' => 'exists:permissions,name',
+    ]);
 
-        $role = Role::create([
-            'name' => $request->role_name,
-            'guard_name' => $request->role_guard,
-        ]);
+    $role = Role::create([
+        'name' => $request->name,
+        'guard_name' => $request->guard_name,
+    ]);
 
-        if ($request->filled('permission_name')) {
-            Permission::create([
-                'name' => $request->permission_name,
-                'guard_name' => $request->permission_guard,
-            ]);
-        }
+    // Assign permission jika dipilih
+    if ($request->has('permissions')) {
+        $role->syncPermissions($request->permissions);
+    }
 
-        return redirect()->route('roles.index')->with('success', 'Role dan Permission berhasil disimpan');
+    return redirect()->route('roles.index')->with('success', 'Role dan Permission berhasil disimpan');
     }
 
     // Form edit role
@@ -58,17 +56,27 @@ class RolePermissionController extends Controller
 
     // Update role
     public function update(Request $request, $id)
-    {
-        $role = Role::findOrFail($id);
-        $request->validate([
-            'name' => 'required|unique:roles,name,' . $id,
-            'guard_name' => 'required'
-        ]);
+{
+    $role = Role::findOrFail($id);
 
-        $role->update($request->only('name', 'guard_name'));
+    $request->validate([
+        'name' => 'required|unique:roles,name,' . $id,
+        'guard_name' => 'required',
+        'permissions' => 'nullable|array',
+        'permissions.*' => 'exists:permissions,name',
+    ]);
 
-        return redirect()->route('roles.index')->with('success', 'Role berhasil diperbarui');
-    }
+    // Update nama & guard role
+    $role->update([
+        'name' => $request->name,
+        'guard_name' => $request->guard_name,
+    ]);
+
+    // Sinkronisasi permission (replace dengan yang dicentang)
+    $role->syncPermissions($request->permissions ?? []);
+
+    return redirect()->route('roles.index')->with('success', 'Role & Permission berhasil diperbarui.');
+}
 
     // Hapus role
     public function destroy($id)
