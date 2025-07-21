@@ -9,37 +9,56 @@
                 <form action="{{ route('roles.store') }}" method="POST">
                     @csrf
 
-                    <!-- Form Role -->
-                    <h5 class="fw-bold">1. Tambah Role</h5>
+                    <!-- Role Section -->
+                    <h5 class="fw-bold">1. Data Role</h5>
                     <div class="row mb-4">
                         <div class="col-md-6">
-                            <label for="role_name" class="form-label">Nama Role <span class="text-danger">*</span></label>
-                            <input type="text" name="role_name" id="role_name" class="form-control" placeholder="cth: admin" required>
+                            <label for="name" class="form-label">Nama Role <span class="text-danger">*</span></label>
+                            <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" placeholder="cth: admin" value="{{ old('name') }}" required>
+                            @error('name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col-md-6">
-                            <label for="role_guard" class="form-label">Guard Name <span class="text-danger">*</span></label>
-                            <input type="text" name="role_guard" id="role_guard" class="form-control" value="web" required>
+                            <label for="guard_name" class="form-label">Guard Name <span class="text-danger">*</span></label>
+                            <input type="text" name="guard_name" id="guard_name" class="form-control @error('guard_name') is-invalid @enderror" value="web" required>
+                            @error('guard_name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
 
                     <hr>
 
-                    <!-- Form Permission -->
-                    <h5 class="fw-bold">2. Tambah Permission</h5>
+                    <!-- Permissions Section -->
+                    <h5 class="fw-bold">2. Hak Akses (Permissions)</h5>
                     <div class="row mb-4">
-                        <div class="col-md-6">
-                            <label for="permission_name" class="form-label">Nama Permission <span class="text-danger">*</span></label>
-                            <input type="text" name="permission_name" id="permission_name" class="form-control" placeholder="cth: lihat data" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="permission_guard" class="form-label">Guard Name <span class="text-danger">*</span></label>
-                            <input type="text" name="permission_guard" id="permission_guard" class="form-control" value="web" required>
-                        </div>
+                        @forelse ($permissions as $permission)
+                            <div class="col-md-4 mb-2">
+                                <div class="form-check">
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        name="permissions[]"
+                                        id="perm_{{ $permission->id }}"
+                                        value="{{ $permission->name }}"
+                                        {{ in_array($permission->name, old('permissions', [])) ? 'checked' : '' }}
+                                    >
+                                    <label class="form-check-label" for="perm_{{ $permission->id }}">
+                                        {{ ucfirst(str_replace('_', ' ', $permission->name)) }}
+                                    </label>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="col-12">
+                                <p class="text-muted">Belum ada permission tersedia.</p>
+                            </div>
+                        @endforelse
                     </div>
 
                     <div class="mt-3">
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Simpan
+                            <i></i> Simpan
                         </button>
                         <a href="{{ route('roles.index') }}" class="btn btn-secondary ms-2">
                             Batal
