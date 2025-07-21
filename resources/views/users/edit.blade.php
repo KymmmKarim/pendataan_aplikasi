@@ -68,8 +68,11 @@
                     <!-- Submit -->
                     <div class="mt-4">
                         <button class="btn btn-primary">
-                            <i class="fas fa-save"></i> Simpan
+                             Simpan Perubahan
                         </button>
+                        <a href="{{ route('users.index') }}" class="btn btn-secondary">
+                             Kembali
+                        </a>
                     </div>
                 </form>
             </div>

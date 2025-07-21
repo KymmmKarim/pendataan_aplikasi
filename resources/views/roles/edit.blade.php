@@ -76,10 +76,10 @@
 
                     <div class="mt-4">
                         <button type="submit" class="btn btn-primary">
-                            <i></i> Simpan Perubahan
+                             Simpan Perubahan
                         </button>
                         <a href="{{ route('roles.index') }}" class="btn btn-secondary">
-                            <i></i> Kembali
+                             Kembali
                         </a>
                     </div>
                 </form>

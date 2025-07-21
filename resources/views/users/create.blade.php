@@ -60,8 +60,11 @@
 
                     <div class="mt-4">
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save me-1"></i> Simpan
+                             Simpan
                         </button>
+                         <a href="{{ route('users.index') }}" class="btn btn-secondary ms-2">
+                            Batal
+                        </a>
                     </div>
                 </form>
             </div>
