@@ -32,21 +32,31 @@
 
                     <!-- Permissions Section -->
                     <h5 class="fw-bold">2. Hak Akses (Permissions)</h5>
-                    <div class="row mb-4">
+
+                    <button type="button" class="btn btn-sm btn-outline-primary mb-3" data-bs-toggle="modal" data-bs-target="#addPermissionModal">
+                        + Tambah Permission
+                    </button>
+
+                    <div class="row mb-4" id="permissionList">
                         @forelse ($permissions as $permission)
-                            <div class="col-md-4 mb-2">
-                                <div class="form-check">
+                            <div class="col-md-4 mb-2 permission-item" id="perm_wrapper_{{ $permission->id }}">
+                                <div class="form-check d-flex align-items-center">
                                     <input
-                                        class="form-check-input"
+                                        class="form-check-input me-2"
                                         type="checkbox"
                                         name="permissions[]"
                                         id="perm_{{ $permission->id }}"
                                         value="{{ $permission->name }}"
                                         {{ in_array($permission->name, old('permissions', [])) ? 'checked' : '' }}
                                     >
-                                    <label class="form-check-label" for="perm_{{ $permission->id }}">
+                                    <label class="form-check-label me-auto" for="perm_{{ $permission->id }}">
                                         {{ ucfirst(str_replace('_', ' ', $permission->name)) }}
                                     </label>
+                                    <button type="button" class="btn btn-sm p-0 ms-2 btn-delete-permission"
+                                        style="background: none; border: none; color: black; font-size: 1.2rem;"
+                                        data-id="{{ $permission->id }}">
+                                        &times;
+                                    </button>
                                 </div>
                             </div>
                         @empty
@@ -57,15 +67,123 @@
                     </div>
 
                     <div class="mt-3">
-                        <button type="submit" class="btn btn-primary">
-                             Simpan
-                        </button>
-                        <a href="{{ route('roles.index') }}" class="btn btn-secondary ms-2">
-                            Batal
-                        </a>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <a href="{{ route('roles.index') }}" class="btn btn-secondary ms-2">Batal</a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
+    <!-- Modal Tambah Permission -->
+    <div class="modal fade" id="addPermissionModal" tabindex="-1" aria-labelledby="addPermissionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="addPermissionForm">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addPermissionModalLabel">Tambah Permission Baru</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="permissionName" class="form-label">Nama Permission</label>
+                            <input type="text" class="form-control" id="permissionName" name="name" required>
+                            <div class="invalid-feedback" id="permissionError"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script Tambah Permission via AJAX -->
+    <script>
+        document.getElementById('addPermissionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('permissionName').value;
+            const errorEl = document.getElementById('permissionError');
+            errorEl.textContent = '';
+            errorEl.style.display = 'none';
+
+            fetch("{{ route('permissions.ajax.store') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ name: name })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => { throw data; });
+                }
+                return response.json();
+            })
+            .then(data => {
+                const wrapperId = `perm_wrapper_${data.permission.id}`;
+                const permId = `perm_${data.permission.id}`;
+                const labelText = data.permission.name
+                    .replace(/_/g, ' ')
+                    .replace(/\b\w/g, c => c.toUpperCase());
+
+                const checkboxHTML = `
+                    <div class="col-md-4 mb-2 permission-item" id="${wrapperId}">
+                        <div class="form-check d-flex align-items-center">
+                            <input class="form-check-input me-2" type="checkbox"
+                                name="permissions[]" id="${permId}"
+                                value="${data.permission.name}" checked>
+                            <label class="form-check-label me-auto" for="${permId}">
+                                ${labelText}
+                            </label>
+                            <button type="button" class="btn btn-sm p-0 ms-2 btn-delete-permission"
+                                style="background: none; border: none; color: black; font-size: 1.2rem;"
+                                data-id="${data.permission.id}">
+                                &times;
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('permissionList').insertAdjacentHTML('beforeend', checkboxHTML);
+
+                document.getElementById('permissionName').value = '';
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addPermissionModal'));
+                modal.hide();
+            })
+            .catch(err => {
+                errorEl.textContent = err.message || 'Terjadi kesalahan.';
+                errorEl.style.display = 'block';
+            });
+        });
+    </script>
+
+    <!-- Script Hapus Permission -->
+    <script>
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('btn-delete-permission')) {
+                const permissionId = e.target.dataset.id;
+
+                if (confirm('Yakin ingin menghapus permission ini?')) {
+                    fetch(`/permissions/${permissionId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) throw new Error('Gagal menghapus permission');
+                        document.getElementById(`perm_wrapper_${permissionId}`).remove();
+                    })
+                    .catch(error => alert(error.message));
+                }
+            }
+        });
+    </script>
 </x-app-layout>

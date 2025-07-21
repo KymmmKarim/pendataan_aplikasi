@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -45,6 +46,30 @@ class RolePermissionController extends Controller
 
     return redirect()->route('roles.index')->with('success', 'Role dan Permission berhasil disimpan');
     }
+
+    public function ajaxStore(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'name' => 'required|unique:permissions,name',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $validator->errors()->first('name'),
+        ], 422);
+    }
+
+    $permission = Permission::create([
+        'name' => $request->name,
+        'guard_name' => 'web',
+    ]);
+
+    return response()->json([
+        'status' => 'success',
+        'permission' => $permission,
+    ]);
+}
 
     // Form edit role
     public function edit($id)
@@ -125,14 +150,14 @@ class RolePermissionController extends Controller
         return redirect()->route('roles.index')->with('success', 'Permission berhasil diperbarui');
     }
 
-    public function destroyPermission($id)
+    
+     function destroyPermission($id)
     {
-        $permission = Permission::findOrFail($id);
-        $permission->delete();
+    $permission = Permission::findOrFail($id);
+    $permission->delete();
 
-        return redirect()->route('roles.index')->with('success', 'Permission berhasil dihapus');
+    return response()->json(['message' => 'Permission deleted']);
     }
-
     // =================== ASSIGN PERMISSION TO ROLE ===================
 
     public function managePermissions($roleId)
@@ -152,4 +177,5 @@ class RolePermissionController extends Controller
 
         return redirect()->route('roles.index')->with('success', 'Permission berhasil diperbarui untuk role.');
     }
+    
 }
