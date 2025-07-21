@@ -44,10 +44,11 @@
                                         <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-sm btn-outline-primary me-1" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('roles.destroy', $role->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus role ini?')">
+
+                                        <form id="delete-form-{{ $role->id }}" action="{{ route('roles.destroy', $role->id) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="btn btn-sm btn-outline-danger" title="Hapus">
+                                            <button type="button" class="btn btn-sm btn-outline-danger btn-hapus" data-id="{{ $role->id }}" title="Hapus">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -69,6 +70,9 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         $(document).ready(function () {
             $('#rolesTable').DataTable({
@@ -86,6 +90,25 @@
                         next: ">"
                     }
                 }
+            });
+
+            // SweetAlert konfirmasi hapus
+            $('.btn-hapus').click(function () {
+                let roleId = $(this).data('id');
+                Swal.fire({
+                    title: 'Yakin mau dihapus ?',
+                    text: "Data yang dihapus tidak dapat dikembalikan loh!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, hapus',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#delete-form-' + roleId).submit();
+                    }
+                });
             });
         });
     </script>

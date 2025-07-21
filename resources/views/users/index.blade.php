@@ -10,7 +10,7 @@
                     <i class="fas fa-users me-2"></i>Daftar Pengguna
                 </h5>
                 <a href="{{ route('users.create') }}" class="btn btn-sm btn-primary">
-                Tambah Data
+                    Tambah Data
                 </a>
             </div>
 
@@ -47,17 +47,16 @@
                                             <span>{{ $role }}</span>
                                         @endforeach
                                     </td>
-                                    <td class="text-center">
-                                        {{ $user->unit ?? '-' }}
-                                    </td>
+                                    <td class="text-center">{{ $user->unit ?? '-' }}</td>
                                     <td class="text-center">
                                         <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-outline-primary me-1" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus?')">
+
+                                        <form id="delete-user-{{ $user->id }}" action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="btn btn-sm btn-outline-danger" title="Hapus">
+                                            <button type="button" class="btn btn-sm btn-outline-danger btn-delete-user" data-id="{{ $user->id }}" title="Hapus">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -77,6 +76,9 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         $(document).ready(function () {
             $('#usersTable').DataTable({
@@ -94,6 +96,25 @@
                         next: ">"
                     }
                 }
+            });
+
+            // SweetAlert konfirmasi hapus
+            $('.btn-delete-user').click(function () {
+                const userId = $(this).data('id');
+                Swal.fire({
+                    title: 'Yakin ingin menghapus?',
+                    text: "Data tidak dapat dikembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, hapus',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#delete-user-' + userId).submit();
+                    }
+                });
             });
         });
     </script>
