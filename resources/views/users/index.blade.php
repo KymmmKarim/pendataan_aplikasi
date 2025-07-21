@@ -91,6 +91,7 @@
                     search: "_INPUT_",
                     searchPlaceholder: "Cari pengguna...",
                     lengthMenu: "Tampilkan _MENU_ data",
+                     info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
                     paginate: {
                         previous: "<",
                         next: ">"
@@ -102,8 +103,8 @@
             $('.btn-delete-user').click(function () {
                 const userId = $(this).data('id');
                 Swal.fire({
-                    title: 'Yakin ingin menghapus?',
-                    text: "Data tidak dapat dikembalikan!",
+                    title: 'Yakin mau dihapus ?',
+                    text: "Data yang dihapus tidak dapat dikembalikan loh!",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d33',

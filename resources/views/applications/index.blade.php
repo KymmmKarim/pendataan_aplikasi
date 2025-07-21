@@ -110,8 +110,8 @@
                 button.addEventListener('click', function () {
                     const appId = this.dataset.id;
                     Swal.fire({
-                        title: 'Yakin ingin menghapus?',
-                        text: "Data tidak dapat dikembalikan!",
+                        title: 'Yakin mau dihapus?',
+                        text: "Data yang dihapus tidak dapat dikembalikan loh!",
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonColor: '#d33',
