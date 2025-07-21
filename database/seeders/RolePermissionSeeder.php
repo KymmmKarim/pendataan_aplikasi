@@ -2,41 +2,63 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-
+use App\Models\User;
 
 class RolePermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        // Hapus cache permission
+
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // Buat permission
+
         $permissions = [
             'view data',
             'create data',
             'edit data',
             'delete data',
+
+            'view users',
+            'create users',
+            'edit users',
+            'delete users',
         ];
 
         foreach ($permissions as $permission) {
             Permission::firstOrCreate(['name' => $permission]);
         }
 
-        // Buat role admin
-        $adminRole = Role::firstOrCreate(['name' => 'admin']);
 
-        // Berikan semua permission ke role admin
-        $adminRole->syncPermissions(Permission::all());
+        $superadmin = Role::firstOrCreate(['name' => 'superadmin']);
+        $superadmin->syncPermissions(Permission::all());
 
-        // Assign role admin ke user pertama (opsional)
+
+        $admin = Role::firstOrCreate(['name' => 'admin']);
+        $admin->syncPermissions([
+            'view data', 'create data', 'edit data', 'delete data',
+            'view users', 'create users', 'edit users',
+        ]);
+
+
+        $unitRoles = [
+            'upt-tik',
+            'unit-a',
+            'unit-b',
+        ];
+
+        foreach ($unitRoles as $roleName) {
+            $role = Role::firstOrCreate(['name' => $roleName]);
+            $role->syncPermissions([
+                'view data', 'create data', 'edit data', 'delete data',
+            ]);
+        }
+
         $user = \App\Models\User::find(1);
         if ($user) {
-            $user->assignRole($adminRole);
+        $user->syncRoles(['superadmin']);
         }
     }
 }

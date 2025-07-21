@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -29,16 +31,16 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{application}', [ApplicationController::class, 'destroy'])->name('destroy'); // hapus
     });
 
-    Route::view('/managemen-pengguna/role', 'managemen-pengguna.role.index')->name('role.index');
-    Route::view('/managemen-pengguna/role/create', 'managemen-pengguna.role.create')->name('role.create');
-    Route::view('/managemen-pengguna/role/edit', 'managemen-pengguna.role.edit')->name('role.edit');
 
+    Route::middleware(['auth', 'role:superadmin'])->group(function () {
+    Route::resource('users', UserController::class);
+});
 
-    Route::view('/managemen-pengguna/user', 'managemen-pengguna.user.index')->name('user.index');
-    Route::view('/managemen-pengguna/user/create', 'managemen-pengguna.user.create')->name('user.create');
-    Route::view('/managemen-pengguna/user/edit', 'managemen-pengguna.user.edit')->name('user.edit');
+Route::middleware(['auth'])->group(function () {
+    Route::resource('users', UserController::class);
+});
 
-
+Route::resource('roles', RolePermissionController::class)->middleware('auth');
     // Unit (khusus tampilan unit)
     Route::get('/unit', function () {
         return view('unit');
