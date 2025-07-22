@@ -25,51 +25,63 @@ class RolePermissionController extends Controller
     }
 
     // Simpan role baru (dan optional permission)
-   public function store(Request $request)
+    public function store(Request $request)
     {
-    $request->validate([
-        'name' => 'required|unique:roles,name',
-        'guard_name' => 'required',
-        'permissions' => 'nullable|array',
-        'permissions.*' => 'exists:permissions,name',
-    ]);
+        $request->validate([
+            'name' => 'required|unique:roles,name',
+            'guard_name' => 'required',
+            'permissions' => 'nullable|array',
+            'permissions.*' => 'exists:permissions,name',
+        ]);
 
-    $role = Role::create([
-        'name' => $request->name,
-        'guard_name' => $request->guard_name,
-    ]);
+        $role = Role::create([
+            'name' => $request->name,
+            'guard_name' => $request->guard_name,
+        ]);
 
-    // Assign permission jika dipilih
-    if ($request->has('permissions')) {
-        $role->syncPermissions($request->permissions);
+        if ($request->has('permissions')) {
+            $role->syncPermissions($request->permissions);
+        }
+
+        return redirect()->route('roles.index')->with('success', 'Role dan Permission berhasil disimpan');
     }
 
-    return redirect()->route('roles.index')->with('success', 'Role dan Permission berhasil disimpan');
-    }
-
+    // ✅ Tambah permission via AJAX (Sudah ada, hanya sedikit perbaikan)
     public function ajaxStore(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'name' => 'required|unique:permissions,name',
-    ]);
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|unique:permissions,name',
+        ]);
 
-    if ($validator->fails()) {
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()->first('name'),
+            ], 422);
+        }
+
+        $permission = Permission::create([
+            'name' => $request->name,
+            'guard_name' => 'web',
+        ]);
+
         return response()->json([
-            'status' => 'error',
-            'message' => $validator->errors()->first('name'),
-        ], 422);
+            'status' => 'success',
+            'permission' => $permission,
+        ]);
     }
 
-    $permission = Permission::create([
-        'name' => $request->name,
-        'guard_name' => 'web',
-    ]);
+    // ✅ Hapus permission via AJAX (TAMBAHAN)
+    public function destroyPermissionAjax($id)
+    {
+        $permission = Permission::findOrFail($id);
+        $permission->delete();
 
-    return response()->json([
-        'status' => 'success',
-        'permission' => $permission,
-    ]);
-}
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Permission berhasil dihapus'
+        ]);
+    }
 
     // Form edit role
     public function edit($id)
@@ -81,27 +93,25 @@ class RolePermissionController extends Controller
 
     // Update role
     public function update(Request $request, $id)
-{
-    $role = Role::findOrFail($id);
+    {
+        $role = Role::findOrFail($id);
 
-    $request->validate([
-        'name' => 'required|unique:roles,name,' . $id,
-        'guard_name' => 'required',
-        'permissions' => 'nullable|array',
-        'permissions.*' => 'exists:permissions,name',
-    ]);
+        $request->validate([
+            'name' => 'required|unique:roles,name,' . $id,
+            'guard_name' => 'required',
+            'permissions' => 'nullable|array',
+            'permissions.*' => 'exists:permissions,name',
+        ]);
 
-    // Update nama & guard role
-    $role->update([
-        'name' => $request->name,
-        'guard_name' => $request->guard_name,
-    ]);
+        $role->update([
+            'name' => $request->name,
+            'guard_name' => $request->guard_name,
+        ]);
 
-    // Sinkronisasi permission (replace dengan yang dicentang)
-    $role->syncPermissions($request->permissions ?? []);
+        $role->syncPermissions($request->permissions ?? []);
 
-    return redirect()->route('roles.index')->with('success', 'Role & Permission berhasil diperbarui.');
-}
+        return redirect()->route('roles.index')->with('success', 'Role & Permission berhasil diperbarui.');
+    }
 
     // Hapus role
     public function destroy($id)
@@ -150,14 +160,14 @@ class RolePermissionController extends Controller
         return redirect()->route('roles.index')->with('success', 'Permission berhasil diperbarui');
     }
 
-    
-     function destroyPermission($id)
+    public function destroyPermission($id)
     {
-    $permission = Permission::findOrFail($id);
-    $permission->delete();
+        $permission = Permission::findOrFail($id);
+        $permission->delete();
 
-    return response()->json(['message' => 'Permission deleted']);
+        return response()->json(['message' => 'Permission deleted']);
     }
+
     // =================== ASSIGN PERMISSION TO ROLE ===================
 
     public function managePermissions($roleId)
@@ -172,10 +182,8 @@ class RolePermissionController extends Controller
     public function updatePermissions(Request $request, $roleId)
     {
         $role = Role::findOrFail($roleId);
-
         $role->syncPermissions($request->permissions ?? []);
 
         return redirect()->route('roles.index')->with('success', 'Permission berhasil diperbarui untuk role.');
     }
-    
 }
