@@ -26,9 +26,17 @@
                         <table class="table table-borderless mb-0">
                             <tbody>
                                 <tr>
-                                    <td class="fw-bold text-primary" style="width: 200px;">Status</td>
-                                    <td style="border-bottom: 1px solid #dee2e6;">{{ $application->status ?? '-' }}</td>
-                                </tr>
+    <td class="fw-bold text-primary" style="width: 200px;">Status</td>
+    <td style="border-bottom: 1px solid #dee2e6;">
+        @if ($application->status === 'Aktif')
+            <span class="badge bg-success">Aktif</span>
+        @elseif ($application->status === 'Non-Aktif')
+            <span class="badge bg-danger">Non-Aktif</span>
+        @else
+            <span class="text-muted">-</span>
+        @endif
+    </td>
+</tr>
                                 <tr>
                                     <td class="fw-bold text-primary">Harga</td>
                                     <td style="border-bottom: 1px solid #dee2e6;">{{ $application->harga ?? '-' }}</td>

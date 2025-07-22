@@ -38,15 +38,15 @@ class ApplicationController extends Controller
         DB::beginTransaction();
         try {
             $validated = $request->validate([
-                'nama_aplikasi'     => 'required',
-                'versi'             => 'nullable',
-                'masa_berlaku'      => 'nullable|date',
-                'status'            => 'nullable|in:Aktif,Non-Aktif',
-                'harga'             => 'nullable',
-                'tanggal_pembelian' => 'nullable|date',
-                'lokasi_pembelian'  => 'nullable|in:Official,E-Commerce',
-                'deskripsi'         => 'nullable',
-                'bukti_pembelian'   => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                'nama_aplikasi'     => 'required|string|max:255',
+                'versi'             => 'required|string|max:100',
+                'masa_berlaku'      => 'required|date',
+                'status'            => 'required|in:Aktif,Non-Aktif',
+                'harga'             => 'required|numeric|min:0',
+                'tanggal_pembelian' => 'required|date',
+                'lokasi_pembelian'  => 'required|in:Official,E-Commerce',
+                'deskripsi'         => 'nullable|string',
+                'bukti_pembelian'   => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             ]);
 
             if ($request->hasFile('bukti_pembelian')) {
@@ -80,15 +80,15 @@ class ApplicationController extends Controller
         DB::beginTransaction();
         try {
             $validated = $request->validate([
-                'nama_aplikasi'     => 'required',
-                'versi'             => 'nullable',
-                'masa_berlaku'      => 'nullable|date',
-                'status'            => 'nullable|in:Aktif,Non-Aktif',
-                'harga'             => 'nullable',
-                'tanggal_pembelian' => 'nullable|date',
-                'lokasi_pembelian'  => 'nullable|in:Official,E-Commerce',
-                'deskripsi'         => 'nullable',
-                'bukti_pembelian'   => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                'nama_aplikasi'     => 'required|string|max:255',
+                'versi'             => 'required|string|max:100',
+                'masa_berlaku'      => 'required|date',
+                'status'            => 'required|in:Aktif,Non-Aktif',
+                'harga'             => 'required|numeric|min:0',
+                'tanggal_pembelian' => 'required|date',
+                'lokasi_pembelian'  => 'required|in:Official,E-Commerce',
+                'deskripsi'         => 'nullable|string',
+                'bukti_pembelian'   => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             ]);
 
             if ($request->hasFile('bukti_pembelian')) {
