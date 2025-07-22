@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UnitController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ApplicationController;
@@ -43,6 +44,10 @@ Route::middleware(['auth'])->group(function () {
 Route::resource('roles', RolePermissionController::class)->middleware('auth');
 Route::post('/permissions/ajax-create', [App\Http\Controllers\RolePermissionController::class, 'ajaxStore'])->name('permissions.ajax.store');
 Route::delete('/permissions/{id}', [RolePermissionController::class, 'destroyPermission'])->name('permissions.destroy');
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('units', UnitController::class);
+});
 
     // Unit (khusus tampilan unit)
     Route::get('/unit', function () {

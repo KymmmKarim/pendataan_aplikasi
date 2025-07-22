@@ -2,17 +2,31 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Unit extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nama'];
+    protected $fillable = [
+        'no',
+        'nama',
+        'singkatan',
+        'urut',
+        'parent_id',
+        'aktif',
+    ];
 
-    public function users()
+    // Relasi ke unit induk
+    public function parent()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsTo(Unit::class, 'parent_id');
+    }
+
+    // Relasi ke unit anak
+    public function children()
+    {
+        return $this->hasMany(Unit::class, 'parent_id');
     }
 }
