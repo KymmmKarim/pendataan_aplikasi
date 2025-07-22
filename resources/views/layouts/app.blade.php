@@ -64,6 +64,12 @@
                 </a>
             </li>
 
+            <li class="nav-item mb-1">
+                <a class="nav-link {{ request()->is('units*') ? 'active' : '' }}" href="{{ route('units.index') }}">
+                    <i class="fas fa-building me-2"></i>Manajemen Unit
+                </a>
+            </li>
+            
             <!-- Manajemen Pengguna Dropdown -->
             <li class="nav-item mb-1">
                 <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#userManagementMenu" role="button" aria-expanded="false" aria-controls="userManagementMenu">
