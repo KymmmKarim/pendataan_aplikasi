@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -11,27 +12,30 @@ use Illuminate\Support\Facades\Storage;
 class ApplicationController extends Controller
 {
     public function index(Request $request)
-    {
-        try {
-            $query = Application::query();
+{
+    try {
+        $query = Application::query();
 
-            if ($request->has('search') && $request->search !== '') {
-                $search = $request->search;
-                $query->where(function ($q) use ($search) {
-                    $q->where('nama_aplikasi', 'like', '%' . $search . '%')
-                      ->orWhere('versi', 'like', '%' . $search . '%')
-                      ->orWhere('masa_berlaku', 'like', '%' . $search . '%');
-                });
-            }
-
-            $applications = $query->latest()->paginate(10)->withQueryString();
-            return view('applications.index', compact('applications'));
-
-        } catch (\Exception $e) {
-            Log::error('Gagal memuat aplikasi: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat data.');
+        if ($request->has('search') && $request->search !== '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_aplikasi', 'like', '%' . $search . '%')
+                  ->orWhere('versi', 'like', '%' . $search . '%')
+                  ->orWhere('masa_berlaku', 'like', '%' . $search . '%');
+            });
         }
+
+        $applications = $query->latest()->paginate(10)->withQueryString();
+        $units = Unit::all(); // Ambil semua unit
+
+        return view('applications.index', compact('applications', 'units')); // Kirim ke view
+
+    } catch (\Exception $e) {
+        Log::error('Gagal memuat aplikasi: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat data.');
     }
+}
+
 
     public function store(Request $request)
     {
@@ -39,6 +43,7 @@ class ApplicationController extends Controller
         try {
             $validated = $request->validate([
                 'nama_aplikasi'     => 'required',
+                'unit_id'           => 'required|exists:units,id',
                 'versi'             => 'nullable',
                 'masa_berlaku'      => 'nullable|date',
                 'status'            => 'nullable|in:Aktif,Non-Aktif',

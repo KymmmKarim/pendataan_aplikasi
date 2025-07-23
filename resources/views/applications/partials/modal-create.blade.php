@@ -48,11 +48,21 @@
             <label class="form-label fw-semibold">Bukti Pembelian <span class="text-danger">*</span></label>
             <input type="file" name="bukti_pembelian" class="form-control border-dark" accept=".jpg,.jpeg,.png,.pdf" required>
         </div>
-        <div class="col-12">
+        <div class="col-md-6">
             <label class="form-label fw-semibold">Deskripsi <span class="text-danger">*</span></label>
             <input type="text" name="deskripsi" class="form-control border-dark" placeholder="Masukkan Deskripsi" required>
         </div>
     </div>
+    <div class="col-md-6">
+    <label for="unit_id" class="form-label">Pilih Unit</label>
+    <select name="unit_id" id="unit_id" class="form-select" required>
+        <option value="">-- Pilih Unit --</option>
+        @foreach ($units as $unit)
+            <option value="{{ $unit->id }}">{{ $unit->nama }}</option>
+        @endforeach
+    </select>
+</div>
+
 
     <div class="d-flex justify-content-end gap-2 mt-4">
         <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Batal</button>

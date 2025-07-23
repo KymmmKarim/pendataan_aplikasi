@@ -12,6 +12,7 @@ class Application extends Model
 
     protected $fillable = [
         'nama_aplikasi',
+        'unit_id',
         'versi',
         'masa_berlaku',
         'status',
@@ -42,4 +43,9 @@ class Application extends Model
     {
         return $this->masa_berlaku && $this->masa_berlaku->isBetween(now(), now()->addDays(30));
     }
+
+    public function unit()
+{
+    return $this->belongsTo(Unit::class, 'unit_id');
+}
 }
