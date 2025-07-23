@@ -34,6 +34,7 @@
                                 <th>Nama Aplikasi</th>
                                 <th>Versi</th>
                                 <th>Masa Berlaku</th>
+                                <th>Unit</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -45,6 +46,8 @@
                                     <td>
                                         {{ $app->masa_berlaku ? \Carbon\Carbon::parse($app->masa_berlaku)->format('d F Y') : '-' }}
                                     </td>
+                                    <td>{{ $app->unit->nama ?? '-' }}</td>
+
                                     <td class="text-center">
                                         <a href="{{ route('applications.show', $app->id) }}" class="btn btn-sm btn-outline-dark me-1" title="Lihat Detail">
                                             <i class="bi bi-info-circle"></i>
