@@ -49,17 +49,23 @@
                                         </span>
                                     </td>
                                     <td class="text-center">
-                                        <a href="{{ route('units.edit', $unit->id) }}" class="btn btn-sm btn-outline-primary me-1">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <form id="delete-unit-{{ $unit->id }}" action="{{ route('units.destroy', $unit->id) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-sm btn-outline-danger btn-delete-unit">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        </form>
-                                    </td>
+    <div class="d-flex justify-content-center gap-1">
+        <!-- Tombol Edit -->
+        <a href="{{ route('units.edit', $unit->id) }}" class="btn btn-sm btn-outline-primary">
+            <i class="fas fa-edit"></i>
+        </a>
+
+        <!-- Tombol Hapus -->
+        <form action="{{ route('units.destroy', $unit->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus unit ini?');">
+            @csrf
+            @method('DELETE')
+            <button class="btn btn-sm btn-danger" type="submit">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        </form>
+    </div>
+</td>
+
                                 </tr>
                             @endforeach
                         </tbody>
