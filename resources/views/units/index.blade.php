@@ -35,6 +35,7 @@
                     <table class="table table-bordered table-hover align-middle w-100" id="unitsTable">
                         <thead class="table-light text-center text-dark">
                             <tr>
+                                
                                 <th>No</th>
                                 <th>Nama</th>
                                 <th>Singkatan</th>
@@ -47,7 +48,8 @@
                         <tbody id="units-table-body">
                             @foreach ($units as $index => $unit)
                                 <tr>
-                                    <td class="text-center">{{ $loop->iteration }}</td>
+                                    
+                                    <td>{{ $unit->no }}</td>
                                     <td>{{ $unit->nama }}</td>
                                     <td>{{ $unit->singkatan }}</td>
                                     <td class="text-center">{{ $unit->urut }}</td>
