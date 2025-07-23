@@ -39,11 +39,11 @@
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Status</label>
-                            <select name="aktif" class="form-select">
-                                <option value="1" {{ old('aktif', $unit->aktif) == '1' ? 'selected' : '' }}>Aktif</option>
-                                <option value="0" {{ old('aktif', $unit->aktif) == '0' ? 'selected' : '' }}>Tidak Aktif</option>
-                            </select>
+                        <label for="aktif" class="form-label">Status</label>
+                        <select name="aktif" id="aktif" class="form-select">
+                            <option value="1" {{ old('aktif', $unit->aktif) == 1 ? 'selected' : '' }}>Aktif</option>
+                            <option value="0" {{ old('aktif', $unit->aktif) == 0 ? 'selected' : '' }}>Tidak Aktif</option>
+                        </select>
                         </div>
                     </div>
 

@@ -22,7 +22,7 @@ class UnitController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'no' => 'required|unique:units,no',
+            'no' => 'required',
             'nama' => 'required|string',
             'singkatan' => 'required|string|max:10',
             'urut' => 'nullable|integer',
@@ -42,20 +42,29 @@ class UnitController extends Controller
     }
 
     public function update(Request $request, Unit $unit)
-    {
-        $request->validate([
-            'no' => 'required|unique:units,no,' . $unit->id,
-            'nama' => 'required|string',
-            'singkatan' => 'required|string|max:10',
-            'urut' => 'nullable|integer',
-            'parent_id' => 'nullable|exists:units,id',
-            'aktif' => 'required|boolean',
-        ]);
+{
+    $request->validate([
+        'no' => 'required',
+        'nama' => 'required|string',
+        'singkatan' => 'required|string|max:10',
+        'urut' => 'nullable|integer',
+        'parent_id' => 'nullable|exists:units,id',
+        'aktif' => 'required|boolean', // sekarang boleh required
+    ]);
 
-        $unit->update($request->all());
+    $unit->update([
+        'no' => $request->no,
+        'nama' => $request->nama,
+        'singkatan' => $request->singkatan,
+        'urut' => $request->urut,
+        'parent_id' => $request->parent_id,
+        'aktif' => $request->aktif,
+    ]);
 
-        return redirect()->route('units.index')->with('success', 'Unit berhasil diperbarui.');
-    }
+    return redirect()->route('units.index')->with('success', 'Unit berhasil diperbarui.');
+}
+
+
 
     public function destroy(Unit $unit)
     {
