@@ -5,13 +5,22 @@
 
     <div class="container mt-4">
         <div class="card shadow border-0">
-            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center gap-2">
                 <h5 class="mb-0 text-dark fw-semibold">
                     <i class="fas fa-building me-2"></i>Daftar Unit
                 </h5>
-                <a href="{{ route('units.create') }}" class="btn btn-sm btn-primary">
-                    Tambah Unit
-                </a>
+
+                <div class="d-flex gap-2 align-items-center">
+                    <div class="input-group input-group-sm" style="max-width: 250px;">
+                        <input type="text" id="search-unit-input" placeholder="Cari unit..." class="form-control">
+                        <button class="btn btn-outline-secondary" type="button">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                    <a href="{{ route('units.create') }}" class="btn btn-primary btn-sm py-1 px-3" style="height: 32px;">
+                        Tambah Unit
+                    </a>
+                </div>
             </div>
 
             <div class="card-body">
@@ -23,49 +32,43 @@
                 @endif
 
                 <div class="table-responsive">
-                    <table class="table table-bordered table-hover align-middle" id="unitsTable">
+                    <table class="table table-bordered table-hover align-middle w-100" id="unitsTable">
                         <thead class="table-light text-center text-dark">
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
                                 <th>Singkatan</th>
                                 <th>Urut</th>
-                                <th>Parent_id</th>
+                                <th>Parent</th>
                                 <th>Aktif</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="units-table-body">
                             @foreach ($units as $index => $unit)
                                 <tr>
-                                    <td class="text-center">{{ $unit->no }}</td>
+                                    <td class="text-center">{{ $loop->iteration }}</td>
                                     <td>{{ $unit->nama }}</td>
                                     <td>{{ $unit->singkatan }}</td>
                                     <td class="text-center">{{ $unit->urut }}</td>
                                     <td>{{ $unit->parent->nama ?? '-' }}</td>
                                     <td class="text-center">
-                                        <span class="badge bg-{{ $unit->aktif ? 'success' : 'secondary' }}">
+                                        <span class="badge bg-{{ $unit->aktif ? 'success' : 'danger' }}">
                                             {{ $unit->aktif ? 'Aktif' : 'Nonaktif' }}
                                         </span>
                                     </td>
                                     <td class="text-center">
-    <div class="d-flex justify-content-center gap-1">
-        <!-- Tombol Edit -->
-        <a href="{{ route('units.edit', $unit->id) }}" class="btn btn-sm btn-outline-primary">
-            <i class="fas fa-edit"></i>
-        </a>
-
-        <!-- Tombol Hapus -->
-        <form action="{{ route('units.destroy', $unit->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus unit ini?');">
-            @csrf
-            @method('DELETE')
-            <button class="btn btn-sm btn-danger" type="submit">
-                <i class="fas fa-trash-alt"></i>
-            </button>
-        </form>
-    </div>
-</td>
-
+                                        <a href="{{ route('units.edit', $unit->id) }}" class="btn btn-sm btn-outline-primary me-1">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form id="delete-unit-{{ $unit->id }}" action="{{ route('units.destroy', $unit->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" class="btn btn-sm btn-outline-danger btn-delete" data-id="{{ $unit->id }}">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -75,13 +78,25 @@
         </div>
     </div>
 
+    {{-- DataTables --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    {{-- SweetAlert --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
-        $(function () {
-            $('#unitsTable').DataTable({
+        $(document).ready(function () {
+            // Inisialisasi DataTables tanpa fitur search
+            const table = $('#unitsTable').DataTable({
+                paging: true,
                 ordering: false,
+                info: true,
+                searching: false,
+                pageLength: 10,
                 language: {
-                    search: "_INPUT_",
-                    searchPlaceholder: "Cari unit...",
                     lengthMenu: "Tampilkan _MENU_ data",
                     info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
                     paginate: {
@@ -91,18 +106,31 @@
                 }
             });
 
-            $('.btn-delete-unit').click(function () {
-                const form = $(this).closest('form');
+            // Filter custom sesuai input pencarian
+            $('#search-unit-input').on('input', function () {
+                const keyword = $(this).val().toLowerCase().trim();
+
+                $('#units-table-body tr').each(function () {
+                    const rowText = $(this).text().toLowerCase();
+                    $(this).toggle(rowText.includes(keyword));
+                });
+            });
+
+            // SweetAlert untuk hapus
+            $('.btn-delete').click(function () {
+                const unitId = $(this).data('id');
                 Swal.fire({
                     title: 'Yakin mau dihapus?',
-                    text: "Data yang dihapus tidak dapat dikembalikan!",
+                    text: "Data yang dihapus tidak bisa dikembalikan!",
                     icon: 'warning',
                     showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
                     confirmButtonText: 'Ya, hapus',
-                    cancelButtonText: 'Batal',
+                    cancelButtonText: 'Batal'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        form.submit();
+                        $('#delete-unit-' + unitId).submit();
                     }
                 });
             });
