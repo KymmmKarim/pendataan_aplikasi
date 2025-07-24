@@ -44,9 +44,7 @@ class RolePermissionSeeder extends Seeder
 
 
         $unitRoles = [
-            'upt-tik',
-            'unit-a',
-            'unit-b',
+            
         ];
 
         foreach ($unitRoles as $roleName) {

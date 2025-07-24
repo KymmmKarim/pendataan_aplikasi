@@ -47,7 +47,7 @@
                                             <span>{{ $role }}</span>
                                         @endforeach
                                     </td>
-                                    <td class="text-center">{{ $user->unit ?? '-' }}</td>
+                                   <td class="text-center">{{ $user->unit->nama ?? '-' }}</td>
                                     <td class="text-center">
                                         <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-outline-primary me-1" title="Edit">
                                             <i class="fas fa-edit"></i>
