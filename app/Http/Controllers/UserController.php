@@ -56,7 +56,8 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $roles = Role::all();
-        return view('users.edit', compact('user', 'roles'));
+        $units = Unit::all();
+        return view('users.edit', compact('user', 'roles','units'));
     }
 
     public function update(Request $request, User $user)
@@ -64,20 +65,20 @@ class UserController extends Controller
     $validated = $request->validate([
         'name'     => 'required|string|max:255',
         'username' => 'required|string|max:255|unique:users,username,' . $user->id,
-        'unit'     => 'required|string|max:255',
         'email'    => 'required|email|unique:users,email,' . $user->id,
         'password' => 'nullable|string|min:6',
         'role'     => 'required|exists:roles,name',
+        'unit_id'  => 'nullable|exists:units,id',
     ]);
 
     $user->update([
         'name'     => $validated['name'],
         'username' => $validated['username'],
-        'unit'     => $validated['unit'],
         'email'    => $validated['email'],
         'password' => $validated['password']
             ? Hash::make($validated['password'])
             : $user->password,
+        'unit_id'  => $validated['unit_id'] ?? null,
     ]);
 
     $user->syncRoles([$validated['role']]);
