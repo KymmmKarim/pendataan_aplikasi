@@ -32,10 +32,18 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="unit" class="form-label">Unit <span class="text-danger">*</span></label>
-                            <input type="text" name="unit" class="form-control" id="unit"
-                                value="{{ old('unit', $user->unit) }}" placeholder="ex. Sistem Informasi">
-                        </div>
+    <label for="unit_id" class="form-label">Unit <span class="text-danger">*</span></label>
+    <select name="unit_id" id="unit_id" class="form-select">
+        <option value="">-- Pilih Unit --</option>
+        @foreach ($units as $unit)
+            <option value="{{ $unit->id }}"
+                {{ old('unit_id', $user->unit_id) == $unit->id ? 'selected' : '' }}>
+                {{ $unit->nama }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
 
                         <div class="col-md-6 mb-3">
                             <label for="password" class="form-label">Password (Kosongkan jika tidak diubah)</label>
