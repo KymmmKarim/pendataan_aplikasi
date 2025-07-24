@@ -73,7 +73,8 @@ class ApplicationController extends Controller
     public function show(Application $application)
     {
         try {
-            return view('applications.show', compact('application'));
+            $units = Unit::all();
+            return view('applications.show', compact('application','units'));
         } catch (\Exception $e) {
             Log::error('Gagal menampilkan detail aplikasi: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat detail.');
@@ -85,16 +86,17 @@ class ApplicationController extends Controller
         DB::beginTransaction();
         try {
             $validated = $request->validate([
-                'nama_aplikasi'     => 'required',
-                'versi'             => 'nullable',
-                'masa_berlaku'      => 'nullable|date',
-                'status'            => 'nullable|in:Aktif,Non-Aktif',
-                'harga'             => 'nullable',
-                'tanggal_pembelian' => 'nullable|date',
-                'lokasi_pembelian'  => 'nullable|in:Official,E-Commerce',
-                'deskripsi'         => 'nullable',
-                'bukti_pembelian'   => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-            ]);
+    'nama_aplikasi'     => 'required',
+    'unit_id'           => 'required|exists:units,id',
+    'versi'             => 'nullable',
+    'masa_berlaku'      => 'nullable|date',
+    'status'            => 'nullable|in:Aktif,Non-Aktif',
+    'harga'             => 'nullable',
+    'tanggal_pembelian' => 'nullable|date',
+    'lokasi_pembelian'  => 'nullable|in:Official,E-Commerce',
+    'deskripsi'         => 'nullable',
+    'bukti_pembelian'   => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+]);
 
             if ($request->hasFile('bukti_pembelian')) {
                 if ($application->bukti_pembelian) {
