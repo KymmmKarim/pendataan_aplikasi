@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Unit;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
@@ -19,7 +20,8 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::all();
-        return view('users.create', compact('roles'));
+        $units = Unit::all();
+        return view('users.create', compact('roles', 'units'));
     }
 
     public function store(Request $request)
@@ -32,6 +34,10 @@ class UserController extends Controller
         'password' => 'required|string|min:6',
         'role'     => 'required|exists:roles,name',
         ]);
+        
+        if ($request->role === 'admin-unit') {
+        $rules['unit'] = 'required|exists:units,id';
+    }
 
         $user = User::create([
             'name'     => $validated['name'],
@@ -39,6 +45,7 @@ class UserController extends Controller
         'unit'     => $validated['unit'],
         'email'    => $validated['email'],
         'password' => Hash::make($validated['password']),
+        'unit_id'  => $validated['unit'] ?? null,
         ]);
 
         $user->assignRole($validated['role']);

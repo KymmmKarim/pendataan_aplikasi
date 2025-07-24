@@ -30,16 +30,15 @@
                         </div>
 
                         <!-- Kolom Unit -->
-                        <div class="col-md-6 mb-3">
-                            <label for="unit" class="form-label">Unit <span class="text-danger">*</span></label>
-                            <select class="form-select" id="unit" name="unit" required>
-                                <option value="" disabled selected>-- Pilih Unit --</option>
-                                <option value="UPT-TIK">UPT-TIK</option>
-                                <option value="unit-a">Unit A</option>
-                                <option value="unit-b">Unit B</option>
-                            </select>
-                        </div>
-                    </div>
+                        <div class="col-md-6 mb-3" id="unit-select-container" style="display: none;">
+    <label for="unit" class="form-label">Pilih Unit <span class="text-danger">*</span></label>
+    <select class="form-select" id="unit" name="unit">
+        <option value="" disabled selected>-- Pilih Unit --</option>
+        @foreach ($units as $unit)
+            <option value="{{ $unit->id }}">{{ $unit->nama }}</option>
+        @endforeach
+    </select>
+</div>
 
                     <hr>
 
@@ -75,4 +74,30 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const roleRadios = document.querySelectorAll('input[name="role"]');
+        const unitSelectContainer = document.getElementById('unit-select-container');
+
+        function toggleUnitSelect() {
+            const selectedRole = document.querySelector('input[name="role"]:checked');
+            if (selectedRole && selectedRole.value === 'admin-unit') {
+                unitSelectContainer.style.display = 'block';
+            } else {
+                unitSelectContainer.style.display = 'none';
+                document.getElementById('unit').value = '';
+            }
+        }
+
+        roleRadios.forEach(radio => {
+            radio.addEventListener('change', toggleUnitSelect);
+        });
+
+        toggleUnitSelect(); // jalankan sekali saat halaman load
+    });
+</script>
+@endpush
+
 </x-app-layout>
