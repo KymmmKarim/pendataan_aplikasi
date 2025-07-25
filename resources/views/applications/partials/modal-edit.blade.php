@@ -61,17 +61,26 @@
                         @endif
                     </div>
 
-                    <div class="col-md-6">
-                        <label for="unit_id{{ $app->id }}" class="form-label fw-semibold">Pilih Unit</label>
-                        <select name="unit_id" id="unit_id{{ $app->id }}" class="form-select border-dark" required>
-                            <option value="">-- Pilih Unit --</option>
-                            @foreach($units as $unit)
-                                <option value="{{ $unit->id }}" {{ $app->unit_id == $unit->id ? 'selected' : '' }}>
-                                    {{ $unit->nama }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+                    @role('admin-unit')
+    <div class="col-md-6">
+        <label class="form-label fw-semibold">Unit</label>
+        <input type="hidden" name="unit_id" value="{{ auth()->user()->unit_id }}">
+        <input type="text" class="form-control border-dark" value="{{ auth()->user()->unit->nama }}" disabled>
+    </div>
+@else
+    <div class="col-md-6">
+        <label for="unit_id{{ $app->id }}" class="form-label fw-semibold">Pilih Unit</label>
+        <select name="unit_id" id="unit_id{{ $app->id }}" class="form-select border-dark" required>
+            <option value="">-- Pilih Unit --</option>
+            @foreach($units as $unit)
+                <option value="{{ $unit->id }}" {{ $app->unit_id == $unit->id ? 'selected' : '' }}>
+                    {{ $unit->nama }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+@endrole
+
 
                     <div class="col-md-6">
                         <label for="deskripsi{{ $app->id }}" class="form-label fw-semibold">Deskripsi</label>
