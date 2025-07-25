@@ -16,34 +16,34 @@
                         <div class="col-md-6 mb-3">
                             <label for="name" class="form-label">Nama <span class="text-danger">*</span></label>
                             <input type="text" name="name" class="form-control" id="name"
-                                value="{{ old('name', $user->name) }}" placeholder="ex. Admin Itenas">
+                                value="{{ old('name', $user->name) }}" placeholder="ex. Admin Itenas" required>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
                             <input type="email" name="email" class="form-control" id="email"
-                                value="{{ old('email', $user->email) }}" placeholder="admin@example.com">
+                                value="{{ old('email', $user->email) }}" placeholder="admin@example.com" required>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
                             <input type="text" name="username" class="form-control" id="username"
-                                value="{{ old('username', $user->username) }}" placeholder="ex. adminitenas">
+                                value="{{ old('username', $user->username) }}" placeholder="ex. adminitenas" required>
                         </div>
 
-                        <div class="col-md-6 mb-3">
-    <label for="unit_id" class="form-label">Unit <span class="text-danger">*</span></label>
-    <select name="unit_id" id="unit_id" class="form-select">
-        <option value="">-- Pilih Unit --</option>
-        @foreach ($units as $unit)
-            <option value="{{ $unit->id }}"
-                {{ old('unit_id', $user->unit_id) == $unit->id ? 'selected' : '' }}>
-                {{ $unit->nama }}
-            </option>
-        @endforeach
-    </select>
-</div>
-
+                        <!-- Dropdown Unit -->
+                        <div class="col-md-6 mb-3" id="unit-select-container" style="display: none;">
+                            <label for="unit" class="form-label">Unit <span class="text-danger">*</span></label>
+                            <select name="unit" id="unit" class="form-select">
+                                <option value="">-- Pilih Unit --</option>
+                                @foreach ($units as $unit)
+                                    <option value="{{ $unit->id }}"
+                                        {{ old('unit', $user->unit_id) == $unit->id ? 'selected' : '' }}>
+                                        {{ $unit->nama }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="password" class="form-label">Password (Kosongkan jika tidak diubah)</label>
@@ -56,34 +56,60 @@
 
                     <!-- SECTION 2: Hak Akses -->
                     <h6 class="fw-bold mb-3">2. Hak Akses (Role)</h6>
-<div class="row">
-    @foreach ($roles->chunk(ceil($roles->count() / 2)) as $chunk)
-        <div class="col-md-6">
-            @foreach ($chunk as $role)
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="radio" name="role" id="role_{{ $role->name }}"
-                        value="{{ $role->name }}"
-                        {{ $user->roles->first()?->name === $role->name ? 'checked' : '' }}>
-                    <label class="form-check-label" for="role_{{ $role->name }}">
-                        {{ ucfirst(str_replace('_', ' ', $role->name)) }}
-                    </label>
-                </div>
-            @endforeach
-        </div>
-    @endforeach
-</div>
+                    <div class="row">
+                        @foreach ($roles->chunk(ceil($roles->count() / 2)) as $chunk)
+                            <div class="col-md-6">
+                                @foreach ($chunk as $role)
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="role" id="role_{{ $role->name }}"
+                                            value="{{ $role->name }}"
+                                            {{ $user->roles->first()?->name === $role->name ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="role_{{ $role->name }}">
+                                            {{ ucfirst(str_replace('-', ' ', $role->name)) }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endforeach
+                    </div>
 
                     <!-- Submit -->
                     <div class="mt-4">
                         <button class="btn btn-primary">
-                             Simpan Perubahan
+                            Simpan Perubahan
                         </button>
                         <a href="{{ route('users.index') }}" class="btn btn-secondary">
-                             Kembali
+                            Kembali
                         </a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const roleRadios = document.querySelectorAll('input[name="role"]');
+            const unitSelectContainer = document.getElementById('unit-select-container');
+            const unitSelect = document.getElementById('unit');
+
+            function toggleUnitSelect() {
+                const selectedRole = document.querySelector('input[name="role"]:checked');
+                if (selectedRole && selectedRole.value === 'admin-unit') {
+                    unitSelectContainer.style.display = 'block';
+                } else {
+                    unitSelectContainer.style.display = 'none';
+                    unitSelect.value = '';
+                }
+            }
+
+            roleRadios.forEach(radio => {
+                radio.addEventListener('change', toggleUnitSelect);
+            });
+
+            toggleUnitSelect(); // Jalankan saat halaman pertama kali dibuka
+        });
+    </script>
+    @endpush
 </x-app-layout>

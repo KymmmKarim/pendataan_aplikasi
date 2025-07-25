@@ -14,7 +14,6 @@ class UserController extends Controller
     {
         $users = User::with('roles')->get();
         return view('users.index', compact('users'));
-
     }
 
     public function create()
@@ -26,29 +25,33 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        // Validasi umum
         $validated = $request->validate([
-        'name'     => 'required|string|max:255',
-        'username' => 'required|string|max:255|unique:users',
-        'unit'     => 'required|string|max:255',
-        'email'    => 'required|email|unique:users',
-        'password' => 'required|string|min:6',
-        'role'     => 'required|exists:roles,name',
+            'name'     => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users',
+            'email'    => 'required|email|unique:users',
+            'password' => 'required|string|min:6',
+            'role'     => 'required|exists:roles,name',
         ]);
-        
+
+        // Validasi tambahan untuk admin-unit
         if ($request->role === 'admin-unit') {
-        $rules['unit'] = 'required|exists:units,id';
-    }
+            $request->validate([
+                'unit' => 'required|exists:units,id',
+            ]);
+        }
 
+        // Simpan user
         $user = User::create([
-            'name'     => $validated['name'],
-        'username' => $validated['username'],
-        'unit'     => $validated['unit'],
-        'email'    => $validated['email'],
-        'password' => Hash::make($validated['password']),
-        'unit_id'  => $validated['unit'] ?? null,
+            'name'     => $request->name,
+            'username' => $request->username,
+            'email'    => $request->email,
+            'password' => Hash::make($request->password),
+            'unit_id'  => $request->role === 'admin-unit' ? $request->unit : null,
         ]);
 
-        $user->assignRole($validated['role']);
+        // Assign role
+        $user->assignRole($request->role);
 
         return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan.');
     }
@@ -57,35 +60,42 @@ class UserController extends Controller
     {
         $roles = Role::all();
         $units = Unit::all();
-        return view('users.edit', compact('user', 'roles','units'));
+        return view('users.edit', compact('user', 'roles', 'units'));
     }
 
     public function update(Request $request, User $user)
-{
-    $validated = $request->validate([
-        'name'     => 'required|string|max:255',
-        'username' => 'required|string|max:255|unique:users,username,' . $user->id,
-        'email'    => 'required|email|unique:users,email,' . $user->id,
-        'password' => 'nullable|string|min:6',
-        'role'     => 'required|exists:roles,name',
-        'unit_id'  => 'nullable|exists:units,id',
-    ]);
+    {
+        $validated = $request->validate([
+            'name'     => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
+            'email'    => 'required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:6',
+            'role'     => 'required|exists:roles,name',
+        ]);
 
-    $user->update([
-        'name'     => $validated['name'],
-        'username' => $validated['username'],
-        'email'    => $validated['email'],
-        'password' => $validated['password']
-            ? Hash::make($validated['password'])
-            : $user->password,
-        'unit_id'  => $validated['unit_id'] ?? null,
-    ]);
+        // Validasi tambahan untuk admin-unit
+        if ($request->role === 'admin-unit') {
+            $request->validate([
+                'unit' => 'required|exists:units,id',
+            ]);
+        }
 
-    $user->syncRoles([$validated['role']]);
+        // Update user
+        $user->update([
+            'name'     => $validated['name'],
+            'username' => $validated['username'],
+            'email'    => $validated['email'],
+            'password' => $validated['password']
+                ? Hash::make($validated['password'])
+                : $user->password,
+            'unit_id'  => $request->role === 'admin-unit' ? $request->unit : null,
+        ]);
 
-    return redirect()->route('users.index')->with('success', 'User berhasil diperbarui.');
-}
+        // Update role
+        $user->syncRoles([$validated['role']]);
 
+        return redirect()->route('users.index')->with('success', 'User berhasil diperbarui.');
+    }
 
     public function destroy(User $user)
     {
