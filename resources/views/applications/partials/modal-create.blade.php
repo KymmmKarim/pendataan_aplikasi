@@ -51,24 +51,16 @@
                         <label for="deskripsi" class="form-label fw-semibold">Deskripsi <span class="text-danger">*</span></label>
                         <input type="text" name="deskripsi" id="deskripsi" class="form-control border-dark" placeholder="Masukkan Deskripsi" required>
                     </div>
-                    @role('admin-unit')
-    <div class="col-md-6">
-        <label class="form-label fw-semibold">Unit</label>
-        <input type="hidden" name="unit_id" value="{{ auth()->user()->unit_id }}">
-        <input type="text" class="form-control border-dark" value="{{ auth()->user()->unit->nama }}" disabled>
-    </div>
-@else
-    <div class="col-md-6">
-        <label for="unit_id" class="form-label fw-semibold">Pilih Unit <span class="text-danger">*</span></label>
-        <select name="unit_id" id="unit_id" class="form-select border-dark" required>
-            <option value="">-- Pilih Unit --</option>
-            @foreach ($units as $unit)
-                <option value="{{ $unit->id }}">{{ $unit->nama }}</option>
-            @endforeach
-        </select>
-    </div>
-@endrole
-
+                    <div class="col-md-6">
+                        <label for="unit_id" class="form-label fw-semibold">Pilih Unit <span class="text-danger">*</span></label>
+                        <select name="unit_id" id="unit_id" class="form-select border-dark" required>
+                            <option value="">-- Pilih Unit --</option>
+                            @foreach ($units as $unit)
+                                <option value="{{ $unit->id }}">{{ $unit->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
 
                 <div class="d-flex justify-content-end gap-2 mt-4">
                     <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Batal</button>
