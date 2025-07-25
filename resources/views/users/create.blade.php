@@ -3,6 +3,11 @@
         Tambah Pengguna
     </x-slot>
 
+    <!-- Select2 CSS & JS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <div class="container-fluid mt-3">
         <div class="card">
             <div class="card-body">
@@ -31,14 +36,15 @@
 
                         <!-- Kolom Unit -->
                         <div class="col-md-6 mb-3" id="unit-select-container" style="display: none;">
-    <label for="unit" class="form-label">Pilih Unit <span class="text-danger">*</span></label>
-    <select class="form-select" id="unit" name="unit">
-        <option value="" disabled selected>-- Pilih Unit --</option>
-        @foreach ($units as $unit)
-            <option value="{{ $unit->id }}">{{ $unit->nama }}</option>
-        @endforeach
-    </select>
-</div>
+                            <label for="unit" class="form-label">Pilih Unit <span class="text-danger">*</span></label>
+                            <select class="form-select select2" id="unit" name="unit">
+                                <option value="" disabled selected>-- Pilih Unit --</option>
+                                @foreach ($units as $unit)
+                                    <option value="{{ $unit->id }}">{{ $unit->nama }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
 
                     <hr>
 
@@ -61,14 +67,9 @@
                         @endforeach
                     </div>
 
-
                     <div class="mt-4">
-                        <button type="submit" class="btn btn-primary">
-                             Simpan
-                        </button>
-                         <a href="{{ route('users.index') }}" class="btn btn-secondary ms-2">
-                            Batal
-                        </a>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <a href="{{ route('users.index') }}" class="btn btn-secondary ms-2">Batal</a>
                     </div>
                 </form>
             </div>
@@ -76,28 +77,37 @@
     </div>
 
     @push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const roleRadios = document.querySelectorAll('input[name="role"]');
-        const unitSelectContainer = document.getElementById('unit-select-container');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const roleRadios = document.querySelectorAll('input[name="role"]');
+            const unitSelectContainer = document.getElementById('unit-select-container');
 
-        function toggleUnitSelect() {
-            const selectedRole = document.querySelector('input[name="role"]:checked');
-            if (selectedRole && selectedRole.value === 'admin-unit') {
-                unitSelectContainer.style.display = 'block';
-            } else {
-                unitSelectContainer.style.display = 'none';
-                document.getElementById('unit').value = '';
+            // Inisialisasi Select2
+            $(document).ready(function () {
+                $('#unit').select2({
+                    placeholder: "-- Pilih Unit --",
+                    allowClear: true,
+                    width: '100%'
+                });
+            });
+
+            function toggleUnitSelect() {
+                const selectedRole = document.querySelector('input[name="role"]:checked');
+                if (selectedRole && selectedRole.value === 'admin-unit') {
+                    unitSelectContainer.style.display = 'block';
+                } else {
+                    unitSelectContainer.style.display = 'none';
+                    $('#unit').val(null).trigger('change');
+                }
             }
-        }
 
-        roleRadios.forEach(radio => {
-            radio.addEventListener('change', toggleUnitSelect);
+            roleRadios.forEach(radio => {
+                radio.addEventListener('change', toggleUnitSelect);
+            });
+
+            toggleUnitSelect(); // jalankan sekali saat halaman load
         });
-
-        toggleUnitSelect(); // jalankan sekali saat halaman load
-    });
-</script>
-@endpush
+    </script>
+    @endpush
 
 </x-app-layout>

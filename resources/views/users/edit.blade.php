@@ -3,6 +3,11 @@
         Edit Pengguna
     </x-slot>
 
+    <!-- Load Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <div class="container-fluid mt-3">
         <div class="card">
             <div class="card-body">
@@ -30,11 +35,17 @@
                             <input type="text" name="username" class="form-control" id="username"
                                 value="{{ old('username', $user->username) }}" placeholder="ex. adminitenas" required>
                         </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label">Password (Kosongkan jika tidak diubah)</label>
+                            <input type="password" name="password" class="form-control" id="password"
+                                placeholder="*******">
+                        </div>
 
                         <!-- Dropdown Unit -->
                         <div class="col-md-6 mb-3" id="unit-select-container" style="display: none;">
                             <label for="unit" class="form-label">Unit <span class="text-danger">*</span></label>
-                            <select name="unit" id="unit" class="form-select">
+                            <select name="unit" id="unit" class="form-select select2" style="width: 100%;">
                                 <option value="">-- Pilih Unit --</option>
                                 @foreach ($units as $unit)
                                     <option value="{{ $unit->id }}"
@@ -43,12 +54,6 @@
                                     </option>
                                 @endforeach
                             </select>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="password" class="form-label">Password (Kosongkan jika tidak diubah)</label>
-                            <input type="password" name="password" class="form-control" id="password"
-                                placeholder="*******">
                         </div>
                     </div>
 
@@ -89,25 +94,28 @@
 
     @push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const roleRadios = document.querySelectorAll('input[name="role"]');
-            const unitSelectContainer = document.getElementById('unit-select-container');
-            const unitSelect = document.getElementById('unit');
+        $(document).ready(function () {
+            // Inisialisasi Select2
+            $('#unit').select2({
+                placeholder: "-- Pilih Unit --",
+                allowClear: true,
+                width: '100%'
+            });
+
+            const roleRadios = $('input[name="role"]');
+            const unitSelectContainer = $('#unit-select-container');
 
             function toggleUnitSelect() {
-                const selectedRole = document.querySelector('input[name="role"]:checked');
-                if (selectedRole && selectedRole.value === 'admin-unit') {
-                    unitSelectContainer.style.display = 'block';
+                const selectedRole = $('input[name="role"]:checked').val();
+                if (selectedRole === 'admin-unit') {
+                    unitSelectContainer.show();
                 } else {
-                    unitSelectContainer.style.display = 'none';
-                    unitSelect.value = '';
+                    unitSelectContainer.hide();
+                    $('#unit').val(null).trigger('change');
                 }
             }
 
-            roleRadios.forEach(radio => {
-                radio.addEventListener('change', toggleUnitSelect);
-            });
-
+            roleRadios.change(toggleUnitSelect);
             toggleUnitSelect(); // Jalankan saat halaman pertama kali dibuka
         });
     </script>
