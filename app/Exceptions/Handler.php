@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 
 class Handler extends ExceptionHandler
 {
@@ -42,9 +43,16 @@ class Handler extends ExceptionHandler
      * @return void
      */
     public function register()
-    {
-        $this->reportable(function (Throwable $e) {
-            //
-        });
-    }
+{
+    $this->reportable(function (Throwable $e) {
+        //
+    });
+
+    $this->renderable(function (Throwable $e, $request) {
+        if ($e instanceof UnauthorizedException) {
+            abort(403, 'Anda tidak memiliki akses ke halaman ini😅.');
+        }
+    });
+}
+
 }

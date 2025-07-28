@@ -8,6 +8,7 @@
             <h4 class="fw-bold mb-0">Data Aplikasi</h4>
 
             <div class="d-flex gap-2">
+                {{-- Search input di atas --}}
                 <form action="{{ route('applications.index') }}" method="GET">
                     <div class="input-group">
                         <input type="text" id="search-input" name="search" placeholder="Cari aplikasi..." class="form-control" value="{{ request('search') }}">
@@ -28,8 +29,8 @@
         <div class="card shadow-sm">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table custom-table align-middle mb-0">
-                        <thead class="table-light border-bottom">
+                    <table class="table custom-table align-middle mb-0" id="applicationsTable">
+                        <thead class="table-light border-bottom text-center">
                             <tr>
                                 <th>Nama Aplikasi</th>
                                 <th>Versi</th>
@@ -47,23 +48,29 @@
                                         {{ $app->masa_berlaku ? \Carbon\Carbon::parse($app->masa_berlaku)->format('d F Y') : '-' }}
                                     </td>
                                     <td>{{ $app->unit->nama ?? '-' }}</td>
-
                                     <td class="text-center">
                                         <a href="{{ route('applications.show', $app->id) }}" class="btn btn-sm btn-outline-dark me-1" title="Lihat Detail">
                                             <i class="bi bi-info-circle"></i>
                                         </a>
-                                        <button type="button" class="btn btn-sm btn-outline-primary me-1"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#modalEdit{{ $app->id }}">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </button>
-                                        <form id="delete-app-{{ $app->id }}" action="{{ route('applications.destroy', $app->id) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-sm btn-outline-danger btn-delete-app" data-id="{{ $app->id }}">
-                                                <i class="bi bi-trash"></i>
+
+                                        @if (
+                                            auth()->user()->hasRole('superadmin') ||
+                                            auth()->user()->hasRole('admin') ||
+                                            (auth()->user()->hasRole('admin-unit') && auth()->user()->unit_id == $app->unit_id)
+                                        )
+                                            <button type="button" class="btn btn-sm btn-outline-primary me-1"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#modalEdit{{ $app->id }}">
+                                                <i class="bi bi-pencil-square"></i>
                                             </button>
-                                        </form>
+                                            <form id="delete-app-{{ $app->id }}" action="{{ route('applications.destroy', $app->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="btn btn-sm btn-outline-danger btn-delete-app" data-id="{{ $app->id }}">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
 
@@ -71,17 +78,17 @@
                                 @include('applications.partials.modal-edit', ['app' => $app])
                             @empty
                                 <tr>
-                                    <td colspan="4" class="text-center">Belum ada data aplikasi.</td>
+                                    <td colspan="5" class="text-center">Belum ada data aplikasi.</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
 
-                {{-- Pagination --}}
-                <div class="mt-3">
+                {{-- Nonaktifkan pagination Laravel --}}
+                {{-- <div class="mt-3">
                     {{ $applications->links() }}
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
@@ -89,43 +96,60 @@
     {{-- Modal Tambah --}}
     @include('applications.partials.modal-create')
 
-    <!-- SweetAlert2 -->
+    {{-- SweetAlert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const searchInput = document.getElementById('search-input');
-            const tableRows = document.querySelectorAll('#applications-table-body tr');
+    {{-- DataTables --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
-            searchInput.addEventListener('input', function () {
-                const keyword = this.value.toLowerCase();
-                tableRows.forEach(row => {
-                    const rowText = row.innerText.toLowerCase();
-                    row.style.display = rowText.includes(keyword) ? '' : 'none';
-                });
-                if (keyword === '') {
-                    tableRows.forEach(row => row.style.display = '');
+    <script>
+        $(document).ready(function () {
+            // Inisialisasi DataTables tanpa fitur searching
+            $('#applicationsTable').DataTable({
+                paging: true,
+                ordering: false,
+                info: true,
+                searching: false, // <== pencarian dimatikan
+                pageLength: 10,
+                language: {
+                    lengthMenu: "Tampilkan _MENU_ data",
+                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                    paginate: {
+                        previous: "<",
+                        next: ">"
+                    }
                 }
             });
 
-            // SweetAlert konfirmasi hapus aplikasi
-            document.querySelectorAll('.btn-delete-app').forEach(button => {
-                button.addEventListener('click', function () {
-                    const appId = this.dataset.id;
-                    Swal.fire({
-                        title: 'Yakin mau dihapus?',
-                        text: "Data yang dihapus tidak dapat dikembalikan loh!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#6c757d',
-                        confirmButtonText: 'Ya, hapus',
-                        cancelButtonText: 'Batal'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            document.getElementById('delete-app-' + appId).submit();
-                        }
-                    });
+            // Filter manual berdasarkan search input di atas
+            $('#search-input').on('input', function () {
+                const keyword = $(this).val().toLowerCase().trim();
+
+                $('#applications-table-body tr').each(function () {
+                    const rowText = $(this).text().toLowerCase();
+                    $(this).toggle(rowText.includes(keyword));
+                });
+            });
+
+            // SweetAlert konfirmasi hapus
+            $('.btn-delete-app').click(function () {
+                const appId = $(this).data('id');
+                Swal.fire({
+                    title: 'Yakin mau dihapus?',
+                    text: "Data yang dihapus tidak dapat dikembalikan loh!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, hapus',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#delete-app-' + appId).submit();
+                    }
                 });
             });
         });
