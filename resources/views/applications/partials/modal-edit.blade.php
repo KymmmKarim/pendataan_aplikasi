@@ -25,7 +25,7 @@
 
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Lokasi Pembelian</label>
-                        <select name="lokasi_pembelian" class="form-control border-dark" required>
+                        <select name="lokasi_pembelian" class="form-select border-dark" required>
                             <option value="">Pilih Lokasi Pembelian</option>
                             <option value="Official" {{ $app->lokasi_pembelian == 'Official' ? 'selected' : '' }}>Official</option>
                             <option value="E-Commerce" {{ $app->lokasi_pembelian == 'E-Commerce' ? 'selected' : '' }}>E-Commerce</option>
@@ -44,7 +44,7 @@
 
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Status</label>
-                        <select name="status" class="form-control border-dark" required>
+                        <select name="status" class="form-select border-dark" required>
                             <option value="">Pilih Status</option>
                             <option value="Aktif" {{ $app->status == 'Aktif' ? 'selected' : '' }}>Aktif</option>
                             <option value="Non-Aktif" {{ $app->status == 'Non-Aktif' ? 'selected' : '' }}>Non-Aktif</option>
@@ -53,7 +53,7 @@
 
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Bukti Pembelian</label>
-                        <input type="file" name="bukti_pembelian" class="form-control border-dark" accept=".jpg,.jpeg,.png,.pdf">
+                        <input type="file" name="bukti_pembelian" class="form-control border-dark">
                         @if ($app->bukti_pembelian)
                             <small class="d-block mt-1">
                                 File saat ini: <a href="{{ asset('storage/' . $app->bukti_pembelian) }}" target="_blank">Lihat</a>
@@ -67,15 +67,22 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Pilih Unit <span class="text-danger">*</span></label>
-                        <select name="unit_id" id="unit_id_{{ $app->id }}" class="form-control border-dark select2-unit" required>
-                            <option value="">-- Pilih Unit --</option>
-                            @foreach ($units as $unit)
-                                <option value="{{ $unit->id }}" {{ $app->unit_id == $unit->id ? 'selected' : '' }}>
-                                    {{ $unit->nama }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <label for="unit_id" class="form-label">Unit</label>
+                        @role('admin-unit')
+                            <select class="form-select" disabled>
+                                <option>{{ auth()->user()->unit->nama }}</option>
+                            </select>
+                            <input type="hidden" name="unit_id" value="{{ auth()->user()->unit_id }}">
+                        @else
+                            <select name="unit_id" class="form-select" required>
+                                <option value="">-- Pilih Unit --</option>
+                                @foreach($units as $unit)
+                                    <option value="{{ $unit->id }}" {{ old('unit_id', $app->unit_id) == $unit->id ? 'selected' : '' }}>
+                                        {{ $unit->nama }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        @endrole
                     </div>
                 </div>
 
@@ -87,36 +94,3 @@
         </div>
     </div>
 </div>
-
-<!-- Select2 CSS & JS Langsung -->
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-<style>
-    .select2-container--default .select2-selection--single {
-        height: 38px !important;
-        border: 1px solid #000 !important;
-        border-radius: 0.375rem !important;
-        padding: 6px 12px;
-    }
-
-    .select2-container--default .select2-selection--single .select2-selection__rendered {
-        line-height: 24px !important;
-    }
-
-    .select2-container--default .select2-selection--single .select2-selection__arrow {
-        height: 36px !important;
-    }
-</style>
-
-<script>
-    $(document).ready(function () {
-        $('#modalEdit{{ $app->id }} .select2-unit').select2({
-            dropdownParent: $('#modalEdit{{ $app->id }}'),
-            placeholder: "-- Pilih Unit --",
-            width: '100%',
-            allowClear: true
-        });
-    });
-</script>
