@@ -10,9 +10,17 @@
                     <i class="fas fa-map-marker-alt me-2"></i>Daftar Lokasi Pembelian
                 </h5>
 
-                <a href="{{ route('lokasi_pembelian.create') }}" class="btn btn-primary btn-sm py-1 px-3" style="height: 32px;">
-                    Tambah Lokasi
-                </a>
+                <div class="d-flex gap-2 align-items-center">
+                    <div class="input-group input-group-sm" style="max-width: 250px;">
+                        <input type="text" id="search-lokasi-input" placeholder="Cari lokasi..." class="form-control">
+                        <button class="btn btn-outline-secondary" type="button">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                    <a href="{{ route('lokasi_pembelian.create') }}" class="btn btn-primary btn-sm py-1 px-3" style="height: 32px;">
+                        Tambah Lokasi
+                    </a>
+                </div>
             </div>
 
             <div class="card-body">
@@ -32,20 +40,20 @@
                                 <th>Aksi</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="lokasi-table-body">
                             @foreach ($lokasi as $index => $item)
                                 <tr>
                                     <td class="text-center">{{ $index + 1 }}</td>
                                     <td>{{ $item->nama }}</td>
                                     <td class="text-center">
                                         <a href="{{ route('lokasi_pembelian.edit', $item->id) }}" class="btn btn-sm btn-outline-primary me-1">
-                                            <i class="fas fa-edit"></i>
+                                            <i class="bi bi-pencil-square"></i>
                                         </a>
                                         <form id="delete-lokasi-{{ $item->id }}" action="{{ route('lokasi_pembelian.destroy', $item->id) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="button" class="btn btn-sm btn-outline-danger btn-delete" data-id="{{ $item->id }}">
-                                                <i class="fas fa-trash-alt"></i>
+                                                <i class="bi bi-trash"></i>
                                             </button>
                                         </form>
                                     </td>
@@ -67,13 +75,17 @@
     {{-- SweetAlert --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    {{-- Bootstrap Icons --}}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
     <script>
         $(document).ready(function () {
-            $('#lokasiTable').DataTable({
+            // Inisialisasi DataTables tanpa search bawaan
+            const table = $('#lokasiTable').DataTable({
                 paging: true,
                 ordering: false,
                 info: true,
-                searching: true,
+                searching: false,
                 pageLength: 10,
                 language: {
                     lengthMenu: "Tampilkan _MENU_ data",
@@ -85,6 +97,16 @@
                 }
             });
 
+            // Custom search
+            $('#search-lokasi-input').on('input', function () {
+                const keyword = $(this).val().toLowerCase().trim();
+                $('#lokasi-table-body tr').each(function () {
+                    const rowText = $(this).text().toLowerCase();
+                    $(this).toggle(rowText.includes(keyword));
+                });
+            });
+
+            // SweetAlert untuk hapus
             $('.btn-delete').click(function () {
                 const id = $(this).data('id');
                 Swal.fire({
