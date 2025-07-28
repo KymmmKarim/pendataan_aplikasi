@@ -50,7 +50,7 @@ class Handler extends ExceptionHandler
 
     $this->renderable(function (Throwable $e, $request) {
         if ($e instanceof UnauthorizedException) {
-            abort(403, 'Anda tidak memiliki akses ke halaman ini😅.');
+            abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
     });
 }
