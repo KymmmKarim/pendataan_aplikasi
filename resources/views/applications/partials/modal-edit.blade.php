@@ -61,22 +61,28 @@
                         @endif
                     </div>
 
-                    <div class="mb-3">
-    <label for="unit_id" class="form-label">Unit</label>
-    <select name="unit_id" id="unit_id" class="form-select" required>
-        <option value="">-- Pilih Unit --</option>
-        @foreach($units as $unit)
-            <option value="{{ $unit->id }}" {{ old('unit_id', $application->unit_id ?? '') == $unit->id ? 'selected' : '' }}>
-                {{ $unit->nama }}
-            </option>
-        @endforeach
-    </select>
-</div>
-
-
-                    <div class="col-12">
+                    <div class="col-md-6">
                         <label class="form-label fw-semibold">Deskripsi</label>
                         <input type="text" name="deskripsi" value="{{ $app->deskripsi }}" class="form-control border-dark" placeholder="Masukkan Deskripsi" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="unit_id" class="form-label">Unit</label>
+                        @role('admin-unit')
+                            <select class="form-select" disabled>
+                                <option>{{ auth()->user()->unit->nama }}</option>
+                            </select>
+                            <input type="hidden" name="unit_id" value="{{ auth()->user()->unit_id }}">
+                        @else
+                            <select name="unit_id" class="form-select" required>
+                                <option value="">-- Pilih Unit --</option>
+                                @foreach($units as $unit)
+                                    <option value="{{ $unit->id }}" {{ old('unit_id', $app->unit_id) == $unit->id ? 'selected' : '' }}>
+                                        {{ $unit->nama }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        @endrole
                     </div>
                 </div>
 
@@ -88,3 +94,4 @@
         </div>
     </div>
 </div>
+    
