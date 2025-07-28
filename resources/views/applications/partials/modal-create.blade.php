@@ -1,3 +1,4 @@
+<!-- Modal Tambah Data -->
 <div class="modal fade" id="tambahData" tabindex="-1" aria-labelledby="tambahDataLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content p-4 border-0 shadow">
@@ -16,28 +17,28 @@
                         <input type="text" name="harga" id="harga" class="form-control border-dark" placeholder="Masukkan Harga" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="versi" class="form-label fw-semibold">Versi<span class="text-danger">*</span></label>
-                        <input type="text" name="versi" id="versi" class="form-control border-dark" placeholder="Masukkan Versi">
+                        <label for="versi" class="form-label fw-semibold">Versi <span class="text-danger">*</span></label>
+                        <input type="text" name="versi" id="versi" class="form-control border-dark" placeholder="Masukkan Versi" required>
                     </div>
                     <div class="col-md-6">
                         <label for="lokasi_pembelian" class="form-label fw-semibold">Lokasi Pembelian <span class="text-danger">*</span></label>
-                        <select name="lokasi_pembelian" id="lokasi_pembelian" class="form-select border-dark" required>
+                        <select name="lokasi_pembelian" id="lokasi_pembelian" class="form-control border-dark" required>
                             <option value="">Pilih Lokasi Pembelian</option>
                             <option value="Official">Official</option>
                             <option value="E-Commerce">E-Commerce</option>
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label for="masa_berlaku" class="form-label fw-semibold">Masa Berlaku<span class="text-danger">*</span></label>
-                        <input type="date" name="masa_berlaku" id="masa_berlaku" class="form-control border-dark">
+                        <label for="masa_berlaku" class="form-label fw-semibold">Masa Berlaku <span class="text-danger">*</span></label>
+                        <input type="date" name="masa_berlaku" id="masa_berlaku" class="form-control border-dark" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="tanggal_pembelian" class="form-label fw-semibold">Tanggal Pembelian<span class="text-danger">*</span></label>
-                        <input type="date" name="tanggal_pembelian" id="tanggal_pembelian" class="form-control border-dark">
+                        <label for="tanggal_pembelian" class="form-label fw-semibold">Tanggal Pembelian <span class="text-danger">*</span></label>
+                        <input type="date" name="tanggal_pembelian" id="tanggal_pembelian" class="form-control border-dark" required>
                     </div>
                     <div class="col-md-6">
                         <label for="status" class="form-label fw-semibold">Status <span class="text-danger">*</span></label>
-                        <select name="status" id="status" class="form-select border-dark" required>
+                        <select name="status" id="status" class="form-control border-dark" required>
                             <option value="">Pilih Status</option>
                             <option value="Aktif">Aktif</option>
                             <option value="Non-Aktif">Non-Aktif</option>
@@ -53,7 +54,7 @@
                     </div>
                     <div class="col-md-6">
                         <label for="unit_id" class="form-label fw-semibold">Pilih Unit <span class="text-danger">*</span></label>
-                        <select name="unit_id" id="unit_id" class="form-select border-dark" required>
+                        <select name="unit_id" id="unit_id" class="form-control border-dark select2" required>
                             <option value="">-- Pilih Unit --</option>
                             @foreach ($units as $unit)
                                 <option value="{{ $unit->id }}">{{ $unit->nama }}</option>
@@ -70,3 +71,41 @@
         </div>
     </div>
 </div>
+
+<!-- Include Select2 & Style -->
+@push('scripts')
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- jQuery & Select2 JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- Style Select2 Biar Seragam -->
+<style>
+    .select2-container--default .select2-selection--single {
+        height: 38px !important;
+        border: 1px solid #000 !important;
+        border-radius: 0.375rem !important;
+        padding: 6px 12px;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 24px !important;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 36px !important;
+    }
+</style>
+
+<!-- Init Select2 -->
+<script>
+    $(document).ready(function () {
+        $('#unit_id').select2({
+            dropdownParent: $('#tambahData'),
+            placeholder: "-- Pilih Unit --",
+            width: '100%',
+            allowClear: true
+        });
+    });
+</script>
+@endpush
