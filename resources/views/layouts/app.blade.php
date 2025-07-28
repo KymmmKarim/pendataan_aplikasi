@@ -72,6 +72,12 @@
                     </a>
                 </li>
 
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ request()->is('lokasi_pembelian*') ? 'active' : '' }}" href="{{ route('lokasi_pembelian.index') }}">
+                        <i class="fas fa-map-marker-alt me-2"></i>Lokasi Pembelian
+                    </a>
+                </li>
+
                 <!-- Manajemen Pengguna Dropdown -->
                 <li class="nav-item mb-1">
                     <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#userManagementMenu" role="button" aria-expanded="false" aria-controls="userManagementMenu">
