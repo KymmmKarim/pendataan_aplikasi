@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LokasiPembelianController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\UserController;
@@ -48,6 +49,11 @@ Route::delete('/permissions/{id}', [RolePermissionController::class, 'destroyPer
 Route::middleware(['auth'])->group(function () {
     Route::resource('units', UnitController::class);
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('lokasi_pembelian', LokasiPembelianController::class);
+});
+
 
     // Unit (khusus tampilan unit)
     Route::get('/unit', function () {
