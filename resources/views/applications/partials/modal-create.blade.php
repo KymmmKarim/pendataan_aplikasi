@@ -53,26 +53,14 @@
                         <input type="text" name="deskripsi" id="deskripsi" class="form-control border-dark" placeholder="Masukkan Deskripsi" required>
                     </div>
                     <div class="col-md-6">
-
-    <label for="unit_id" class="form-label">Unit</label>
-
-    @role('admin-unit')
-        <select class="form-select" disabled>
-            <option>{{ auth()->user()->unit->nama }}</option>
-        </select>
-        <input type="hidden" name="unit_id" value="{{ auth()->user()->unit_id }}">
-    @else
-        <select name="unit_id" class="form-select" required>
-            <option value="">-- Pilih Unit --</option>
-            @foreach($units as $unit)
-                <option value="{{ $unit->id }}" {{ old('unit_id') == $unit->id ? 'selected' : '' }}>
-                    {{ $unit->nama }}
-                </option>
-            @endforeach
-        </select>
-    @endrole
-</div>
-
+                        <label for="unit_id" class="form-label fw-semibold">Pilih Unit <span class="text-danger">*</span></label>
+                        <select name="unit_id" id="unit_id" class="form-control border-dark select2" required>
+                            <option value="">-- Pilih Unit --</option>
+                            @foreach ($units as $unit)
+                                <option value="{{ $unit->id }}">{{ $unit->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
 
                 <div class="d-flex justify-content-end gap-2 mt-4">
