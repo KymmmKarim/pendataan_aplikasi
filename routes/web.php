@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\LokasiPembelianController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\UserController;
@@ -57,7 +58,16 @@ Route::middleware('role:superadmin')->group(function () {
 });
 
 
+
     // Unit view (custom)
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('lokasi_pembelian', LokasiPembelianController::class);
+});
+
+
+    // Unit (khusus tampilan unit)
+
     Route::get('/unit', function () {
         return view('unit');
     })->name('unit');
