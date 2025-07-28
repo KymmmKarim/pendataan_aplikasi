@@ -43,9 +43,6 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{application}', [ApplicationController::class, 'destroy'])->name('destroy');
     });
 
-    // ===== Lokasi Pembelian =====
-    Route::resource('lokasi_pembelian', LokasiPembelianController::class);
-
     // ===== Unit view (custom) =====
     Route::get('/unit', function () {
         return view('unit');
@@ -57,7 +54,10 @@ Route::middleware('auth')->group(function () {
     });
 
     // ===== Admin-only Routes (superadmin) =====
-    Route::middleware('role:superadmin')->group(function () {
+    Route::middleware('role:superadmin|admin')->group(function () {
+
+        // Lokasi Pembelian
+        Route::resource('lokasi_pembelian', LokasiPembelianController::class);
 
         // Users
         Route::resource('users', UserController::class);
