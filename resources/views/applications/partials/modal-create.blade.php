@@ -1,5 +1,5 @@
 <!-- Modal Tambah Data -->
-<div class="modal fade" id="tambahData" tabindex="-1" aria-labelledby="tambahDataLabel" aria-hidden="true">
+<div class="modal fade" id="tambahData" tabindex="-1" aria-labelledby="tambahDataLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content p-4 border-0 shadow">
             <h4 class="mb-4 fw-bold text-primary">Tambah Data</h4>
@@ -8,38 +8,47 @@
                 @csrf
 
                 <div class="row g-4">
+                    <!-- Nama Aplikasi -->
                     <div class="col-md-6">
                         <label for="nama_aplikasi" class="form-label fw-semibold">Nama Aplikasi <span class="text-danger">*</span></label>
                         <input type="text" name="nama_aplikasi" id="nama_aplikasi" class="form-control border-dark" placeholder="Masukkan Nama Aplikasi" required>
                     </div>
+
+                    <!-- Harga -->
                     <div class="col-md-6">
-    <label for="harga" class="form-label fw-semibold">Harga <span class="text-danger">*</span></label>
-    <input type="text" name="harga" id="harga" class="form-control border-dark" placeholder="Masukkan Harga" required oninput="formatHarga(this)">
-</div>
+                        <label for="harga" class="form-label fw-semibold">Harga <span class="text-danger">*</span></label>
+                        <input type="text" name="harga" id="harga" class="form-control border-dark" placeholder="Masukkan Harga" required oninput="formatHarga(this)">
+                    </div>
+
+                    <!-- Versi -->
                     <div class="col-md-6">
                         <label for="versi" class="form-label fw-semibold">Versi <span class="text-danger">*</span></label>
                         <input type="text" name="versi" id="versi" class="form-control border-dark" placeholder="Masukkan Versi" required>
                     </div>
+
+                    <!-- Lokasi Pembelian -->
                     <div class="col-md-6">
                         <label for="lokasi_pembelian_id" class="form-label fw-semibold">Lokasi Pembelian <span class="text-danger">*</span></label>
-                        <div class="d-flex gap-2">
-                            <select name="lokasi_pembelian_id" id="lokasi_pembelian_id" class="form-control border-dark select2-lokasi" required>
-                                <option value="">-- Pilih Lokasi --</option>
-                                @foreach ($lokasiPembelians as $lokasi)
-                                    <option value="{{ $lokasi->id }}">{{ $lokasi->nama }}</option>
-                                @endforeach
-                            </select>
-                            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalLokasiBaru">+</button>
-                        </div>
+                        <select name="lokasi_pembelian_id" id="lokasi_pembelian_id" class="form-control border-dark" required>
+                            @foreach ($lokasiPembelians as $lokasi)
+                                <option value="{{ $lokasi->id }}">{{ $lokasi->nama }}</option>
+                            @endforeach
+                        </select>
                     </div>
+
+                    <!-- Masa Berlaku -->
                     <div class="col-md-6">
                         <label for="masa_berlaku" class="form-label fw-semibold">Masa Berlaku <span class="text-danger">*</span></label>
                         <input type="date" name="masa_berlaku" id="masa_berlaku" class="form-control border-dark" required>
                     </div>
+
+                    <!-- Tanggal Pembelian -->
                     <div class="col-md-6">
                         <label for="tanggal_pembelian" class="form-label fw-semibold">Tanggal Pembelian <span class="text-danger">*</span></label>
                         <input type="date" name="tanggal_pembelian" id="tanggal_pembelian" class="form-control border-dark" required>
                     </div>
+
+                    <!-- Status -->
                     <div class="col-md-6">
                         <label for="status" class="form-label fw-semibold">Status <span class="text-danger">*</span></label>
                         <select name="status" id="status" class="form-control border-dark" required>
@@ -48,14 +57,20 @@
                             <option value="Non-Aktif">Non-Aktif</option>
                         </select>
                     </div>
+
+                    <!-- Bukti Pembelian -->
                     <div class="col-md-6">
                         <label for="bukti_pembelian" class="form-label fw-semibold">Bukti Pembelian <span class="text-danger">*</span></label>
                         <input type="file" name="bukti_pembelian" id="bukti_pembelian" class="form-control border-dark" accept=".jpg,.jpeg,.png,.pdf" required>
                     </div>
+
+                    <!-- Deskripsi -->
                     <div class="col-md-6">
                         <label for="deskripsi" class="form-label fw-semibold">Deskripsi <span class="text-danger">*</span></label>
                         <input type="text" name="deskripsi" id="deskripsi" class="form-control border-dark" placeholder="Masukkan Deskripsi" required>
                     </div>
+
+                    <!-- Unit -->
                     <div class="col-md-6">
                         <label for="unit_id" class="form-label fw-semibold">Pilih Unit <span class="text-danger">*</span></label>
                         @role('admin-unit')
@@ -83,93 +98,96 @@
     </div>
 </div>
 
-<!-- Modal Tambah Lokasi Pembelian -->
-<div class="modal fade" id="modalLokasiBaru" tabindex="-1" aria-labelledby="modalLokasiBaruLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content p-4 border-0 shadow">
-            <h5 class="modal-title mb-3 fw-bold text-primary" id="modalLokasiBaruLabel">Tambah Lokasi Pembelian</h5>
-
-            <div class="mb-3">
-                <label for="nama_lokasi_baru" class="form-label fw-semibold">Nama Lokasi</label>
-                <input type="text" id="nama_lokasi_baru" class="form-control border-dark" placeholder="Masukkan nama lokasi">
-            </div>
-
-            <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Batal</button>
-                <button type="button" id="simpan_lokasi" class="btn btn-success">Simpan</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 @push('scripts')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    <style>
-        .select2-container--default .select2-selection--single {
-            height: 38px !important;
-            border: 1px solid #000 !important;
-            border-radius: 0.375rem !important;
-            padding: 6px 12px;
+<style>
+.select2-container--default .select2-selection--single {
+    height: 38px !important;
+    border: 1px solid #000 !important;
+    border-radius: 0.375rem !important;
+    padding: 6px 12px;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 24px !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 36px !important;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+    // Inisialisasi Select2 Unit
+    $('#unit_id').select2({
+        dropdownParent: $('#tambahData'),
+        placeholder: "-- Pilih Unit --",
+        width: '100%',
+        allowClear: true
+    });
+
+    // Inisialisasi Select2 Lokasi dengan fitur tags
+    $('#lokasi_pembelian_id').select2({
+        dropdownParent: $('#tambahData'),
+        placeholder: "-- Pilih atau Tambah Lokasi --",
+        tags: true,
+        width: '100%',
+        allowClear: true,
+        createTag: function (params) {
+            var term = $.trim(params.term);
+            if (term === '') return null;
+            return {
+                id: 'new:' + term,
+                text: term,
+                newOption: true
+            };
+        },
+        templateResult: function (data) {
+            var $result = $("<span></span>");
+            $result.text(data.text);
+            if (data.newOption) {
+                $result.append(" <em>(tambah lokasi baru)</em>");
+            }
+            return $result;
         }
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            line-height: 24px !important;
-        }
-        .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: 36px !important;
-        }
-    </style>
+    });
 
-    <script>
-        $(document).ready(function () {
-            $('#unit_id').select2({
-                dropdownParent: $('#tambahData'),
-                placeholder: "-- Pilih Unit --",
-                width: '100%',
-                allowClear: true
-            });
+    // Submit form dengan cek lokasi baru
+    $('#tambahData form').on('submit', function (e) {
+        var selected = $('#lokasi_pembelian_id').val();
 
-            $('#lokasi_pembelian_id').select2({
-                dropdownParent: $('#tambahData'),
-                placeholder: "-- Pilih Lokasi --",
-                width: '100%',
-                allowClear: true
-            });
+        if (selected && selected.startsWith('new:')) {
+            e.preventDefault();
 
-            $('#simpan_lokasi').click(function () {
-                var nama = $('#nama_lokasi_baru').val();
+            var namaBaru = selected.slice(4);
 
-                if (!nama) {
-                    alert('Nama lokasi tidak boleh kosong');
-                    return;
-                }
-
-                $.ajax({
-                    url: '{{ route("lokasi-pembelian.ajax-store") }}',
-                    method: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        nama: nama
-                    },
-                    success: function (res) {
-                        if (res.status === 'success') {
-                            let newOption = new Option(res.lokasi.nama, res.lokasi.id, true, true);
-                            $('#lokasi_pembelian_id').append(newOption).trigger('change');
-
-                            $('#modalLokasiBaru').modal('hide');
-                            $('#nama_lokasi_baru').val('');
-                        }
-                    },
-                    error: function () {
-                        alert('Gagal menyimpan lokasi pembelian');
+            $.ajax({
+                url: '{{ route("lokasi-pembelian.ajax-store") }}',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    nama: namaBaru
+                },
+                success: function (res) {
+                    if (res.status === 'success') {
+                        let newOption = new Option(res.lokasi.nama, res.lokasi.id, true, true);
+                        $('#lokasi_pembelian_id').append(newOption).val(res.lokasi.id).trigger('change');
+                        $('#tambahData form')[0].submit();
+                    } else {
+                        alert('Gagal menyimpan lokasi.');
                     }
-                });
+                },
+                error: function () {
+                    alert('Terjadi kesalahan saat menyimpan lokasi.');
+                }
             });
-        });
+        }
+    });
+});
 
-        function formatHarga(input) {
+function formatHarga(input) {
         let value = input.value.replace(/\D/g, ''); // Hapus semua non-digit
         if (!value) {
             input.value = '';
@@ -184,5 +202,5 @@
             e.preventDefault();
         }
     });
-    </script>
+</script>
 @endpush
