@@ -13,9 +13,9 @@
                         <input type="text" name="nama_aplikasi" id="nama_aplikasi" class="form-control border-dark" placeholder="Masukkan Nama Aplikasi" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="harga" class="form-label fw-semibold">Harga <span class="text-danger">*</span></label>
-                        <input type="text" name="harga" id="harga" class="form-control border-dark" placeholder="Masukkan Harga" required>
-                    </div>
+    <label for="harga" class="form-label fw-semibold">Harga <span class="text-danger">*</span></label>
+    <input type="text" name="harga" id="harga" class="form-control border-dark" placeholder="Masukkan Harga" required oninput="formatHarga(this)">
+</div>
                     <div class="col-md-6">
                         <label for="versi" class="form-label fw-semibold">Versi <span class="text-danger">*</span></label>
                         <input type="text" name="versi" id="versi" class="form-control border-dark" placeholder="Masukkan Versi" required>
@@ -168,5 +168,21 @@
                 });
             });
         });
+
+        function formatHarga(input) {
+        let value = input.value.replace(/\D/g, ''); // Hapus semua non-digit
+        if (!value) {
+            input.value = '';
+            return;
+        }
+        input.value = new Intl.NumberFormat('id-ID').format(value);
+    }
+
+    // Pastikan hanya angka bisa diketik
+    document.getElementById('harga').addEventListener('keypress', function (e) {
+        if (!/[0-9]/.test(e.key)) {
+            e.preventDefault();
+        }
+    });
     </script>
 @endpush

@@ -19,7 +19,7 @@ return new class extends Migration
         $table->string('versi')->nullable();
         $table->date('masa_berlaku')->nullable();
         $table->string('status')->nullable(); // Aktif / Non-Aktif
-        $table->string('harga')->nullable();
+        $table->unsignedBigInteger('harga')->nullable();
         $table->date('tanggal_pembelian')->nullable();
         $table->text('deskripsi')->nullable();
         $table->string('bukti_pembelian')->nullable();

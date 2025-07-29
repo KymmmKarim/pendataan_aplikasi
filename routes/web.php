@@ -43,6 +43,10 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{application}', [ApplicationController::class, 'destroy'])->name('destroy');
     });
 
+    Route::post('/lokasi-pembelian/ajax-store', [LokasiPembelianController::class, 'ajaxStore'])->name('lokasi-pembelian.ajax-store');
+        Route::get('/lokasi-pembelian/json', [LokasiPembelianController::class, 'json'])->name('lokasi-pembelian.json');
+
+
     // ===== Unit view (custom) =====
     Route::get('/unit', function () {
         return view('unit');
@@ -59,9 +63,7 @@ Route::middleware('auth')->group(function () {
         // Lokasi Pembelian
         Route::resource('lokasi_pembelian', LokasiPembelianController::class);
 
-        Route::post('/lokasi-pembelian/ajax-store', [LokasiPembelianController::class, 'ajaxStore'])->name('lokasi-pembelian.ajax-store');
-        Route::get('/lokasi-pembelian/json', [LokasiPembelianController::class, 'json'])->name('lokasi-pembelian.json');
-
+        
 
         // Users
         Route::resource('users', UserController::class);
