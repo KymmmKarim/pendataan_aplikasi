@@ -44,7 +44,7 @@ class RolePermissionSeeder extends Seeder
 
 
         $unitRoles = [
-            
+            'admin-unit',
         ];
 
         foreach ($unitRoles as $roleName) {

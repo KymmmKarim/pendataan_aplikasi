@@ -10,4 +10,10 @@ class LokasiPembelian extends Model
     use HasFactory;
 
     protected $fillable = ['nama'];
+
+    public function applications()
+{
+    return $this->hasMany(Application::class);
+}
+
 }
