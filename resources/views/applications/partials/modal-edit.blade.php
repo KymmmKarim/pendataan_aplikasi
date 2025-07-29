@@ -21,14 +21,19 @@
                         <label for="versi_{{ $app->id }}" class="form-label fw-semibold">Versi <span class="text-danger">*</span></label>
                         <input type="text" name="versi" id="versi_{{ $app->id }}" value="{{ $app->versi }}" class="form-control border-dark" placeholder="Masukkan Versi" required>
                     </div>
+
                     <div class="col-md-6">
-                        <label for="lokasi_pembelian_{{ $app->id }}" class="form-label fw-semibold">Lokasi Pembelian <span class="text-danger">*</span></label>
-                        <select name="lokasi_pembelian" id="lokasi_pembelian_{{ $app->id }}" class="form-control border-dark" required>
-                            <option value="">Pilih Lokasi Pembelian</option>
-                            <option value="Official" {{ $app->lokasi_pembelian == 'Official' ? 'selected' : '' }}>Official</option>
-                            <option value="E-Commerce" {{ $app->lokasi_pembelian == 'E-Commerce' ? 'selected' : '' }}>E-Commerce</option>
+                        <label for="lokasi_pembelian_id_{{ $app->id }}" class="form-label fw-semibold">Lokasi Pembelian <span class="text-danger">*</span></label>
+                        <select name="lokasi_pembelian_id" id="lokasi_pembelian_id_{{ $app->id }}" class="form-control border-dark select2" required>
+                            <option value="">-- Pilih Lokasi --</option>
+                            @foreach ($lokasiPembelians as $lokasi)
+                                <option value="{{ $lokasi->id }}" {{ $app->lokasi_pembelian_id == $lokasi->id ? 'selected' : '' }}>
+                                    {{ $lokasi->nama }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
+
                     <div class="col-md-6">
                         <label for="masa_berlaku_{{ $app->id }}" class="form-label fw-semibold">Masa Berlaku <span class="text-danger">*</span></label>
                         <input type="date" name="masa_berlaku" id="masa_berlaku_{{ $app->id }}" value="{{ $app->masa_berlaku }}" class="form-control border-dark" required>

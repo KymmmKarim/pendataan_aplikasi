@@ -21,7 +21,6 @@ return new class extends Migration
         $table->string('status')->nullable(); // Aktif / Non-Aktif
         $table->string('harga')->nullable();
         $table->date('tanggal_pembelian')->nullable();
-        $table->string('lokasi_pembelian')->nullable(); // E-Commerce / Official
         $table->text('deskripsi')->nullable();
         $table->string('bukti_pembelian')->nullable();
         $table->timestamps();

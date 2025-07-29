@@ -49,7 +49,10 @@
                                 </tr>
                                 <tr>
                                     <td class="fw-bold text-primary">Lokasi Pembelian</td>
-                                    <td style="border-bottom: 1px solid #dee2e6;">{{ $application->lokasi_pembelian ?? '-' }}</td>
+<td style="border-bottom: 1px solid #dee2e6;">
+    {{ $application->lokasiPembelian->nama ?? '-' }}
+</td>
+
                                 </tr>
                                 <tr>
                                     <td class="fw-bold text-primary">Deskripsi</td>

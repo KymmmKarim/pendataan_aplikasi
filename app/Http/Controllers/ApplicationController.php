@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LokasiPembelian;
 use App\Models\Application;
 use App\Models\Unit;
 use Illuminate\Http\Request;
@@ -31,8 +32,9 @@ class ApplicationController extends Controller
 
             $applications = $query->latest()->paginate(10)->withQueryString();
             $units = Unit::all();
+            $lokasiPembelians = LokasiPembelian::all();
 
-            return view('applications.index', compact('applications', 'units'));
+            return view('applications.index', compact('applications', 'units', 'lokasiPembelians'));
         } catch (\Exception $e) {
             Log::error('Gagal memuat aplikasi: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat data.');
@@ -50,7 +52,7 @@ class ApplicationController extends Controller
                 'status'            => 'nullable|in:Aktif,Non-Aktif',
                 'harga'             => 'nullable',
                 'tanggal_pembelian' => 'nullable|date',
-                'lokasi_pembelian'  => 'nullable|in:Official,E-Commerce',
+                'lokasi_pembelian_id' => 'nullable|exists:lokasi_pembelians,id',
                 'deskripsi'         => 'nullable',
                 'bukti_pembelian'   => 'nullable|file|mimes:jpg,jpeg,png,pdf',
             ];
@@ -89,7 +91,8 @@ class ApplicationController extends Controller
             }
 
             $units = Unit::all();
-            return view('applications.show', compact('application', 'units'));
+            $lokasiPembelians = LokasiPembelian::all();
+            return view('applications.show', compact('application', 'units', 'lokasiPembelians'));
         } catch (\Exception $e) {
             Log::error('Gagal menampilkan detail aplikasi: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat detail.');
@@ -112,7 +115,7 @@ class ApplicationController extends Controller
                 'status'            => 'nullable|in:Aktif,Non-Aktif',
                 'harga'             => 'nullable',
                 'tanggal_pembelian' => 'nullable|date',
-                'lokasi_pembelian'  => 'nullable|in:Official,E-Commerce',
+                'lokasi_pembelian_id' => 'nullable|exists:lokasi_pembelians,id',
                 'deskripsi'         => 'nullable',
                 'bukti_pembelian'   => 'nullable|file|mimes:jpg,jpeg,png,pdf',
             ];

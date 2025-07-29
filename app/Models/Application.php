@@ -18,7 +18,7 @@ class Application extends Model
         'status',
         'harga',
         'tanggal_pembelian',
-        'lokasi_pembelian',
+        'lokasi_pembelian_id',
         'deskripsi',
         'bukti_pembelian',
     ];
@@ -47,5 +47,10 @@ class Application extends Model
     public function unit()
 {
     return $this->belongsTo(Unit::class, 'unit_id');
+}
+
+public function lokasiPembelian()
+{
+    return $this->belongsTo(LokasiPembelian::class);
 }
 }

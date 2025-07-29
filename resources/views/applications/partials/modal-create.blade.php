@@ -21,11 +21,12 @@
                         <input type="text" name="versi" id="versi" class="form-control border-dark" placeholder="Masukkan Versi" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="lokasi_pembelian" class="form-label fw-semibold">Lokasi Pembelian <span class="text-danger">*</span></label>
-                        <select name="lokasi_pembelian" id="lokasi_pembelian" class="form-control border-dark" required>
-                            <option value="">Pilih Lokasi Pembelian</option>
-                            <option value="Official">Official</option>
-                            <option value="E-Commerce">E-Commerce</option>
+                        <label for="lokasi_pembelian_id" class="form-label fw-semibold">Lokasi Pembelian <span class="text-danger">*</span></label>
+                        <select name="lokasi_pembelian_id" id="lokasi_pembelian_id" class="form-control border-dark select2" required>
+                            <option value="">-- Pilih Lokasi --</option>
+                            @foreach ($lokasiPembelians as $lokasi)
+                                <option value="{{ $lokasi->id }}">{{ $lokasi->nama }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="col-md-6">
