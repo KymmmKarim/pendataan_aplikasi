@@ -59,6 +59,10 @@ Route::middleware('auth')->group(function () {
         // Lokasi Pembelian
         Route::resource('lokasi_pembelian', LokasiPembelianController::class);
 
+        Route::post('/lokasi-pembelian/ajax-store', [LokasiPembelianController::class, 'ajaxStore'])->name('lokasi-pembelian.ajax-store');
+        Route::get('/lokasi-pembelian/json', [LokasiPembelianController::class, 'json'])->name('lokasi-pembelian.json');
+
+
         // Users
         Route::resource('users', UserController::class);
 
