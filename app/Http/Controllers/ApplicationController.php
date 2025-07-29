@@ -45,16 +45,21 @@ class ApplicationController extends Controller
     {
         DB::beginTransaction();
         try {
+
+            $request->merge([
+            'harga' => $request->harga ? str_replace('.', '', $request->harga) : null
+        ]);
+
             $rules = [
-                'nama_aplikasi'     => 'required',
-                'versi'             => 'nullable',
-                'masa_berlaku'      => 'nullable|date',
-                'status'            => 'nullable|in:Aktif,Non-Aktif',
-                'harga'             => 'nullable',
-                'tanggal_pembelian' => 'nullable|date',
-                'lokasi_pembelian_id' => 'nullable|exists:lokasi_pembelians,id',
-                'deskripsi'         => 'nullable',
-                'bukti_pembelian'   => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                'nama_aplikasi'         => 'required',
+                'versi'                 => 'nullable',
+                'masa_berlaku'          => 'nullable|date',
+                'status'                => 'nullable|in:Aktif,Non-Aktif',
+                'harga'                 => 'nullable|numeric|min:0',
+                'tanggal_pembelian'     => 'nullable|date',
+                'lokasi_pembelian_id'   => 'nullable|exists:lokasi_pembelians,id',
+                'deskripsi'             => 'nullable',
+                'bukti_pembelian'       => 'nullable|file|mimes:jpg,jpeg,png,pdf',
             ];
 
             if (!auth()->user()->hasRole('admin-unit')) {
@@ -108,16 +113,20 @@ class ApplicationController extends Controller
                 abort(403, 'Unauthorized update.');
             }
 
+            $request->merge([
+            'harga' => $request->harga ? str_replace('.', '', $request->harga) : null
+        ]);
+
             $rules = [
-                'nama_aplikasi'     => 'required',
-                'versi'             => 'nullable',
-                'masa_berlaku'      => 'nullable|date',
-                'status'            => 'nullable|in:Aktif,Non-Aktif',
-                'harga'             => 'nullable',
-                'tanggal_pembelian' => 'nullable|date',
-                'lokasi_pembelian_id' => 'nullable|exists:lokasi_pembelians,id',
-                'deskripsi'         => 'nullable',
-                'bukti_pembelian'   => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                'nama_aplikasi'         => 'required',
+                'versi'                 => 'nullable',
+                'masa_berlaku'          => 'nullable|date',
+                'status'                => 'nullable|in:Aktif,Non-Aktif',
+                'harga'                 => 'nullable|numeric|min:0',
+                'tanggal_pembelian'     => 'nullable|date',
+                'lokasi_pembelian_id'   => 'nullable|exists:lokasi_pembelians,id',
+                'deskripsi'             => 'nullable',
+                'bukti_pembelian'       => 'nullable|file|mimes:jpg,jpeg,png,pdf',
             ];
 
             if (!auth()->user()->hasRole('admin-unit')) {

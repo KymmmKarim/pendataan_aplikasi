@@ -14,9 +14,19 @@
                         <input type="text" name="nama_aplikasi" id="nama_aplikasi_{{ $app->id }}" value="{{ $app->nama_aplikasi }}" class="form-control border-dark" placeholder="Masukkan Nama Aplikasi" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="harga_{{ $app->id }}" class="form-label fw-semibold">Harga <span class="text-danger">*</span></label>
-                        <input type="text" name="harga" id="harga_{{ $app->id }}" value="{{ $app->harga }}" class="form-control border-dark" placeholder="Masukkan Harga" required>
-                    </div>
+    <label for="harga_{{ $app->id }}" class="form-label fw-semibold">Harga <span class="text-danger">*</span></label>
+    <input 
+        type="text" 
+        name="harga" 
+        id="harga_{{ $app->id }}" 
+        value="{{ number_format($app->harga, 0, ',', '.') }}" 
+        class="form-control border-dark" 
+        placeholder="Masukkan Harga" 
+        required
+        oninput="formatHarga(this)"
+    >
+</div>
+
                     <div class="col-md-6">
                         <label for="versi_{{ $app->id }}" class="form-label fw-semibold">Versi <span class="text-danger">*</span></label>
                         <input type="text" name="versi" id="versi_{{ $app->id }}" value="{{ $app->versi }}" class="form-control border-dark" placeholder="Masukkan Versi" required>
@@ -125,5 +135,24 @@
                 allowClear: true
             });
         });
-    </script>
+
+
+    function formatHarga(input) {
+        let value = input.value.replace(/\D/g, ''); // Hanya angka
+        if (!value) {
+            input.value = '';
+            return;
+        }
+        input.value = new Intl.NumberFormat('id-ID').format(value);
+    }
+
+    // Cegah huruf diketik (khusus input harga)
+    document.querySelectorAll('input[name="harga"]').forEach(input => {
+        input.addEventListener('keypress', function (e) {
+            if (!/[0-9]/.test(e.key)) {
+                e.preventDefault();
+            }
+        });
+    });
+</script>
 @endpush

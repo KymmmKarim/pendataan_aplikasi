@@ -39,7 +39,7 @@
 </tr>
                                 <tr>
                                     <td class="fw-bold text-primary">Harga</td>
-                                    <td style="border-bottom: 1px solid #dee2e6;">{{ $application->harga ?? '-' }}</td>
+                                    <td style="border-bottom: 1px solid #dee2e6;">{{ $application->harga ? 'Rp ' . number_format($application->harga, 0, ',', '.') : '-' }}</td>
                                 </tr>
                                 <tr>
                                     <td class="fw-bold text-primary">Tanggal Pembelian</td>
