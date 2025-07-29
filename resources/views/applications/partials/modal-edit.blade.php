@@ -21,10 +21,9 @@
                         <label for="versi_{{ $app->id }}" class="form-label fw-semibold">Versi <span class="text-danger">*</span></label>
                         <input type="text" name="versi" id="versi_{{ $app->id }}" value="{{ $app->versi }}" class="form-control border-dark" placeholder="Masukkan Versi" required>
                     </div>
-
                     <div class="col-md-6">
                         <label for="lokasi_pembelian_id_{{ $app->id }}" class="form-label fw-semibold">Lokasi Pembelian <span class="text-danger">*</span></label>
-                        <select name="lokasi_pembelian_id" id="lokasi_pembelian_id_{{ $app->id }}" class="form-control border-dark select2" required>
+                        <select name="lokasi_pembelian_id" id="lokasi_pembelian_id_{{ $app->id }}" class="form-control border-dark select2-lokasi" required>
                             <option value="">-- Pilih Lokasi --</option>
                             @foreach ($lokasiPembelians as $lokasi)
                                 <option value="{{ $lokasi->id }}" {{ $app->lokasi_pembelian_id == $lokasi->id ? 'selected' : '' }}>
@@ -33,7 +32,6 @@
                             @endforeach
                         </select>
                     </div>
-
                     <div class="col-md-6">
                         <label for="masa_berlaku_{{ $app->id }}" class="form-label fw-semibold">Masa Berlaku <span class="text-danger">*</span></label>
                         <input type="date" name="masa_berlaku" id="masa_berlaku_{{ $app->id }}" value="{{ $app->masa_berlaku }}" class="form-control border-dark" required>
@@ -93,7 +91,6 @@
 </div>
 
 @push('scripts')
-    <!-- Select2 (jika belum di-push sebelumnya) -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -118,6 +115,12 @@
             $('#unit_id_{{ $app->id }}').select2({
                 dropdownParent: $('#modalEdit{{ $app->id }}'),
                 placeholder: "-- Pilih Unit --",
+                width: '100%',
+                allowClear: true
+            });
+            $('#lokasi_pembelian_id_{{ $app->id }}').select2({
+                dropdownParent: $('#modalEdit{{ $app->id }}'),
+                placeholder: "-- Pilih Lokasi --",
                 width: '100%',
                 allowClear: true
             });

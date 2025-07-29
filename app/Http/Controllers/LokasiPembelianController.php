@@ -20,7 +20,7 @@ class LokasiPembelianController extends Controller
         return view('lokasi_pembelian.create');
     }
 
-    // Simpan data baru
+    // Simpan data baru (non-AJAX)
     public function store(Request $request)
     {
         $request->validate([
@@ -63,5 +63,30 @@ class LokasiPembelianController extends Controller
         $lokasi->delete();
 
         return redirect()->route('lokasi_pembelian.index')->with('success', 'Lokasi berhasil dihapus!');
+    }
+
+    // ✅ AJAX: Simpan lokasi baru dari form Application (tanpa reload)
+    public function ajaxStore(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required|string|max:255',
+        ]);
+
+        $lokasi = LokasiPembelian::create([
+            'nama' => $request->nama,
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'lokasi' => $lokasi,
+        ]);
+    }
+
+    // ✅ AJAX: Ambil semua data lokasi pembelian (JSON)
+    public function json()
+    {
+        $lokasis = LokasiPembelian::select('id', 'nama')->get();
+
+        return response()->json($lokasis);
     }
 }
