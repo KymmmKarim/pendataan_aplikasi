@@ -3,33 +3,53 @@
         Tambah Unit
     </x-slot>
 
-    <div class="container-fluid mt-3">
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        /* Samakan tinggi Select2 agar setara dengan form-control biasa */
+        .select2-container--default .select2-selection--single {
+            height: 38px !important;
+            padding: 6px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 24px;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 36px;
+        }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <div class="container mt-4">
         <div class="card">
             <div class="card-body">
                 <form action="{{ route('units.store') }}" method="POST">
                     @csrf
-
                     <div class="row mb-3">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">No</label>
+                            <label class="form-label fw-bold">No <span class="text-danger">*</span></label>
                             <input type="text" name="no" class="form-control" value="{{ old('no') }}" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Nama</label>
+                            <label class="form-label fw-bold">Nama <span class="text-danger">*</span></label>
                             <input type="text" name="nama" class="form-control" value="{{ old('nama') }}" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Singkatan</label>
+                            <label class="form-label fw-bold">Singkatan <span class="text-danger">*</span></label>
                             <input type="text" name="singkatan" class="form-control" value="{{ old('singkatan') }}" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Urut</label>
+                            <label class="form-label fw-bold">Urut</label>
                             <input type="number" name="urut" class="form-control" value="{{ old('urut', 0) }}">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Induk Unit</label>
-                            <select name="parent_id" class="form-select">
-                                <option value="">-- Tidak Ada --</option>
+                            <label class="form-label fw-bold">Induk Unit</label>
+                            <select name="parent_id" id="parent_id" class="form-select">
+                                <option value="">-- Pilih --</option>
                                 @foreach ($parents as $parent)
                                     <option value="{{ $parent->id }}" {{ old('parent_id') == $parent->id ? 'selected' : '' }}>
                                         {{ $parent->nama }}
@@ -38,20 +58,31 @@
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Status</label>
+                            <label class="form-label fw-bold">Status</label>
                             <select name="aktif" class="form-select">
+                                <option value="">-- Pilih --</option>
                                 <option value="1" {{ old('aktif') == '1' ? 'selected' : '' }}>Aktif</option>
                                 <option value="0" {{ old('aktif') == '0' ? 'selected' : '' }}>Tidak Aktif</option>
                             </select>
                         </div>
                     </div>
 
-                    <div class="mt-4">
+                    <div class="d-flex justify-content-end mt-4 gap-2">
+                        <a href="{{ route('units.index') }}" class="btn btn-outline-danger">Batal</a>
                         <button type="submit" class="btn btn-primary">Simpan</button>
-                        <a href="{{ route('units.index') }}" class="btn btn-secondary ms-2">Batal</a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#parent_id').select2({
+                placeholder: "-- Pilih --",
+                allowClear: true,
+                width: '100%'
+            });
+        });
+    </script>
 </x-app-layout>

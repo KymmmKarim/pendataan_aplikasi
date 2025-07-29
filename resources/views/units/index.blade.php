@@ -60,16 +60,18 @@
                                         </span>
                                     </td>
                                     <td class="text-center">
-                                        <a href="{{ route('units.edit', $unit->id) }}" class="btn btn-sm btn-outline-primary me-1">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <form id="delete-unit-{{ $unit->id }}" action="{{ route('units.destroy', $unit->id) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-sm btn-outline-danger btn-delete" data-id="{{ $unit->id }}">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        </form>
+                                        <div class="d-flex flex-column align-items-center gap-1">
+                                            <a href="{{ route('units.edit', $unit->id) }}" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form id="delete-unit-{{ $unit->id }}" action="{{ route('units.destroy', $unit->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="btn btn-sm btn-outline-danger btn-delete" data-id="{{ $unit->id }}">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
