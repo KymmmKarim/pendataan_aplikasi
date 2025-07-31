@@ -1,172 +1,200 @@
 <x-app-layout>
-    <x-slot name="header">
-        Dashboard
-    </x-slot>
+    <x-slot name="header">Dashboard</x-slot>
 
     <div class="row">
-    @foreach ([
-        ['icon' => 'far fa-building',       'color' => 'icon-blue',  'value' => 10, 'label' => 'Total Biaya Aplikasi'],
-        ['icon' => 'far fa-folder',           'color' => 'icon-yellow',   'value' => 36, 'label' => 'Total Aplikasi'],
-        ['icon' => 'fas fa-check',  'color' => 'icon-green', 'value' => 20, 'label' => 'Aplikasi Aktif'],
-        ['icon' => 'fas fa-times',      'color' => 'icon-red', 'value' => 36, 'label' => 'Aplikasi Nonaktif']
-    ] as $card)
-        <div class="col-md-3 mb-3">
-            <div class="card-custom">
-                <div class="icon-box {{ $card['color'] }}">
-                    <i class="{{ $card['icon'] }}"></i>
-                </div>
-                <div>
-                    <div class="card-value">{{ $card['value'] }}</div>
-                    <div class="card-label">{{ $card['label'] }}</div>
-                </div>
-            </div>
-        </div>
-    @endforeach
-</div>
+        @php
+            $cards = [
+                ['icon' => 'far fa-building', 'color' => 'icon-blue',   'value' => isset($totalBiaya) ? 'Rp' . number_format($totalBiaya, 0, ',', '.') : 'Rp 0', 'label' => 'Total Biaya Aplikasi'],
+                ['icon' => 'far fa-folder',   'color' => 'icon-yellow', 'value' => $totalAplikasi ?? 0,  'label' => 'Total Aplikasi'],
+                ['icon' => 'fas fa-check',    'color' => 'icon-green',  'value' => $aplikasiAktif ?? 0,  'label' => 'Aplikasi Aktif'],
+                ['icon' => 'fas fa-times',    'color' => 'icon-red',    'value' => $aplikasiNonaktif ?? 0, 'label' => 'Aplikasi Nonaktif'],
+            ];
+        @endphp
 
-        <!-- Chart & Todo -->
-        <div class="row g-4">
-            <div class="col-md-8">
-                <div class="chart-card h-100">
-                    <h5>Jumlah Aplikasi per Unit</h5>
-                    <div class="chart-wrapper">
-                        <canvas id="lineChart"></canvas>
+        @foreach ($cards as $card)
+            <div class="col-md-3 mb-3">
+                <div class="card-custom">
+                    <div class="icon-box {{ $card['color'] }}">
+                        <i class="{{ $card['icon'] }}"></i>
+                    </div>
+                    <div>
+                        <div class="card-value">{{ $card['value'] }}</div>
+                        <div class="card-label">{{ $card['label'] }}</div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-4 d-flex flex-column">
-    <div class="chart-card h-100">
-        <h5 class="mb-3">Aplikasi Hampir Expired</h5>
-        <ul class="list-unstyled" style="max-height: 200px; overflow-y: auto; padding-left: 0.5rem;">
-            <li class="py-2 border-bottom" style="font-size: 0.9rem;">
-                <div class="row">
-                    <div class="col-4 text-start">SIPengadaan</div>
-                    <div class="col-4 text-center">20 Jul 2025</div>
-                    <div class="col-4 text-end">4 hari lagi</div>
-                </div>
-            </li>
-            <li class="py-2 border-bottom" style="font-size: 0.9rem;">
-                <div class="row">
-                    <div class="col-4 text-start">e-Arsip</div>
-                    <div class="col-4 text-center">30 Jul 2025</div>
-                    <div class="col-4 text-end">14 hari lagi</div>
-                </div>
-            </li>
-            <li class="py-2 border-bottom" style="font-size: 0.9rem;">
-                <div class="row">
-                    <div class="col-4 text-start">Simpeg</div>
-                    <div class="col-4 text-center">10 Jul 2025</div>
-                    <div class="col-4 text-end">Expired</div>
-                </div>
-            </li>
-            <li class="py-2 border-bottom" style="font-size: 0.9rem;">
-                <div class="row">
-                    <div class="col-4 text-start">Simpeg</div>
-                    <div class="col-4 text-center">10 Jul 2025</div>
-                    <div class="col-4 text-end">Expired</div>
-                </div>
-            </li>
-            <li class="py-2 border-bottom" style="font-size: 0.9rem;">
-                <div class="row">
-                    <div class="col-4 text-start">Simpeg</div>
-                    <div class="col-4 text-center">10 Jul 2025</div>
-                    <div class="col-4 text-end">Expired</div>
-                </div>
-            </li>
-            <li class="py-2 border-bottom" style="font-size: 0.9rem;">
-                <div class="row">
-                    <div class="col-4 text-start">Simpeg</div>
-                    <div class="col-4 text-center">10 Jul 2025</div>
-                    <div class="col-4 text-end">Expired</div>
-                </div>
-            </li>
-            <li class="py-2 border-bottom" style="font-size: 0.9rem;">
-                <div class="row">
-                    <div class="col-4 text-start">Simpeg</div>
-                    <div class="col-4 text-center">10 Jul 2025</div>
-                    <div class="col-4 text-end">Expired</div>
-                </div>
-            </li>
-            <li class="py-2 border-bottom" style="font-size: 0.9rem;">
-                <div class="row">
-                    <div class="col-4 text-start">Simpeg</div>
-                    <div class="col-4 text-center">10 Jul 2025</div>
-                    <div class="col-4 text-end">Expired</div>
-                </div>
-            </li>
-        </ul>
+        @endforeach
     </div>
-</div>
 
+    <!-- Chart & Todo -->
+    <div class="row g-4">
+        <!-- Line Chart -->
+        <div class="col-md-8">
+            <div class="chart-card h-100">
+                <h5>Penambahan Aplikasi per Bulan ({{ date('Y') }})</h5>
+                <div style="height: 250px;"> 
+                    <canvas id="lineChart"></canvas>
+                </div>
+            </div>
         </div>
 
-        <!-- Perbandingan + Samping -->
-        <div class="row g-4 mt-2">
-            <div class="col-md-8 d-flex flex-column">
-                <div class="chart-card">
-                    <h5>Perbandingan Item</h5>
-                    <div class="chart-wrapper large">
-                        <canvas id="barChart"></canvas>
-                    </div>
-                </div>
+        <!-- Aplikasi Hampir Expired -->
+        <div class="col-md-4 d-flex flex-column">
+            <div class="chart-card h-100">
+                <h5 class="mb-3">Aplikasi Hampir Expired</h5>
+                <ul class="list-unstyled" style="max-height: 200px; overflow-y: auto; padding-left: 0.5rem;">
+    @forelse ($aplikasiHampirExpired as $app)
+        @php
+            $sisaHari = $app->sisa_hari;
+            if ($sisaHari < 0) {
+                $warna = 'dark';
+                $label = 'Expired';
+            } elseif ($sisaHari <= 5) {
+                $warna = 'danger';
+                $label = $sisaHari . ' hari lagi';
+            } elseif ($sisaHari <= 7) {
+                $warna = 'warning';
+                $label = $sisaHari . ' hari lagi';
+            } elseif ($sisaHari <= 10) {
+                $warna = 'secondary';
+                $label = $sisaHari . ' hari lagi';
+            } else {
+                $warna = 'success';
+                $label = $sisaHari . ' hari lagi';
+            }
+        @endphp
+        <li class="py-2 border-bottom small">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
+                <div class="text-truncate" style="max-width: 120px;">{{ $app->nama_aplikasi }}</div>
+                <div class="text-nowrap">{{ \Carbon\Carbon::parse($app->masa_berlaku)->format('d M Y') }}</div>
+                <div><span class="badge bg-{{ $warna }}">{{ $label }}</span></div>
             </div>
+        </li>
+    @empty
+        <li class="text-muted">Tidak ada aplikasi yang akan expired dalam 30 hari.</li>
+    @endforelse
+</ul>
 
-            <div class="col-md-4">
-                <div class="chart-card">
-                    <h5>Aplikasi Terbaru</h5>
-                    <p class="mb-2">Aplikasi yang baru saja ditambahkan.</p>
-                    <ul class="list-group list-group-flush small">
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>SIPengadaan</span><span class="text-muted">01 Jul 2025</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>Simpeg v2</span><span class="text-muted">29 Jun 2025</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>e-Arsip</span><span class="text-muted">28 Jun 2025</span>
-                        </li>
-                    </ul>
-                </div>
+
+
             </div>
+        </div>
+    </div>
+
+    
+    <div class="row mt-4">
+    <!-- Top 2 Lokasi Pembelian -->
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow-sm p-4">
+            <h5 class="mb-4 fw-bold text-primary">Top 2 Lokasi Pembelian Terbanyak</h5>
+            <div style="height: 150px;">
+                <canvas id="lokasiChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="chart-card">
+                <h5>Aplikasi Terbaru</h5>
+                <p class="mb-2">Aplikasi yang baru saja ditambahkan.</p>
+                <ul class="list-group list-group-flush small">
+    @forelse($latestApps as $app)
+        <li class="list-group-item d-flex justify-content-between">
+            <span class="text-truncate" style="max-width: 140px;">{{ $app->nama_aplikasi }}</span>
+            <span class="text-muted">{{ \Carbon\Carbon::parse($app->created_at)->format('d M Y') }}</span>
+        </li>
+    @empty
+        <li class="list-group-item text-muted">Belum ada aplikasi terbaru.</li>
+    @endforelse
+</ul>
+
+            </div>
+        </div>
+    </div>
 
     @push('scripts')
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            new Chart(document.getElementById('lineChart'), {
-                type: 'line',
-                data: {
-                    labels: ['UNIT 1', 'UNIT 2', 'UNIT 3', 'UNIT 4', 'UNIT 5', 'UNIT 6', 'UNIT 7', 'UNIT 8'],
-                    datasets: [{
-                        label: 'Jumlah Aplikasi',
-                        data: [3, 5, 2, 6, 4, 5, 6, 2],
-                        borderColor: 'blue',
-                        backgroundColor: 'lightblue',
-                        tension: 0.3
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false
-                }
-            });
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const bulanLabels = @json($dataBulan);
+        const jumlahData = @json($dataJumlah);
 
-            new Chart(document.getElementById('barChart'), {
-                type: 'bar',
-                data: {
-                    labels: ['Item 1', 'Item 2'],
-                    datasets: [{
-                        label: 'Seri 1',
-                        data: [3, 8],
-                        backgroundColor: '#06b6d4'
-                    }]
+        new Chart(document.getElementById('lineChart'), {
+            type: 'line',
+            data: {
+                labels: bulanLabels,
+                datasets: [{
+                    label: 'Jumlah Aplikasi',
+                    data: jumlahData,
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                    fill: true,
+                    tension: 0.3,
+                    pointBackgroundColor: '#3b82f6',
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
                 },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    }
                 }
-            });
-        </script>
+            }
+        });
+
+        // Bar Chart: Top Lokasi Pembelian
+            // Bar Chart: Top Lokasi Pembelian (Horizontal)
+new Chart(document.getElementById('lokasiChart'), {
+    type: 'bar',
+    data: {
+        labels: @json($topLokasiLabels),
+        datasets: [{
+            label: 'Jumlah Aplikasi',
+            data: @json($topLokasiData),
+            backgroundColor: '#06b6d4',
+            borderRadius: 4,
+            barThickness: 30
+        }]
+    },
+    options: {
+        indexAxis: 'y', // <-- ini membuat bar horizontal
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: false
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return context.parsed.x + ' Aplikasi';
+                    }
+                }
+            }
+        }
+    }
+});
+
+    </script>
     @endpush
 </x-app-layout>
