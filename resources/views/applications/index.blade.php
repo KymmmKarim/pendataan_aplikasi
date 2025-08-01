@@ -44,7 +44,7 @@
                                     <td><strong>{{ $app->nama_aplikasi }}</strong></td>
                                     <td>{{ $app->versi }}</td>
                                     <td>
-                                        {{ $app->masa_berlaku ? \Carbon\Carbon::parse($app->masa_berlaku)->format('d F Y') : '-' }}
+                                        {{ $app->masa_berlaku ? \Carbon\Carbon::parse($app->masa_berlaku)->translatedFormat('d F Y') : '-' }}
                                     </td>
                                     <td>{{ $app->unit->nama ?? '-' }}</td>
 

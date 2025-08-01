@@ -66,7 +66,7 @@
         <li class="py-2 border-bottom small">
             <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
                 <div class="text-truncate" style="max-width: 120px;">{{ $app->nama_aplikasi }}</div>
-                <div class="text-nowrap">{{ \Carbon\Carbon::parse($app->masa_berlaku)->format('d M Y') }}</div>
+                <div class="text-nowrap">{{ \Carbon\Carbon::parse($app->masa_berlaku)->translatedFormat('d M Y') }}</div>
                 <div><span class="badge bg-{{ $warna }}">{{ $label }}</span></div>
             </div>
         </li>
@@ -101,7 +101,7 @@
     @forelse($latestApps as $app)
         <li class="list-group-item d-flex justify-content-between">
             <span class="text-truncate" style="max-width: 140px;">{{ $app->nama_aplikasi }}</span>
-            <span class="text-muted">{{ \Carbon\Carbon::parse($app->created_at)->format('d M Y') }}</span>
+            <span class="text-muted">{{ \Carbon\Carbon::parse($app->created_at)->translatedFormat('d M Y') }}</span>
         </li>
     @empty
         <li class="list-group-item text-muted">Belum ada aplikasi terbaru.</li>
