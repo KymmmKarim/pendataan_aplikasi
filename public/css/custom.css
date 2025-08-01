@@ -368,7 +368,6 @@ body.login-page, html.login-page {
 /* Sidebar default di desktop */
 #sidebar {
     width: var(--sidebar-width);
-    transition: transform 0.3s ease, width 0.3s ease;
     z-index: 1050;
 }
 
