@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\LokasiPembelian;
 use App\Models\Application;
+use App\Models\LokasiPembelian;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class ApplicationController extends Controller
 {
@@ -21,12 +22,12 @@ class ApplicationController extends Controller
                 $query->where('unit_id', auth()->user()->unit_id);
             }
 
-            if ($request->has('search') && $request->search !== '') {
+            if ($request->filled('search')) {
                 $search = $request->search;
                 $query->where(function ($q) use ($search) {
-                    $q->where('nama_aplikasi', 'like', '%' . $search . '%')
-                      ->orWhere('versi', 'like', '%' . $search . '%')
-                      ->orWhere('masa_berlaku', 'like', '%' . $search . '%');
+                    $q->where('nama_aplikasi', 'like', "%$search%")
+                      ->orWhere('versi', 'like', "%$search%")
+                      ->orWhere('masa_berlaku', 'like', "%$search%");
                 });
             }
 
@@ -44,11 +45,11 @@ class ApplicationController extends Controller
     public function store(Request $request)
     {
         DB::beginTransaction();
-        try {
 
+        try {
             $request->merge([
-            'harga' => $request->harga ? str_replace('.', '', $request->harga) : null
-        ]);
+                'harga' => $request->harga ? str_replace('.', '', $request->harga) : null
+            ]);
 
             $rules = [
                 'nama_aplikasi'         => 'required',
@@ -77,9 +78,14 @@ class ApplicationController extends Controller
             }
 
             Application::create($validated);
-            DB::commit();
 
+            DB::commit();
             return redirect()->back()->with('success', 'Data berhasil ditambahkan.');
+
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors($e->errors())->withInput();
+
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Gagal menambahkan aplikasi: ' . $e->getMessage());
@@ -90,14 +96,15 @@ class ApplicationController extends Controller
     public function show(Application $application)
     {
         try {
-            // Hanya tampilkan jika admin-unit adalah pemilik unit
             if (auth()->user()->hasRole('admin-unit') && $application->unit_id !== auth()->user()->unit_id) {
                 abort(403, 'Unauthorized access.');
             }
 
             $units = Unit::all();
             $lokasiPembelians = LokasiPembelian::all();
+
             return view('applications.show', compact('application', 'units', 'lokasiPembelians'));
+
         } catch (\Exception $e) {
             Log::error('Gagal menampilkan detail aplikasi: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat detail.');
@@ -107,15 +114,15 @@ class ApplicationController extends Controller
     public function update(Request $request, Application $application)
     {
         DB::beginTransaction();
+
         try {
-            // Cek akses berdasarkan role & unit
             if (auth()->user()->hasRole('admin-unit') && $application->unit_id !== auth()->user()->unit_id) {
                 abort(403, 'Unauthorized update.');
             }
 
             $request->merge([
-            'harga' => $request->harga ? str_replace('.', '', $request->harga) : null
-        ]);
+                'harga' => $request->harga ? str_replace('.', '', $request->harga) : null
+            ]);
 
             $rules = [
                 'nama_aplikasi'         => 'required',
@@ -136,20 +143,26 @@ class ApplicationController extends Controller
             $validated = $request->validate($rules);
 
             if (auth()->user()->hasRole('admin-unit')) {
-                $validated['unit_id'] = auth()->user()->unit_id; // Jangan ambil dari form
+                $validated['unit_id'] = auth()->user()->unit_id;
             }
 
             if ($request->hasFile('bukti_pembelian')) {
                 if ($application->bukti_pembelian) {
                     Storage::disk('public')->delete($application->bukti_pembelian);
                 }
+
                 $validated['bukti_pembelian'] = $request->file('bukti_pembelian')->store('bukti', 'public');
             }
 
             $application->update($validated);
-            DB::commit();
 
+            DB::commit();
             return redirect()->back()->with('success', 'Data berhasil diperbarui.');
+
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors($e->errors())->withInput();
+
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Gagal mengupdate aplikasi: ' . $e->getMessage());
@@ -160,6 +173,7 @@ class ApplicationController extends Controller
     public function destroy(Application $application)
     {
         DB::beginTransaction();
+
         try {
             if (auth()->user()->hasRole('admin-unit') && $application->unit_id !== auth()->user()->unit_id) {
                 abort(403, 'Unauthorized delete.');
@@ -170,9 +184,10 @@ class ApplicationController extends Controller
             }
 
             $application->delete();
-            DB::commit();
 
+            DB::commit();
             return redirect()->back()->with('success', 'Data berhasil dihapus.');
+
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Gagal menghapus aplikasi: ' . $e->getMessage());

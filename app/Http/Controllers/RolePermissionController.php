@@ -3,28 +3,34 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
 class RolePermissionController extends Controller
 {
-    // Tampilkan daftar semua role dan permission
     public function index()
     {
-        $roles = Role::with('permissions')->get();
-        $permissions = Permission::all();
-        return view('roles.index', compact('roles', 'permissions'));
+        try {
+            $roles = Role::with('permissions')->get();
+            $permissions = Permission::all();
+            return view('roles.index', compact('roles', 'permissions'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal memuat data: ' . $e->getMessage());
+        }
     }
 
-    // Form create role + permission
     public function create()
     {
-        $permissions = Permission::all();
-        return view('roles.create', compact('permissions'));
+        try {
+            $permissions = Permission::all();
+            return view('roles.create', compact('permissions'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal memuat form: ' . $e->getMessage());
+        }
     }
 
-    // Simpan role baru (dan optional permission)
     public function store(Request $request)
     {
         $request->validate([
@@ -34,19 +40,25 @@ class RolePermissionController extends Controller
             'permissions.*' => 'exists:permissions,name',
         ]);
 
-        $role = Role::create([
-            'name' => $request->name,
-            'guard_name' => $request->guard_name,
-        ]);
+        DB::beginTransaction();
+        try {
+            $role = Role::create([
+                'name' => $request->name,
+                'guard_name' => $request->guard_name,
+            ]);
 
-        if ($request->has('permissions')) {
-            $role->syncPermissions($request->permissions);
+            if ($request->has('permissions')) {
+                $role->syncPermissions($request->permissions);
+            }
+
+            DB::commit();
+            return redirect()->route('roles.index')->with('success', 'Role dan Permission berhasil disimpan');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withInput()->with('error', 'Gagal menyimpan: ' . $e->getMessage());
         }
-
-        return redirect()->route('roles.index')->with('success', 'Role dan Permission berhasil disimpan');
     }
 
-    // ✅ Tambah permission via AJAX (Sudah ada, hanya sedikit perbaikan)
     public function ajaxStore(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -60,42 +72,61 @@ class RolePermissionController extends Controller
             ], 422);
         }
 
-        $permission = Permission::create([
-            'name' => $request->name,
-            'guard_name' => 'web',
-        ]);
+        DB::beginTransaction();
+        try {
+            $permission = Permission::create([
+                'name' => $request->name,
+                'guard_name' => 'web',
+            ]);
 
-        return response()->json([
-            'status' => 'success',
-            'permission' => $permission,
-        ]);
+            DB::commit();
+            return response()->json([
+                'status' => 'success',
+                'permission' => $permission,
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal menyimpan permission: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
-    // ✅ Hapus permission via AJAX (TAMBAHAN)
     public function destroyPermissionAjax($id)
     {
-        $permission = Permission::findOrFail($id);
-        $permission->delete();
+        DB::beginTransaction();
+        try {
+            $permission = Permission::findOrFail($id);
+            $permission->delete();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Permission berhasil dihapus'
-        ]);
+            DB::commit();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Permission berhasil dihapus'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal menghapus permission: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
-    // Form edit role
     public function edit($id)
     {
-        $role = Role::findOrFail($id);
-        $permissions = Permission::all();
-        return view('roles.edit', compact('role', 'permissions'));
+        try {
+            $role = Role::findOrFail($id);
+            $permissions = Permission::all();
+            return view('roles.edit', compact('role', 'permissions'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal memuat data: ' . $e->getMessage());
+        }
     }
 
-    // Update role
     public function update(Request $request, $id)
     {
-        $role = Role::findOrFail($id);
-
         $request->validate([
             'name' => 'required|unique:roles,name,' . $id,
             'guard_name' => 'required',
@@ -103,26 +134,39 @@ class RolePermissionController extends Controller
             'permissions.*' => 'exists:permissions,name',
         ]);
 
-        $role->update([
-            'name' => $request->name,
-            'guard_name' => $request->guard_name,
-        ]);
+        DB::beginTransaction();
+        try {
+            $role = Role::findOrFail($id);
 
-        $role->syncPermissions($request->permissions ?? []);
+            $role->update([
+                'name' => $request->name,
+                'guard_name' => $request->guard_name,
+            ]);
 
-        return redirect()->route('roles.index')->with('success', 'Role & Permission berhasil diperbarui.');
+            $role->syncPermissions($request->permissions ?? []);
+
+            DB::commit();
+            return redirect()->route('roles.index')->with('success', 'Role & Permission berhasil diperbarui.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withInput()->with('error', 'Gagal memperbarui: ' . $e->getMessage());
+        }
     }
 
-    // Hapus role
     public function destroy($id)
     {
-        $role = Role::findOrFail($id);
-        $role->delete();
+        DB::beginTransaction();
+        try {
+            $role = Role::findOrFail($id);
+            $role->delete();
 
-        return redirect()->route('roles.index')->with('success', 'Role berhasil dihapus');
+            DB::commit();
+            return redirect()->route('roles.index')->with('success', 'Role berhasil dihapus');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Gagal menghapus role: ' . $e->getMessage());
+        }
     }
-
-    // =================== PERMISSION CRUD ===================
 
     public function createPermission()
     {
@@ -136,54 +180,88 @@ class RolePermissionController extends Controller
             'guard_name' => 'required'
         ]);
 
-        Permission::create($request->only('name', 'guard_name'));
+        DB::beginTransaction();
+        try {
+            Permission::create($request->only('name', 'guard_name'));
 
-        return redirect()->route('roles.index')->with('success', 'Permission berhasil ditambahkan');
+            DB::commit();
+            return redirect()->route('roles.index')->with('success', 'Permission berhasil ditambahkan');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withInput()->with('error', 'Gagal menyimpan permission: ' . $e->getMessage());
+        }
     }
 
     public function editPermission($id)
     {
-        $permission = Permission::findOrFail($id);
-        return view('roles.edit-permission', compact('permission'));
+        try {
+            $permission = Permission::findOrFail($id);
+            return view('roles.edit-permission', compact('permission'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal memuat data permission: ' . $e->getMessage());
+        }
     }
 
     public function updatePermission(Request $request, $id)
     {
-        $permission = Permission::findOrFail($id);
         $request->validate([
             'name' => 'required|unique:permissions,name,' . $id,
             'guard_name' => 'required'
         ]);
 
-        $permission->update($request->only('name', 'guard_name'));
+        DB::beginTransaction();
+        try {
+            $permission = Permission::findOrFail($id);
+            $permission->update($request->only('name', 'guard_name'));
 
-        return redirect()->route('roles.index')->with('success', 'Permission berhasil diperbarui');
+            DB::commit();
+            return redirect()->route('roles.index')->with('success', 'Permission berhasil diperbarui');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withInput()->with('error', 'Gagal update permission: ' . $e->getMessage());
+        }
     }
 
     public function destroyPermission($id)
     {
-        $permission = Permission::findOrFail($id);
-        $permission->delete();
+        DB::beginTransaction();
+        try {
+            $permission = Permission::findOrFail($id);
+            $permission->delete();
 
-        return response()->json(['message' => 'Permission deleted']);
+            DB::commit();
+            return response()->json(['message' => 'Permission deleted']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => 'Gagal menghapus: ' . $e->getMessage()], 500);
+        }
     }
-
-    // =================== ASSIGN PERMISSION TO ROLE ===================
 
     public function managePermissions($roleId)
     {
-        $role = Role::findOrFail($roleId);
-        $permissions = Permission::all();
-        $rolePermissions = $role->permissions->pluck('id')->toArray();
+        try {
+            $role = Role::findOrFail($roleId);
+            $permissions = Permission::all();
+            $rolePermissions = $role->permissions->pluck('id')->toArray();
 
-        return view('roles.manage-permissions', compact('role', 'permissions', 'rolePermissions'));
+            return view('roles.manage-permissions', compact('role', 'permissions', 'rolePermissions'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal memuat data role/permission: ' . $e->getMessage());
+        }
     }
 
     public function updatePermissions(Request $request, $roleId)
     {
-        $role = Role::findOrFail($roleId);
-        $role->syncPermissions($request->permissions ?? []);
+        DB::beginTransaction();
+        try {
+            $role = Role::findOrFail($roleId);
+            $role->syncPermissions($request->permissions ?? []);
 
-        return redirect()->route('roles.index')->with('success', 'Permission berhasil diperbarui untuk role.');
+            DB::commit();
+            return redirect()->route('roles.index')->with('success', 'Permission berhasil diperbarui untuk role.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Gagal update permission role: ' . $e->getMessage());
+        }
     }
 }
