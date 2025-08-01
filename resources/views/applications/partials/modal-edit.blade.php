@@ -44,11 +44,11 @@
                     </div>
                     <div class="col-md-6">
                         <label for="masa_berlaku_{{ $app->id }}" class="form-label fw-semibold">Masa Berlaku <span class="text-danger">*</span></label>
-                        <input type="date" name="masa_berlaku" id="masa_berlaku_{{ $app->id }}" value="{{ $app->masa_berlaku }}" class="form-control border-dark" required>
+                        <input type="date" name="masa_berlaku" id="masa_berlaku_{{ $app->id }}"value="{{ \Carbon\Carbon::parse($app->masa_berlaku)->format('Y-m-d') }}"class="form-control border-dark" required>
                     </div>
                     <div class="col-md-6">
                         <label for="tanggal_pembelian_{{ $app->id }}" class="form-label fw-semibold">Tanggal Pembelian <span class="text-danger">*</span></label>
-                        <input type="date" name="tanggal_pembelian" id="tanggal_pembelian_{{ $app->id }}" value="{{ $app->tanggal_pembelian }}" class="form-control border-dark" required>
+                        <input type="date" name="tanggal_pembelian" id="tanggal_pembelian_{{ $app->id }}"value="{{ \Carbon\Carbon::parse($app->tanggal_pembelian)->format('Y-m-d') }}"class="form-control border-dark" required>
                     </div>
                     <div class="col-md-6">
                         <label for="status_{{ $app->id }}" class="form-label fw-semibold">Status <span class="text-danger">*</span></label>
