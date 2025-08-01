@@ -21,19 +21,19 @@
                         <div class="col-md-6 mb-3">
                             <label for="name" class="form-label">Nama <span class="text-danger">*</span></label>
                             <input type="text" name="name" class="form-control" id="name"
-                                value="{{ old('name', $user->name) }}" placeholder="ex. Admin Itenas" required>
+                                value="{{ old('name', $user->name) }}" placeholder="Masukkan Nama" required>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
                             <input type="email" name="email" class="form-control" id="email"
-                                value="{{ old('email', $user->email) }}" placeholder="admin@example.com" required>
+                                value="{{ old('email', $user->email) }}" placeholder="Masukkan Email" required>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
                             <input type="text" name="username" class="form-control" id="username"
-                                value="{{ old('username', $user->username) }}" placeholder="ex. adminitenas" required>
+                                value="{{ old('username', $user->username) }}" placeholder="Masukkan Username" required>
                         </div>
                         
                         <div class="col-md-6 mb-3">
@@ -46,7 +46,7 @@
                         <div class="col-md-6 mb-3" id="unit-select-container" style="display: none;">
                             <label for="unit" class="form-label">Unit <span class="text-danger">*</span></label>
                             <select name="unit" id="unit" class="form-select select2" style="width: 100%;">
-                                <option value="">-- Pilih Unit --</option>
+                                <option value=""> Pilih Unit </option>
                                 @foreach ($units as $unit)
                                     <option value="{{ $unit->id }}"
                                         {{ old('unit', $user->unit_id) == $unit->id ? 'selected' : '' }}>

@@ -30,6 +30,7 @@
                     <div class="col-md-6">
                         <label for="lokasi_pembelian_id" class="form-label fw-semibold">Lokasi Pembelian <span class="text-danger">*</span></label>
                         <select name="lokasi_pembelian_id" id="lokasi_pembelian_id" class="form-control border-dark" required>
+                            <option></option>
                             @foreach ($lokasiPembelians as $lokasi)
                                 <option value="{{ $lokasi->id }}">{{ $lokasi->nama }}</option>
                             @endforeach
@@ -123,7 +124,7 @@ $(document).ready(function () {
     // Inisialisasi Select2 Unit
     $('#unit_id').select2({
         dropdownParent: $('#tambahData'),
-        placeholder: "-- Pilih Unit --",
+        placeholder: "Pilih Unit",
         width: '100%',
         allowClear: true
     });
@@ -131,7 +132,7 @@ $(document).ready(function () {
     // Inisialisasi Select2 Lokasi dengan fitur tags
     $('#lokasi_pembelian_id').select2({
         dropdownParent: $('#tambahData'),
-        placeholder: "-- Pilih atau Tambah Lokasi --",
+        placeholder: "Pilih atau Tambah Lokasi",
         tags: true,
         width: '100%',
         allowClear: true,

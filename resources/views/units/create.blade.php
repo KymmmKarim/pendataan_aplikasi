@@ -60,7 +60,7 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">Status</label>
                             <select name="aktif" class="form-select">
-                                <option value="">-- Pilih --</option>
+                                <option value="">Masukkan Status </option>
                                 <option value="1" {{ old('aktif') == '1' ? 'selected' : '' }}>Aktif</option>
                                 <option value="0" {{ old('aktif') == '0' ? 'selected' : '' }}>Tidak Aktif</option>
                             </select>
@@ -79,7 +79,7 @@
     <script>
         $(document).ready(function () {
             $('#parent_id').select2({
-                placeholder: "-- Pilih --",
+                placeholder: "Pilih Induk Unit",
                 allowClear: true,
                 width: '100%'
             });
