@@ -6,18 +6,59 @@
     <title>{{ $header ?? 'Dashboard' }} - Itenas</title>
     <link rel="icon" href="{{ asset('img/logo_itenas.png') }}" type="image/png">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- CSS Libraries -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+
+    <style>
+        :root {
+            --sidebar-width: 250px;
+        }
+
+        .logo-section {
+            width: var(--sidebar-width);
+            background-color: white;
+            z-index: 1030;
+            height: 70px;
+        }
+
+        #sidebar {
+            width: var(--sidebar-width);
+        }
+
+        #main-content {
+            margin-left: var(--sidebar-width);
+        }
+
+        @media (max-width: 991.98px) {
+            .logo-section {
+                width: var(--sidebar-width);
+            }
+
+            #sidebar {
+                width: var(--sidebar-width);
+                transform: translateX(-100%);
+            }
+
+            #main-content {
+                margin-left: 0 !important;
+            }
+
+            #sidebar.show {
+                transform: translateX(0);
+            }
+        }
+    </style>
 </head>
 <body>
 <div class="d-flex header-fixed">
-    <div class="logo-section d-flex align-items-center justify-content-between px-3 border-end bg-white" style="width: 250px; height: 70px;">
+    <div class="logo-section d-flex align-items-center justify-content-between px-3 border-end">
         <button class="btn btn-outline-primary" id="toggleSidebar">
             <i class="fas fa-bars"></i>
         </button>
-        <a class="navbar-brand mx-auto" href="dashboard">
+        <a class="navbar-brand mx-auto" href="{{ route('dashboard') }}">
             <img src="{{ asset('img/logoitenas.png') }}" alt="Logo" style="height: 45px;">
         </a>
     </div>
@@ -28,10 +69,7 @@
             <button class="btn profile-dropdown d-flex align-items-center" type="button" data-bs-toggle="dropdown">
                 {{ Auth::user()->name ?? 'Admin' }}
                 @if(Auth::user()->photo)
-                    <img src="{{ asset('storage/' . Auth::user()->photo) }}" 
-                        alt="Foto Profil" 
-                        class="rounded-circle object-fit-cover ms-2" 
-                        style="width:40px; height:40px;">
+                    <img src="{{ asset('storage/' . Auth::user()->photo) }}" class="rounded-circle object-fit-cover ms-2" style="width:40px; height:40px;">
                 @else
                     <i class="fas fa-user-circle ms-3"></i>
                 @endif
@@ -51,7 +89,7 @@
 </div>
 
 <div class="d-flex">
-    <div id="sidebar" class="bg-white border-end position-fixed h-100" style="width: 250px;">
+    <div id="sidebar" class="bg-white border-end position-fixed h-100">
         <ul class="nav flex-column p-3 pt-4">
             <li class="nav-item mb-1">
                 <a class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
@@ -64,7 +102,6 @@
                 </a>
             </li>
 
-            {{-- Tampilkan hanya jika BUKAN admin-unit --}}
             @if(!Auth::user()->hasRole('admin-unit'))
                 <li class="nav-item mb-1">
                     <a class="nav-link {{ request()->is('units*') ? 'active' : '' }}" href="{{ route('units.index') }}">
@@ -78,13 +115,10 @@
                     </a>
                 </li>
 
-                <!-- Manajemen Pengguna Dropdown -->
                 <li class="nav-item mb-1">
-                    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#userManagementMenu" role="button" aria-expanded="false" aria-controls="userManagementMenu">
+                    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#userManagementMenu" role="button" aria-expanded="false">
                         <div class="d-flex align-items-center">
-                            <div class="me-3 d-flex align-items-center justify-content-center" style="width: 30px; height: 40px;">
-                                <i class="fas fa-users fa-lg"></i>
-                            </div>
+                            <i class="fas fa-users fa-lg me-2"></i>
                             <div class="d-flex flex-column lh-sm">
                                 <span class="fw">Manajemen</span>
                                 <span class="fw">Pengguna</span>
@@ -95,12 +129,12 @@
                     <div class="collapse ps-4 {{ request()->is('roles*') || request()->is('users*') ? 'show' : '' }}" id="userManagementMenu">
                         <ul class="nav flex-column mt-2">
                             <li class="nav-item mb-2">
-                                <a class="nav-link d-flex align-items-center {{ request()->is('roles*') ? 'active' : '' }}" href="{{ url('roles') }}">
+                                <a class="nav-link {{ request()->is('roles*') ? 'active' : '' }}" href="{{ url('roles') }}">
                                     <i class="fas fa-user-shield me-2"></i>Hak Akses
                                 </a>
                             </li>
                             <li class="nav-item mb-2">
-                                <a class="nav-link d-flex align-items-center {{ request()->is('users*') ? 'active' : '' }}" href="{{ url('users') }}">
+                                <a class="nav-link {{ request()->is('users*') ? 'active' : '' }}" href="{{ url('users') }}">
                                     <i class="fas fa-user me-2"></i>Pengguna
                                 </a>
                             </li>
@@ -111,25 +145,39 @@
         </ul>
     </div>
 
-    <div id="main-content" class="flex-grow-1 bg-light min-vh-100 p-4" style="margin-left: 250px;">
+    <div id="main-content" class="flex-grow-1 bg-light min-vh-100 p-4">
         {{ $slot }}
     </div>
 </div>
 
-<!-- Scripts -->
+<!-- JS Libraries -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<!-- Sidebar Toggle and Logout -->
 <script>
     const toggleBtn = document.getElementById('toggleSidebar');
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.getElementById('main-content');
 
     toggleBtn.addEventListener('click', function () {
-        sidebar.classList.toggle('hidden');
-        mainContent.style.marginLeft = sidebar.classList.contains('hidden') ? '0' : '250px';
+        if (window.innerWidth <= 991.98) {
+            sidebar.classList.toggle('show');
+        } else {
+            sidebar.classList.toggle('hidden');
+            mainContent.style.marginLeft = sidebar.classList.contains('hidden') ? '0' : getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width');
+        }
     });
+
+    if (window.innerWidth <= 991.98) {
+        const sidebarLinks = document.querySelectorAll('#sidebar .nav-link');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                sidebar.classList.remove('show');
+            });
+        });
+    }
 
     const links = document.querySelectorAll('#sidebar .nav-link');
     links.forEach(link => {
