@@ -18,6 +18,8 @@ body.login-page, html.login-page {
 
 .container-fluid {
     padding: 1rem 2rem;
+    max-width: 1140px;
+    margin: auto;
 }
 
 
@@ -63,6 +65,7 @@ body.login-page, html.login-page {
     margin-left: 250px;
     margin-top: 64px;
     transition: margin-left 0.3s ease;
+    padding: 1.5rem;
 }
 
 
@@ -196,6 +199,7 @@ body.login-page, html.login-page {
 .custom-table th {
     border-top: none !important;
     border-bottom: 1px solid #dee2e6;
+    font-size: 0.9rem;
 }
 
 .custom-table thead th {
@@ -296,4 +300,54 @@ body.login-page, html.login-page {
     border-color: #ef4444;
     color: #ef4444;
     background-color: #fee2e2;
+}
+
+
+/* =======================
+   Responsive Layout (Tambahan)
+========================== */
+@media (max-width: 991.98px) {
+    #sidebar {
+        position: fixed;
+        z-index: 1050;
+        top: 64px;
+        left: 0;
+        height: calc(100% - 64px);
+        background-color: white;
+        width: 250px;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    #sidebar.show {
+        transform: translateX(0);
+    }
+
+    #main-content {
+        margin-left: 0 !important;
+    }
+
+    .logo-section {
+        width: auto !important;
+    }
+
+    .topbar {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .profile-dropdown {
+        font-size: 0.95rem;
+    }
+
+    .profile-dropdown img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .navbar-brand img {
+        height: 30px;
+    }
 }
