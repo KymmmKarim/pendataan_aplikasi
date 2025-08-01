@@ -351,3 +351,12 @@ body.login-page, html.login-page {
         height: 30px;
     }
 }
+
+.field-icon {
+    position: absolute;
+    top: 43px;
+    right: 25px;
+    cursor: pointer;
+    color: black;
+    z-index: 2;
+}

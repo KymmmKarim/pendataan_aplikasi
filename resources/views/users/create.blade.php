@@ -29,9 +29,10 @@
                             <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="username" name="username" placeholder="Masukkan Username" required>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6 mb-3 position-relative">
                             <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
                             <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan Password" required>
+                            <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
                         </div>
 
                         <!-- Kolom Unit -->
@@ -107,6 +108,21 @@
 
             toggleUnitSelect(); // jalankan sekali saat halaman load
         });
+
+        
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggle = document.querySelector('.toggle-password');
+        const input = document.querySelector(toggle.getAttribute('toggle'));
+
+        toggle.addEventListener('click', function () {
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+    });
+
+
     </script>
     @endpush
 

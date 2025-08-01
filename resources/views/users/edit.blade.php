@@ -36,11 +36,14 @@
                                 value="{{ old('username', $user->username) }}" placeholder="Masukkan Username" required>
                         </div>
                         
-                        <div class="col-md-6 mb-3">
-                            <label for="password" class="form-label">Password (Kosongkan jika tidak diubah)</label>
-                            <input type="password" name="password" class="form-control" id="password"
-                                placeholder="*******">
+                        <div class="col-md-6 mb-3 position-relative">
+                            <label for="password" class="form-label">
+                                Password <small class="text-muted">(Kosongkan jika tidak diubah)</small>
+                            </label>
+                            <input type="password" name="password" class="form-control" id="password" placeholder="*******">
+                            <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
                         </div>
+
 
                         <!-- Dropdown Unit -->
                         <div class="col-md-6 mb-3" id="unit-select-container" style="display: none;">
@@ -118,6 +121,18 @@
             roleRadios.change(toggleUnitSelect);
             toggleUnitSelect(); // Jalankan saat halaman pertama kali dibuka
         });
+
+         document.addEventListener('DOMContentLoaded', function () {
+        const toggle = document.querySelector('.toggle-password');
+        const input = document.querySelector(toggle.getAttribute('toggle'));
+
+        toggle.addEventListener('click', function () {
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+    });
     </script>
     @endpush
 </x-app-layout>
