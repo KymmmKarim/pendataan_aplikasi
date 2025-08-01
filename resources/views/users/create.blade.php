@@ -38,7 +38,7 @@
                         <div class="col-md-6 mb-3" id="unit-select-container" style="display: none;">
                             <label for="unit" class="form-label">Pilih Unit <span class="text-danger">*</span></label>
                             <select class="form-select select2" id="unit" name="unit">
-                                <option value="" disabled selected>-- Pilih Unit --</option>
+                                <option value="" disabled selected> Pilih Unit </option>
                                 @foreach ($units as $unit)
                                     <option value="{{ $unit->id }}">{{ $unit->nama }}</option>
                                 @endforeach
@@ -85,7 +85,7 @@
             // Inisialisasi Select2
             $(document).ready(function () {
                 $('#unit').select2({
-                    placeholder: "-- Pilih Unit --",
+                    placeholder: " Pilih Unit ",
                     allowClear: true,
                     width: '100%'
                 });
