@@ -121,7 +121,7 @@
             });
 
             // SweetAlert untuk hapus
-            $('.btn-delete').click(function () {
+            $(document).on('click', '.btn-delete', function () {
                 const unitId = $(this).data('id');
                 Swal.fire({
                     title: 'Yakin mau dihapus?',

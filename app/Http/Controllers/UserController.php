@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -33,26 +34,31 @@ class UserController extends Controller
             'role'     => 'required|exists:roles,name',
         ];
 
-        // Jika role adalah admin-unit, maka unit wajib diisi
         if ($request->role === 'admin-unit') {
             $rules['unit'] = 'required|exists:units,id';
         }
 
         $validated = $request->validate($rules);
 
-        // Simpan user
-        $user = User::create([
-            'name'     => $validated['name'],
-            'username' => $validated['username'],
-            'email'    => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'unit_id'  => $request->role === 'admin-unit' ? $request->unit : null,
-        ]);
+        try {
+            DB::beginTransaction();
 
-        // Assign role
-        $user->assignRole($validated['role']);
+            $user = User::create([
+                'name'     => $validated['name'],
+                'username' => $validated['username'],
+                'email'    => $validated['email'],
+                'password' => Hash::make($validated['password']),
+                'unit_id'  => $request->role === 'admin-unit' ? $request->unit : null,
+            ]);
 
-        return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan.');
+            $user->assignRole($validated['role']);
+
+            DB::commit();
+            return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan.');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return back()->withErrors('Gagal menambahkan user: ' . $e->getMessage())->withInput();
+        }
     }
 
     public function edit(User $user)
@@ -78,25 +84,39 @@ class UserController extends Controller
 
         $validated = $request->validate($rules);
 
-        $user->update([
-            'name'     => $validated['name'],
-            'username' => $validated['username'],
-            'email'    => $validated['email'],
-            'password' => $validated['password']
-                ? Hash::make($validated['password'])
-                : $user->password,
-            'unit_id'  => $request->role === 'admin-unit' ? $request->unit : null,
-        ]);
+        try {
+            DB::beginTransaction();
 
-        // Sync role baru
-        $user->syncRoles([$validated['role']]);
+            $user->update([
+                'name'     => $validated['name'],
+                'username' => $validated['username'],
+                'email'    => $validated['email'],
+                'password' => $validated['password']
+                    ? Hash::make($validated['password'])
+                    : $user->password,
+                'unit_id'  => $request->role === 'admin-unit' ? $request->unit : null,
+            ]);
 
-        return redirect()->route('users.index')->with('success', 'User berhasil diperbarui.');
+            $user->syncRoles([$validated['role']]);
+
+            DB::commit();
+            return redirect()->route('users.index')->with('success', 'User berhasil diperbarui.');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return back()->withErrors('Gagal memperbarui user: ' . $e->getMessage())->withInput();
+        }
     }
 
     public function destroy(User $user)
     {
-        $user->delete();
-        return redirect()->route('users.index')->with('success', 'User berhasil dihapus.');
+        try {
+            DB::beginTransaction();
+            $user->delete();
+            DB::commit();
+            return redirect()->route('users.index')->with('success', 'User berhasil dihapus.');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return back()->withErrors('Gagal menghapus user: ' . $e->getMessage());
+        }
     }
 }
