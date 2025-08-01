@@ -44,7 +44,7 @@
                                 <tr>
                                     <td class="fw-bold text-primary">Tanggal Pembelian</td>
                                     <td style="border-bottom: 1px solid #dee2e6;">
-                                        {{ $application->tanggal_pembelian ? \Carbon\Carbon::parse($application->tanggal_pembelian)->format('d F Y') : '-' }}
+                                        {{ $application->tanggal_pembelian ? \Carbon\Carbon::parse($application->tanggal_pembelian)->translatedFormat('d F Y') : '-' }}
                                     </td>
                                 </tr>
                                 <tr>
