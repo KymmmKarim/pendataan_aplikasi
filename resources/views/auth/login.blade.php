@@ -1,5 +1,6 @@
 <x-guest-layout>
     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet"> <!-- Custom CSS -->
 
@@ -38,13 +39,15 @@
                 </div>
 
                 <!-- Password -->
-                <div class="mb-3">
+                <div class="mb-3 position-relative">
                     <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
                     <input type="password" name="password" id="password" class="form-control border-bottom-only" required>
+                    <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
                     @error('password')
                         <div class="text-danger small">{{ $message }}</div>
                     @enderror
                 </div>
+
 
                 <!-- Remember Me -->
                 <div class="mb-3 form-check">
@@ -66,4 +69,18 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggle = document.querySelector('.toggle-password');
+        const input = document.querySelector(toggle.getAttribute('toggle'));
+
+        toggle.addEventListener('click', function () {
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+    });
+</script>
+
 </x-guest-layout>
