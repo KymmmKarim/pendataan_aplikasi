@@ -46,7 +46,7 @@
     @forelse ($aplikasiHampirExpired as $app)
         @php
             $sisaHari = $app->sisa_hari;
-            if ($sisaHari < 0) {
+            if ($sisaHari <= 0) {
                 $warna = 'dark';
                 $label = 'Expired';
             } elseif ($sisaHari <= 5) {
