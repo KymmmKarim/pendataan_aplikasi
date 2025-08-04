@@ -16,7 +16,7 @@
     </div>
 
     <a href="#" class="btn btn-primary btn-sm py-1 px-3" style="height: 32px;" data-bs-toggle="modal" data-bs-target="#tambahData">
-        Tambah Data
+        Tambah
     </a>
 </div>
 
@@ -45,24 +45,26 @@
                                         </td>
                                         <td class="text-center">{{ $app->unit->nama ?? '-' }}</td>
                                         <td class="text-center">
-                                            <a href="{{ route('applications.show', $app->id) }}" class="btn btn-sm btn-outline-dark me-1" title="Lihat Detail">
-                                                <i class="bi bi-info-circle"></i>
-                                            </a>
-                                            <button type="button" class="btn btn-sm btn-outline-primary me-1"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#modalEdit{{ $app->id }}">
-                                                <i class="bi bi-pencil-square"></i>
-                                            </button>
-                                            <form id="delete-app-{{ $app->id }}" action="{{ route('applications.destroy', $app->id) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button" class="btn btn-sm btn-outline-danger btn-delete-app" data-id="{{ $app->id }}">
-                                                    <i class="bi bi-trash"></i>
+                                            <div class="d-inline-flex gap-1">
+                                                <a href="{{ route('applications.show', $app->id) }}" class="btn btn-sm btn-outline-dark" title="Lihat Detail">
+                                                    <i class="bi bi-info-circle"></i>
+                                                </a>
+                                                <button type="button" class="btn btn-sm btn-outline-primary"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#modalEdit{{ $app->id }}">
+                                                    <i class="bi bi-pencil-square"></i>
                                                 </button>
-                                            </form>
+                                                <form id="delete-app-{{ $app->id }}" action="{{ route('applications.destroy', $app->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" class="btn btn-sm btn-outline-danger btn-delete-app" data-id="{{ $app->id }}">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
-
+                                    
                                     {{-- Modal Edit --}}
                                     @include('applications.partials.modal-edit', ['app' => $app])
                                 @empty
