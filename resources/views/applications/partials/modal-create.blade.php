@@ -4,9 +4,8 @@
         <div class="modal-content p-4 border-0 shadow">
             <h4 class="mb-4 fw-bold text-primary">Tambah Data</h4>
 
-            <form method="POST" action="{{ route('applications.store') }}" enctype="multipart/form-data">
+            <form id="formTambah" method="POST" action="{{ route('applications.store') }}" enctype="multipart/form-data">
                 @csrf
-
                 <div class="row g-4">
                     <!-- Nama Aplikasi -->
                     <div class="col-md-6">
@@ -17,7 +16,7 @@
                     <!-- Harga -->
                     <div class="col-md-6">
                         <label for="harga" class="form-label fw-semibold">Harga <span class="text-danger">*</span></label>
-                        <input type="text" name="harga" id="harga" class="form-control border-dark" placeholder="Masukkan Harga" required oninput="formatHarga(this)">
+                        <input type="text" name="harga" id="harga" class="form-control border-dark" placeholder="Masukkan Harga" required>
                     </div>
 
                     <!-- Versi -->
@@ -81,7 +80,7 @@
                             <input type="hidden" name="unit_id" value="{{ auth()->user()->unit_id }}">
                         @else
                             <select name="unit_id" id="unit_id" class="form-control border-dark select2-unit" required>
-                                <option value="">-- Pilih Unit --</option>
+                                <option value="">Pilih Unit</option>
                                 @foreach ($units as $unit)
                                     <option value="{{ $unit->id }}">{{ $unit->nama }}</option>
                                 @endforeach
@@ -121,21 +120,16 @@
 
 <script>
 $(document).ready(function () {
-    // Inisialisasi Select2 Unit
-    $('#unit_id').select2({
+    $('#unit_id, #lokasi_pembelian_id').select2({
         dropdownParent: $('#tambahData'),
-        placeholder: "Pilih Unit",
         width: '100%',
         allowClear: true
     });
 
-    // Inisialisasi Select2 Lokasi dengan fitur tags
     $('#lokasi_pembelian_id').select2({
         dropdownParent: $('#tambahData'),
         placeholder: "Pilih atau Tambah Lokasi",
         tags: true,
-        width: '100%',
-        allowClear: true,
         createTag: function (params) {
             var term = $.trim(params.term);
             if (term === '') return null;
@@ -146,8 +140,7 @@ $(document).ready(function () {
             };
         },
         templateResult: function (data) {
-            var $result = $("<span></span>");
-            $result.text(data.text);
+            var $result = $("<span></span>").text(data.text);
             if (data.newOption) {
                 $result.append(" <em>(tambah lokasi baru)</em>");
             }
@@ -155,14 +148,29 @@ $(document).ready(function () {
         }
     });
 
-    // Submit form dengan cek lokasi baru
-    $('#tambahData form').on('submit', function (e) {
+    $('#harga').on('input', function () {
+        let value = this.value.replace(/\D/g, '');
+        if (!value) {
+            this.value = '';
+            return;
+        }
+        this.value = new Intl.NumberFormat('id-ID').format(value);
+    });
+
+    $('#harga').on('keypress', function (e) {
+        if (!/[0-9]/.test(e.key)) {
+            e.preventDefault();
+        }
+    });
+
+    $('#formTambah').on('submit', function (e) {
+        e.preventDefault();
+
         var selected = $('#lokasi_pembelian_id').val();
+        var form = this;
 
         if (selected && selected.startsWith('new:')) {
-            e.preventDefault();
-
-            var namaBaru = selected.slice(4);
+            let namaBaru = selected.slice(4);
 
             $.ajax({
                 url: '{{ route("lokasi-pembelian.ajax-store") }}',
@@ -174,8 +182,8 @@ $(document).ready(function () {
                 success: function (res) {
                     if (res.status === 'success') {
                         let newOption = new Option(res.lokasi.nama, res.lokasi.id, true, true);
-                        $('#lokasi_pembelian_id').append(newOption).val(res.lokasi.id).trigger('change');
-                        $('#tambahData form')[0].submit();
+                        $('#lokasi_pembelian_id').append(newOption).trigger('change');
+                        $('#formTambah').submit();
                     } else {
                         alert('Gagal menyimpan lokasi.');
                     }
@@ -184,24 +192,73 @@ $(document).ready(function () {
                     alert('Terjadi kesalahan saat menyimpan lokasi.');
                 }
             });
-        }
-    });
-});
-
-function formatHarga(input) {
-        let value = input.value.replace(/\D/g, ''); // Hapus semua non-digit
-        if (!value) {
-            input.value = '';
             return;
         }
-        input.value = new Intl.NumberFormat('id-ID').format(value);
-    }
 
-    // Pastikan hanya angka bisa diketik
-    document.getElementById('harga').addEventListener('keypress', function (e) {
-        if (!/[0-9]/.test(e.key)) {
-            e.preventDefault();
-        }
+        let formData = new FormData(form);
+
+        $.ajax({
+            url: $(form).attr('action'),
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.status === 'success') {
+                    const formattedDate = response.masa_berlaku
+                        ? new Date(response.masa_berlaku).toLocaleDateString('id-ID', {
+                            day: '2-digit', month: 'long', year: 'numeric'
+                        }) : '-';
+
+                    const newRow = `
+                        <tr>
+                            <td><strong>${response.nama_aplikasi}</strong></td>
+                            <td>${response.versi ?? '-'}</td>
+                            <td>${formattedDate}</td>
+                            <td class="text-center">${response.unit_nama ?? '-'}</td>
+                            <td class="text-center">
+                                <div class="d-inline-flex gap-1">
+                                    <a href="/applications/${response.id}" class="btn btn-sm btn-outline-dark" title="Lihat Detail">
+                                        <i class="bi bi-info-circle"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-sm btn-outline-primary"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalEdit${response.id}">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    <form id="delete-app-${response.id}" action="/applications/${response.id}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="btn btn-sm btn-outline-danger btn-delete-app" data-id="${response.id}">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+
+                    $('#applications-table-body').prepend(newRow);
+
+                    $('#tambahData').modal('hide');
+                    form.reset();
+                    $('#lokasi_pembelian_id, #unit_id').val(null).trigger('change');
+                }
+            },
+            error: function(xhr) {
+                if (xhr.status === 422) {
+                    let errors = xhr.responseJSON.errors;
+                    let pesan = '';
+                    for (let key in errors) {
+                        pesan += errors[key][0] + '\n';
+                    }
+                    alert(pesan);
+                } else {
+                    alert('Terjadi kesalahan saat menyimpan data.');
+                }
+            }
+        });
     });
+});
 </script>
 @endpush
