@@ -23,6 +23,12 @@ class DashboardController extends Controller
                 $query->where('unit_id', $unitId);
             }
 
+            // ✅ Otomatis nonaktifkan aplikasi yang sudah expired
+            (clone $query)
+                ->whereDate('masa_berlaku', '<', now())
+                ->where('status', '!=', 'non-aktif')
+                ->update(['status' => 'non-aktif']);
+
             // Statistik utama
             $totalBiaya = (clone $query)->sum('harga');
             $totalAplikasi = (clone $query)->count();

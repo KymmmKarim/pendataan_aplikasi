@@ -26,20 +26,34 @@
                         <table class="table table-borderless mb-0">
                             <tbody>
                                 <tr>
-    <td class="fw-bold text-primary" style="width: 200px;">Status</td>
-    <td style="border-bottom: 1px solid #dee2e6;">
-        @if ($application->status === 'Aktif')
-            <span class="badge bg-success">Aktif</span>
-        @elseif ($application->status === 'Non-Aktif')
-            <span class="badge bg-danger">Non-Aktif</span>
-        @else
-            <span class="text-muted">-</span>
-        @endif
-    </td>
-</tr>
+                                    <td class="fw-bold text-primary" style="width: 200px;">Status</td>
+                                    <td style="border-bottom: 1px solid #dee2e6;">
+                                        @php
+                                            $expired = $application->masa_berlaku && \Carbon\Carbon::parse($application->masa_berlaku)->isPast();
+                                        @endphp
+
+                                        @if ($application->status === 'Aktif')
+                                            <span class="badge bg-success">Aktif</span>
+                                        @elseif ($application->status === 'Non-Aktif' || $expired)
+                                            <span class="badge bg-danger">Non-Aktif</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-primary">Masa Berlaku</td>
+                                    <td style="border-bottom: 1px solid #dee2e6;">
+                                        @if ($application->masa_berlaku)
+                                            {{ \Carbon\Carbon::parse($application->masa_berlaku)->translatedFormat('d F Y') }}
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td class="fw-bold text-primary">Harga</td>
-                                    <td style="border-bottom: 1px solid #dee2e6;">{{ $application->harga ? 'Rp ' . number_format($application->harga, 0, ',', '.') : '-' }}</td>
+                                    <td style="border-bottom: 1px solid #dee2e6;">
+                                        {{ $application->harga ? 'Rp ' . number_format($application->harga, 0, ',', '.') : '-' }}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="fw-bold text-primary">Tanggal Pembelian</td>
@@ -49,14 +63,15 @@
                                 </tr>
                                 <tr>
                                     <td class="fw-bold text-primary">Lokasi Pembelian</td>
-<td style="border-bottom: 1px solid #dee2e6;">
-    {{ $application->lokasiPembelian->nama ?? '-' }}
-</td>
-
+                                    <td style="border-bottom: 1px solid #dee2e6;">
+                                        {{ $application->lokasiPembelian->nama ?? '-' }}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="fw-bold text-primary">Deskripsi</td>
-                                    <td style="border-bottom: 1px solid #dee2e6;">{{ $application->deskripsi ?? '-' }}</td>
+                                    <td style="border-bottom: 1px solid #dee2e6;">
+                                        {{ $application->deskripsi ?? '-' }}
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
