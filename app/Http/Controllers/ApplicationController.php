@@ -42,97 +42,96 @@ class ApplicationController extends Controller
         }
     }
 
-   public function store(Request $request)
-{
-    DB::beginTransaction();
+    public function store(Request $request)
+    {
+        DB::beginTransaction();
 
-    try {
-        $request->merge([
-            'harga' => $request->harga ? str_replace('.', '', $request->harga) : null
-        ]);
+        try {
+            $request->merge([
+                'harga' => $request->harga ? str_replace('.', '', $request->harga) : null
+            ]);
 
-        $rules = [
-            'nama_aplikasi'         => 'required',
-            'versi'                 => 'nullable',
-            'masa_berlaku'          => 'nullable|date',
-            'status'                => 'nullable|in:Aktif,Non-Aktif',
-            'harga'                 => 'nullable|numeric|min:0',
-            'tanggal_pembelian'     => 'nullable|date',
-            'lokasi_pembelian_id'   => 'nullable|exists:lokasi_pembelians,id',
-            'deskripsi'             => 'nullable',
-            'bukti_pembelian'       => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-        ];
+            $rules = [
+                'nama_aplikasi'         => 'required',
+                'versi'                 => 'nullable',
+                'masa_berlaku'          => 'nullable|date',
+                'status'                => 'nullable|in:Aktif,Non-Aktif',
+                'harga'                 => 'nullable|numeric|min:0',
+                'tanggal_pembelian'     => 'nullable|date',
+                'lokasi_pembelian_id'   => 'nullable|exists:lokasi_pembelians,id',
+                'deskripsi'             => 'nullable',
+                'bukti_pembelian'       => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+            ];
 
-        if (!auth()->user()->hasRole('admin-unit')) {
-            $rules['unit_id'] = 'required|exists:units,id';
+            if (!auth()->user()->hasRole('admin-unit')) {
+                $rules['unit_id'] = 'required|exists:units,id';
+            }
+
+            $validated = $request->validate($rules);
+
+            if (auth()->user()->hasRole('admin-unit')) {
+                $validated['unit_id'] = auth()->user()->unit_id;
+            }
+
+            if ($request->hasFile('bukti_pembelian')) {
+                $validated['bukti_pembelian'] = $request->file('bukti_pembelian')->store('bukti', 'public');
+            }
+
+            $app = Application::create($validated);
+
+            DB::commit();
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Data berhasil ditambahkan.',
+                    'id' => $app->id,
+                    'nama_aplikasi' => $app->nama_aplikasi,
+                    'versi' => $app->versi,
+                    'masa_berlaku' => $app->masa_berlaku,
+                    'unit_nama' => $app->unit->nama ?? '-'
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'Data berhasil ditambahkan.');
+
+        } catch (ValidationException $e) {
+            DB::rollBack();
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'status' => 'error',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+
+            return redirect()->back()->withErrors($e->errors())->withInput();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Gagal menambahkan aplikasi: ' . $e->getMessage());
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Terjadi kesalahan saat menambahkan data.'
+                ], 500);
+            }
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menambahkan data.');
         }
-
-        $validated = $request->validate($rules);
-
-        if (auth()->user()->hasRole('admin-unit')) {
-            $validated['unit_id'] = auth()->user()->unit_id;
-        }
-
-        if ($request->hasFile('bukti_pembelian')) {
-            $validated['bukti_pembelian'] = $request->file('bukti_pembelian')->store('bukti', 'public');
-        }
-
-        $app = Application::create($validated);
-
-        DB::commit();
-
-        // ✅ Jika request dari AJAX, kirim JSON response
-        if ($request->ajax()) {
-            return response()->json([
-    'status' => 'success',
-    'message' => 'Data berhasil ditambahkan.',
-    'id' => $app->id,
-    'nama_aplikasi' => $app->nama_aplikasi,
-    'versi' => $app->versi,
-    'masa_berlaku' => $app->masa_berlaku,
-    'unit_nama' => $app->unit->nama ?? '-'
-]);
-
-        }
-
-        // Default response untuk non-AJAX
-        return redirect()->back()->with('success', 'Data berhasil ditambahkan.');
-
-    } catch (ValidationException $e) {
-        DB::rollBack();
-
-        // ✅ Jika AJAX, kirim error JSON
-        if ($request->ajax()) {
-            return response()->json([
-                'status' => 'error',
-                'errors' => $e->errors()
-            ], 422);
-        }
-
-        return redirect()->back()->withErrors($e->errors())->withInput();
-
-    } catch (\Exception $e) {
-        DB::rollBack();
-        Log::error('Gagal menambahkan aplikasi: ' . $e->getMessage());
-
-        // ✅ Error umum - versi AJAX
-        if ($request->ajax()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Terjadi kesalahan saat menambahkan data.'
-            ], 500);
-        }
-
-        return redirect()->back()->with('error', 'Terjadi kesalahan saat menambahkan data.');
     }
-}
-
 
     public function show(Application $application)
     {
         try {
             if (auth()->user()->hasRole('admin-unit') && $application->unit_id !== auth()->user()->unit_id) {
                 abort(403, 'Unauthorized access.');
+            }
+
+            // ✅ Auto-update status jika masa berlaku sudah lewat
+            if ($application->status === 'Aktif' && $application->masa_berlaku && $application->masa_berlaku < now()->toDateString()) {
+                $application->update(['status' => 'Non-Aktif']);
             }
 
             $units = Unit::all();
