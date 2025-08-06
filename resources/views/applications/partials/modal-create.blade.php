@@ -120,49 +120,50 @@
 
 <script>
 $(document).ready(function () {
-    $('#unit_id, #lokasi_pembelian_id').select2({
-        dropdownParent: $('#tambahData'),
-        width: '100%',
-        allowClear: true
-    });
-
-    $('#lokasi_pembelian_id').select2({
-        dropdownParent: $('#tambahData'),
-        placeholder: "Pilih atau Tambah Lokasi",
-        tags: true,
-        createTag: function (params) {
-            var term = $.trim(params.term);
-            if (term === '') return null;
-            return {
-                id: 'new:' + term,
-                text: term,
-                newOption: true
-            };
-        },
-        templateResult: function (data) {
-            var $result = $("<span></span>").text(data.text);
-            if (data.newOption) {
-                $result.append(" <em>(tambah lokasi baru)</em>");
-            }
-            return $result;
-        }
-    });
-
+    // Format harga
     $('#harga').on('input', function () {
         let value = this.value.replace(/\D/g, '');
-        if (!value) {
-            this.value = '';
-            return;
-        }
-        this.value = new Intl.NumberFormat('id-ID').format(value);
+        this.value = value ? new Intl.NumberFormat('id-ID').format(value) : '';
     });
 
     $('#harga').on('keypress', function (e) {
-        if (!/[0-9]/.test(e.key)) {
-            e.preventDefault();
+        if (!/[0-9]/.test(e.key)) e.preventDefault();
+    });
+
+    // Saat modal tampil, inisialisasi Select2 (hanya sekali)
+    $('#tambahData').on('shown.bs.modal', function () {
+        const $unit = $('#unit_id');
+        const $lokasi = $('#lokasi_pembelian_id');
+
+        if (!$unit.hasClass("select2-hidden-accessible")) {
+            $unit.select2({
+                dropdownParent: $('#tambahData'),
+                width: '100%',
+                allowClear: true
+            });
+        }
+
+        if (!$lokasi.hasClass("select2-hidden-accessible")) {
+            $lokasi.select2({
+                dropdownParent: $('#tambahData'),
+                width: '100%',
+                allowClear: true,
+                placeholder: "Pilih atau Tambah Lokasi",
+                tags: true,
+                createTag: function (params) {
+                    var term = $.trim(params.term);
+                    return term ? { id: 'new:' + term, text: term, newOption: true } : null;
+                },
+                templateResult: function (data) {
+                    var $result = $("<span></span>").text(data.text);
+                    if (data.newOption) $result.append(" <em>(tambah lokasi baru)</em>");
+                    return $result;
+                }
+            });
         }
     });
 
+    // Submit form tambah data
     $('#formTambah').on('submit', function (e) {
         e.preventDefault();
 
@@ -171,7 +172,6 @@ $(document).ready(function () {
 
         if (selected && selected.startsWith('new:')) {
             let namaBaru = selected.slice(4);
-
             $.ajax({
                 url: '{{ route("lokasi-pembelian.ajax-store") }}',
                 method: 'POST',
@@ -203,7 +203,7 @@ $(document).ready(function () {
             data: formData,
             processData: false,
             contentType: false,
-            success: function(response) {
+            success: function (response) {
                 if (response.status === 'success') {
                     const formattedDate = response.masa_berlaku
                         ? new Date(response.masa_berlaku).toLocaleDateString('id-ID', {
@@ -239,19 +239,24 @@ $(document).ready(function () {
                     `;
 
                     $('#applications-table-body').prepend(newRow);
-
                     $('#tambahData').modal('hide');
                     form.reset();
                     $('#lokasi_pembelian_id, #unit_id').val(null).trigger('change');
+
+                    // SweetAlert success
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: response.message,
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
                 }
             },
-            error: function(xhr) {
+            error: function (xhr) {
                 if (xhr.status === 422) {
                     let errors = xhr.responseJSON.errors;
-                    let pesan = '';
-                    for (let key in errors) {
-                        pesan += errors[key][0] + '\n';
-                    }
+                    let pesan = Object.values(errors).map(err => err[0]).join('\n');
                     alert(pesan);
                 } else {
                     alert('Terjadi kesalahan saat menyimpan data.');
