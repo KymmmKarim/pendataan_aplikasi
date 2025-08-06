@@ -81,18 +81,6 @@ class ApplicationController extends Controller
 
             DB::commit();
 
-            if ($request->ajax()) {
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Data berhasil ditambahkan.',
-                    'id' => $app->id,
-                    'nama_aplikasi' => $app->nama_aplikasi,
-                    'versi' => $app->versi,
-                    'masa_berlaku' => $app->masa_berlaku,
-                    'unit_nama' => $app->unit->nama ?? '-'
-                ]);
-            }
-
             return redirect()->back()->with('success', 'Data berhasil ditambahkan.');
 
         } catch (ValidationException $e) {

@@ -130,7 +130,7 @@ $(document).ready(function () {
         if (!/[0-9]/.test(e.key)) e.preventDefault();
     });
 
-    // Saat modal tampil, inisialisasi Select2 (hanya sekali)
+    // Inisialisasi select2 saat modal tampil
     $('#tambahData').on('shown.bs.modal', function () {
         const $unit = $('#unit_id');
         const $lokasi = $('#lokasi_pembelian_id');
@@ -163,15 +163,15 @@ $(document).ready(function () {
         }
     });
 
-    // Submit form tambah data
+    // Deteksi lokasi baru sebelum submit
     $('#formTambah').on('submit', function (e) {
-        e.preventDefault();
-
         var selected = $('#lokasi_pembelian_id').val();
         var form = this;
 
         if (selected && selected.startsWith('new:')) {
+            e.preventDefault(); // tahan submit
             let namaBaru = selected.slice(4);
+
             $.ajax({
                 url: '{{ route("lokasi-pembelian.ajax-store") }}',
                 method: 'POST',
@@ -183,86 +183,16 @@ $(document).ready(function () {
                     if (res.status === 'success') {
                         let newOption = new Option(res.lokasi.nama, res.lokasi.id, true, true);
                         $('#lokasi_pembelian_id').append(newOption).trigger('change');
-                        $('#formTambah').submit();
+                        form.submit(); // submit ulang dengan value baru
                     } else {
-                        alert('Gagal menyimpan lokasi.');
+                        alert('Gagal menambahkan lokasi baru.');
                     }
                 },
                 error: function () {
-                    alert('Terjadi kesalahan saat menyimpan lokasi.');
+                    alert('Terjadi kesalahan saat menambahkan lokasi baru.');
                 }
             });
-            return;
         }
-
-        let formData = new FormData(form);
-
-        $.ajax({
-            url: $(form).attr('action'),
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                if (response.status === 'success') {
-                    const formattedDate = response.masa_berlaku
-                        ? new Date(response.masa_berlaku).toLocaleDateString('id-ID', {
-                            day: '2-digit', month: 'long', year: 'numeric'
-                        }) : '-';
-
-                    const newRow = `
-                        <tr>
-                            <td><strong>${response.nama_aplikasi}</strong></td>
-                            <td>${response.versi ?? '-'}</td>
-                            <td>${formattedDate}</td>
-                            <td class="text-center">${response.unit_nama ?? '-'}</td>
-                            <td class="text-center">
-                                <div class="d-inline-flex gap-1">
-                                    <a href="/applications/${response.id}" class="btn btn-sm btn-outline-dark" title="Lihat Detail">
-                                        <i class="bi bi-info-circle"></i>
-                                    </a>
-                                    <button type="button" class="btn btn-sm btn-outline-primary"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#modalEdit${response.id}">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </button>
-                                    <form id="delete-app-${response.id}" action="/applications/${response.id}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button" class="btn btn-sm btn-outline-danger btn-delete-app" data-id="${response.id}">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-
-                    $('#applications-table-body').prepend(newRow);
-                    $('#tambahData').modal('hide');
-                    form.reset();
-                    $('#lokasi_pembelian_id, #unit_id').val(null).trigger('change');
-
-                    // SweetAlert success
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil!',
-                        text: response.message,
-                        timer: 1500,
-                        showConfirmButton: false
-                    });
-                }
-            },
-            error: function (xhr) {
-                if (xhr.status === 422) {
-                    let errors = xhr.responseJSON.errors;
-                    let pesan = Object.values(errors).map(err => err[0]).join('\n');
-                    alert(pesan);
-                } else {
-                    alert('Terjadi kesalahan saat menyimpan data.');
-                }
-            }
-        });
     });
 });
 </script>
