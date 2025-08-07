@@ -12,7 +12,7 @@
         @endphp
 
         @foreach ($cards as $card)
-            <div class="col-md-3 mb-3">
+            <div class="col-12 col-sm-6 col-lg-3 mb-3">
                 <div class="card-custom">
                     <div class="icon-box {{ $card['color'] }}">
                         <i class="{{ $card['icon'] }}"></i>
@@ -29,7 +29,7 @@
     <!-- Chart & Aplikasi Hampir Expired -->
     <div class="row g-4">
         <!-- Line Chart -->
-        <div class="col-md-8">
+        <div class="col-12 col-lg-8">
             <div class="chart-card h-100">
                 <h5>Penambahan Aplikasi per Bulan ({{ date('Y') }})</h5>
                 <div style="height: 250px;">
@@ -39,7 +39,7 @@
         </div>
 
         <!-- Aplikasi Hampir Expired -->
-        <div class="col-md-4 d-flex flex-column">
+        <div class="col-12 col-lg-4 d-flex flex-column">
             <div class="chart-card h-100">
                 <h5 class="mb-3">Aplikasi Hampir Expired</h5>
                 <ul class="list-unstyled" style="max-height: 200px; overflow-y: auto; padding-left: 0.5rem;">
@@ -80,7 +80,7 @@
 
     <div class="row mt-4">
         <!-- Top Lokasi Pembelian -->
-        <div class="col-lg-8 mb-4">
+        <div class="col-12 col-lg-8 mb-4">
             <div class="card shadow-sm p-4">
                 <h5 class="mb-4 fw-bold text-primary">Top 2 Lokasi Pembelian Terbanyak</h5>
                 <div style="height: 150px;">
@@ -90,7 +90,7 @@
         </div>
 
         <!-- Aplikasi Terbaru -->
-        <div class="col-md-4 mb-4">
+        <div class="col-12 col-lg-4 mb-4">
             <div class="chart-card">
                 <h5>Aplikasi Terbaru</h5>
                 <p class="mb-2">Aplikasi yang baru saja ditambahkan.</p>

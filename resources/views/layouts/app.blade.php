@@ -29,27 +29,25 @@
         }
 
         #main-content {
-            margin-left: var(--sidebar-width);
-        }
+    margin-left: var(--sidebar-width);
+    transition: margin-left 0.3s ease;
+}
 
-        @media (max-width: 991.98px) {
-            .logo-section {
-                width: var(--sidebar-width);
-            }
+@media (max-width: 991.98px) {
+    #main-content {
+        margin-left: 0 !important;
+    }
 
-            #sidebar {
-                width: var(--sidebar-width);
-                transform: translateX(-100%);
-            }
+    #sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
 
-            #main-content {
-                margin-left: 0 !important;
-            }
+    #sidebar.show {
+        transform: translateX(0);
+    }
+}
 
-            #sidebar.show {
-                transform: translateX(0);
-            }
-        }
     </style>
 </head>
 <body>
