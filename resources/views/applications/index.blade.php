@@ -41,6 +41,7 @@
                         <table class="table table-bordered table-hover align-middle mb-0">
                             <thead class="table-light text-center text-dark">
                                 <tr>
+                                    <th>No</th>
                                     <th>Nama Aplikasi</th>
                                     <th>Versi</th>
                                     <th>Masa Berlaku</th>
@@ -51,6 +52,7 @@
                             <tbody id="applications-table-body">
                                 @forelse ($applications as $app)
                                     <tr>
+                                        <td>{{ $loop->iteration }}</td>
                                         <td><strong>{{ $app->nama_aplikasi }}</strong></td>
                                         <td>{{ $app->versi }}</td>
                                         <td>

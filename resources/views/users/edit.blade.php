@@ -100,7 +100,7 @@
         $(document).ready(function () {
             // Inisialisasi Select2
             $('#unit').select2({
-                placeholder: "-- Pilih Unit --",
+                placeholder: " Pilih Unit ",
                 allowClear: true,
                 width: '100%'
             });
