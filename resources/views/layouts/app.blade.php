@@ -33,6 +33,10 @@
     transition: margin-left 0.3s ease;
 }
 
+.hidden {
+        display: none !important;
+    }
+
 @media (max-width: 991.98px) {
     #main-content {
         margin-left: 0 !important;
@@ -52,39 +56,89 @@
 </head>
 <body>
 <div class="d-flex header-fixed">
-    <div class="logo-section d-flex align-items-center justify-content-between px-3 border-end">
-        <button class="btn btn-outline-primary" id="toggleSidebar">
-            <i class="fas fa-bars"></i>
-        </button>
-        <a class="navbar-brand mx-auto" href="{{ route('dashboard') }}">
-            <img src="{{ asset('img/logoitenas.png') }}" alt="Logo" style="height: 45px;">
-        </a>
-    </div>
 
-    <div class="flex-grow-1 d-flex justify-content-between align-items-center topbar px-4 text-white">
-        <span class="fw-bold fs-5">{{ $header ?? 'Dashboard' }}</span>
-        <div class="dropdown">
-            <button class="btn profile-dropdown d-flex align-items-center" type="button" data-bs-toggle="dropdown">
-                {{ Auth::user()->name ?? 'Admin' }}
-                @if(Auth::user()->photo)
-                    <img src="{{ asset('storage/' . Auth::user()->photo) }}" class="rounded-circle object-fit-cover ms-2" style="width:40px; height:40px;">
-                @else
-                    <i class="fas fa-user-circle ms-3"></i>
-                @endif
+    {{-- TOPBAR DESKTOP --}}
+    <div class="topbar-desktop d-flex w-100">
+        <div class="logo-section d-flex align-items-center justify-content-between px-3 border-end">
+            <button class="btn btn-outline-primary" id="toggleSidebarDesktop">
+                <i class="fas fa-bars"></i>
             </button>
+            <a class="navbar-brand mx-auto" href="{{ route('dashboard') }}">
+                <img src="{{ asset('img/logoitenas.png') }}" alt="Logo" style="height: 45px;">
+            </a>
+        </div>
 
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a></li>
-                <li>
-                    <form id="logout-form" method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button class="dropdown-item" type="button" id="btnLogout">Logout</button>
-                    </form>
-                </li>
-            </ul>
+        <div class="flex-grow-1 d-flex justify-content-between align-items-center topbar px-4 text-white">
+            <span class="fw-bold fs-5">{{ $header ?? 'Dashboard' }}</span>
+            <div class="dropdown">
+                <button class="btn profile-dropdown d-flex align-items-center" type="button" data-bs-toggle="dropdown">
+                    {{ Auth::user()->name ?? 'Admin' }}
+                    @if(Auth::user()->photo)
+                        <img src="{{ asset('storage/' . Auth::user()->photo) }}" class="rounded-circle object-fit-cover ms-2" style="width:40px; height:40px;">
+                    @else
+                        <i class="fas fa-user-circle ms-3"></i>
+                    @endif
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item py-2" href="{{ route('profile.edit') }}"><i class="fas fa-user me-2"></i> Profil</a></li>
+                    <li>
+                        <form id="logout-form" method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button class="dropdown-item text-danger py-2" type="button" id="btnLogout">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
+
+    {{-- TOPBAR MOBILE --}}
+    <div class="topbar-mobile w-100">
+        <button class="btn-toggle-sidebar" id="toggleSidebarMobile">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="blue-line"></div>
+        <div class="dropdown">
+    <button class="btn profile-dropdown d-flex align-items-center" type="button" data-bs-toggle="dropdown">
+        @if(Auth::user()->photo)
+            <img src="{{ asset('storage/' . Auth::user()->photo) }}" class="rounded-circle object-fit-cover" style="width:40px; height:40px;">
+        @else
+            <i class="fas fa-user-circle" style="font-size: 28px;"></i>
+        @endif
+    </button>
+
+    <ul class="dropdown-menu dropdown-menu-end p-2 shadow-lg" style="min-width: 250px;">
+        <!-- Header profil -->
+        <li class="px-3 py-2 text-center border-bottom">
+            @if(Auth::user()->photo)
+                <img src="{{ asset('storage/' . Auth::user()->photo) }}" class="rounded-circle object-fit-cover mb-2" style="width:60px; height:60px;">
+            @else
+                <i class="fas fa-user-circle mb-2" style="font-size: 60px; color: #ccc;"></i>
+            @endif
+            <h6 class="mb-0">{{ Auth::user()->name }}</h6>
+            <small class="text-muted">{{ Auth::user()->email }}</small>
+        </li>
+
+        <!-- Menu -->
+        <li><a class="dropdown-item py-2" href="{{ route('profile.edit') }}"><i class="fas fa-user me-2"></i> Profil</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+            <form id="logout-form" method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button class="dropdown-item text-danger py-2" type="button" id="btnLogout">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                </button>
+            </form>
+        </li>
+    </ul>
 </div>
+
+    </div>
+
+</div>
+
 
 <div class="d-flex">
     <div id="sidebar" class="bg-white border-end position-fixed h-100">
@@ -155,19 +209,27 @@
 
 <!-- Sidebar Toggle and Logout -->
 <script>
-    const toggleBtn = document.getElementById('toggleSidebar');
+    const toggleBtnDesktop = document.getElementById('toggleSidebarDesktop');
+    const toggleBtnMobile = document.getElementById('toggleSidebarMobile');
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.getElementById('main-content');
 
-    toggleBtn.addEventListener('click', function () {
+    function toggleSidebar() {
         if (window.innerWidth <= 991.98) {
             sidebar.classList.toggle('show');
         } else {
             sidebar.classList.toggle('hidden');
-            mainContent.style.marginLeft = sidebar.classList.contains('hidden') ? '0' : getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width');
+            mainContent.style.marginLeft = sidebar.classList.contains('hidden')
+                ? '0'
+                : getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width');
         }
-    });
+    }
 
+    // Event listener untuk desktop dan mobile
+    toggleBtnDesktop.addEventListener('click', toggleSidebar);
+    toggleBtnMobile.addEventListener('click', toggleSidebar);
+
+    // Tutup sidebar saat klik link di mobile
     if (window.innerWidth <= 991.98) {
         const sidebarLinks = document.querySelectorAll('#sidebar .nav-link');
         sidebarLinks.forEach(link => {
@@ -177,6 +239,7 @@
         });
     }
 
+    // Highlight link aktif
     const links = document.querySelectorAll('#sidebar .nav-link');
     links.forEach(link => {
         link.addEventListener('click', () => {
@@ -185,6 +248,7 @@
         });
     });
 
+    // Konfirmasi logout
     const logoutBtn = document.getElementById('btnLogout');
     const logoutForm = document.getElementById('logout-form');
 
@@ -208,6 +272,7 @@
     });
 </script>
 
+
 @stack('scripts')
 </body>
-</html>
+</html> 

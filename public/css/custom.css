@@ -397,3 +397,54 @@ body.login-page, html.login-page {
         margin-left: 0 !important;
     }
 }
+/* Default: tampilkan desktop, sembunyikan mobile */
+.topbar-desktop {
+    display: flex;
+}
+
+.topbar-mobile {
+    display: none;
+}
+
+/* Mobile view */
+@media (max-width: 991.98px) {
+    .topbar-desktop {
+        display: none !important;
+    }
+
+    .topbar-mobile {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #0044cc; /* full biru */
+        padding: 10px;
+    }
+
+    .btn-toggle-sidebar {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    .blue-line {
+        flex: 1;
+        height: 3px;
+        background-color: #007bff;
+        margin: 0 10px;
+    }
+
+    .btn-profile {
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .profile-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+}
