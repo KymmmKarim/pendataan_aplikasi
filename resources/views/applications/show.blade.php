@@ -40,6 +40,13 @@
                                     </td>
                                 </tr>
                                 <tr>
+    <td class="fw-bold text-primary">Versi</td>
+    <td style="border-bottom: 1px solid #dee2e6;">
+        {{ $application->versi ?? '-' }}
+    </td>
+</tr>
+
+                                <tr>
                                     <td class="fw-bold text-primary">Masa Berlaku</td>
                                     <td style="border-bottom: 1px solid #dee2e6;">
                                         @if ($application->masa_berlaku)

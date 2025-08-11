@@ -3,6 +3,21 @@
             Application List
         </x-slot>
 
+        <style>
+/* Untuk layar <= 768px (tablet & HP) */
+@media (max-width: 768px) {
+    table th:nth-child(3),
+    table td:nth-child(3),
+    table th:nth-child(4),
+    table td:nth-child(4),
+    table th:nth-child(6),
+    table td:nth-child(6) {
+        display: none; /* Hilangkan kolom versi, masa berlaku, dan aksi */
+    }
+}
+
+</style>
+
         <div class="container mt-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="fw-bold mb-0">Data Aplikasi</h4>
@@ -50,44 +65,83 @@
                                 </tr>
                             </thead>
                             <tbody id="applications-table-body">
-                                @forelse ($applications as $app)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td><strong>{{ $app->nama_aplikasi }}</strong></td>
-                                        <td>{{ $app->versi }}</td>
-                                        <td>
-                                            {{ $app->masa_berlaku ? \Carbon\Carbon::parse($app->masa_berlaku)->translatedFormat('d F Y') : '-' }}
-                                        </td>
-                                        <td class="text-center">{{ $app->unit->nama ?? '-' }}</td>
-                                        <td class="text-center">
-                                            <div class="d-inline-flex gap-1">
-                                                <a href="{{ route('applications.show', $app->id) }}" class="btn btn-sm btn-outline-dark" title="Lihat Detail">
-                                                    <i class="bi bi-info-circle"></i>
-                                                </a>
-                                                <button type="button" class="btn btn-sm btn-outline-primary"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#modalEdit{{ $app->id }}">
-                                                    <i class="bi bi-pencil-square"></i>
-                                                </button>
-                                                <form id="delete-app-{{ $app->id }}" action="{{ route('applications.destroy', $app->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button" class="btn btn-sm btn-outline-danger btn-delete-app" data-id="{{ $app->id }}">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    
-                                    {{-- Modal Edit --}}
-                                    @include('applications.partials.modal-edit', ['app' => $app])
-                                @empty
-                                    <tr>
-                                        <td colspan="5" class="text-center">Belum ada data aplikasi.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
+    @forelse ($applications as $app)
+        <tr>
+            <td>{{ $loop->iteration }}</td>
+            <td>
+    <div class="d-flex align-items-center justify-content-between">
+        <strong>{{ $app->nama_aplikasi }}</strong>
+        
+        <!-- Dropdown hanya di mobile -->
+        <div class="dropdown d-md-none ms-1">
+            <a href="#" class="text-primary p-0 border-0 bg-transparent" data-bs-toggle="dropdown">
+                <i class="bi bi-caret-down-fill"></i>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="dropdown-item" href="{{ route('applications.show', $app->id) }}">
+                        <i class="bi bi-info-circle me-1"></i> Detail
+                    </a>
+                </li>
+                <li>
+                    <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalEdit{{ $app->id }}">
+                        <i class="bi bi-pencil-square me-1"></i> Edit
+                    </button>
+                </li>
+                <li>
+                    <form id="delete-app-{{ $app->id }}" action="{{ route('applications.destroy', $app->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="dropdown-item text-danger btn-delete-app" data-id="{{ $app->id }}">
+                            <i class="bi bi-trash me-1"></i> Hapus
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</td>
+
+
+
+
+            <td>{{ $app->versi }}</td>
+            <td>
+                {{ $app->masa_berlaku ? \Carbon\Carbon::parse($app->masa_berlaku)->translatedFormat('d F Y') : '-' }}
+            </td>
+            <td class="text-center">{{ $app->unit->nama ?? '-' }}</td>
+
+            <!-- Kolom aksi hanya muncul di desktop -->
+            <td class="text-center d-none d-md-table-cell">
+                <div class="d-inline-flex gap-1">
+                    <a href="{{ route('applications.show', $app->id) }}" class="btn btn-sm btn-outline-dark" title="Lihat Detail">
+                        <i class="bi bi-info-circle"></i>
+                    </a>
+                    <button type="button" class="btn btn-sm btn-outline-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalEdit{{ $app->id }}">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                    <form id="delete-app-{{ $app->id }}" action="{{ route('applications.destroy', $app->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="btn btn-sm btn-outline-danger btn-delete-app" data-id="{{ $app->id }}">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+
+        {{-- Modal Edit --}}
+        @include('applications.partials.modal-edit', ['app' => $app])
+    @empty
+        <tr>
+            <td colspan="6" class="text-center">Belum ada data aplikasi.</td>
+        </tr>
+    @endforelse
+</tbody>
+
                         </table>
                     </div>
                 </div>
