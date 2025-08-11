@@ -97,9 +97,12 @@
     {{-- TOPBAR MOBILE --}}
     <div class="topbar-mobile w-100">
         <button class="btn-toggle-sidebar" id="toggleSidebarMobile">
-            <i class="fas fa-bars"></i>
+            <i class="fas fa-bars"></i><span class="fw-bold fs-5" style="margin-left:8px; margin-right:8px; line-height:1.5;">
+    {{ $header ?? 'Dashboard' }}
+</span>
+
+          
         </button>
-        <div class="blue-line"></div>
         <div class="dropdown">
     <button class="btn profile-dropdown d-flex align-items-center" type="button" data-bs-toggle="dropdown">
         @if(Auth::user()->photo)
@@ -168,28 +171,32 @@
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#userManagementMenu" role="button" aria-expanded="false">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-users fa-lg me-2"></i>
-                            <div class="d-flex flex-column lh-sm">
-                                <span class="fw">Manajemen</span>
-                                <span class="fw">Pengguna</span>
-                            </div>
-                        </div>
-                        <i class="fas fa-chevron-down small ms-2"></i>
-                    </a>
-                    <div class="collapse ps-4 {{ request()->is('roles*') || request()->is('users*') ? 'show' : '' }}" id="userManagementMenu">
-                        <ul class="nav flex-column mt-2">
-                            <li class="nav-item mb-2">
-                                <a class="nav-link {{ request()->is('roles*') ? 'active' : '' }}" href="{{ url('roles') }}">
-                                    <i class="fas fa-user-shield me-2"></i>Hak Akses
-                                </a>
-                            </li>
-                            <li class="nav-item mb-2">
-                                <a class="nav-link {{ request()->is('users*') ? 'active' : '' }}" href="{{ url('users') }}">
-                                    <i class="fas fa-user me-2"></i>Pengguna
-                                </a>
-                            </li>
+    <div class="nav-link d-flex justify-content-between align-items-center menu-toggle" role="button" data-bs-toggle="collapse" data-bs-target="#userManagementMenu" aria-expanded="false">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-users fa-lg me-2"></i>
+            <div class="d-flex flex-column lh-sm">
+                <span class="fw">Manajemen</span>
+                <span class="fw">Pengguna</span>
+            </div>
+        </div>
+        <i class="fas fa-chevron-down small ms-2"></i>
+    </div>
+    <div class="collapse ps-4 {{ request()->is('roles*') || request()->is('users*') ? 'show' : '' }}" id="userManagementMenu">
+        <ul class="nav flex-column mt-2">
+            <li class="nav-item mb-2">
+                <a class="nav-link {{ request()->is('roles*') ? 'active' : '' }}" href="{{ url('roles') }}">
+                    <i class="fas fa-user-shield me-2"></i>Hak Akses
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+                <a class="nav-link {{ request()->is('users*') ? 'active' : '' }}" href="{{ url('users') }}">
+                    <i class="fas fa-user me-2"></i>Pengguna
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>
+
                         </ul>
                     </div>
                 </li>
@@ -199,7 +206,7 @@
 
     <div id="main-content" class="flex-grow-1 bg-light min-vh-100 p-4">
         {{ $slot }}
-    </div>
+    </div>F
 </div>
 
 <!-- JS Libraries -->
@@ -231,12 +238,13 @@
 
     // Tutup sidebar saat klik link di mobile
     if (window.innerWidth <= 991.98) {
-        const sidebarLinks = document.querySelectorAll('#sidebar .nav-link');
-        sidebarLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                sidebar.classList.remove('show');
-            });
-        });
+        const sidebarLinks = document.querySelectorAll('.menu-toggle').forEach(el => {
+    el.addEventListener('click', function(e) {
+        e.preventDefault();      // cegah link
+        e.stopPropagation();     // cegah trigger close sidebar
+    });
+});
+
     }
 
     // Highlight link aktif
