@@ -40,23 +40,6 @@
                                     </td>
                                 </tr>
                                 <tr>
-    <td class="fw-bold text-primary">Versi</td>
-    <td style="border-bottom: 1px solid #dee2e6;">
-        {{ $application->versi ?? '-' }}
-    </td>
-</tr>
-
-                                <tr>
-                                    <td class="fw-bold text-primary">Masa Berlaku</td>
-                                    <td style="border-bottom: 1px solid #dee2e6;">
-                                        @if ($application->masa_berlaku)
-                                            {{ \Carbon\Carbon::parse($application->masa_berlaku)->translatedFormat('d F Y') }}
-                                        @else
-                                            <span class="text-muted">-</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                                <tr>
                                     <td class="fw-bold text-primary">Harga</td>
                                     <td style="border-bottom: 1px solid #dee2e6;">
                                         {{ $application->harga ? 'Rp ' . number_format($application->harga, 0, ',', '.') : '-' }}
