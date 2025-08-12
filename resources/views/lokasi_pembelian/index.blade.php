@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        Manajemen Lokasi Pembelian
+        Lokasi Pembelian
     </x-slot>
 
     <div class="container mt-4">
