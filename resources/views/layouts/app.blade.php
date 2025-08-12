@@ -82,12 +82,14 @@
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item py-2" href="{{ route('profile.edit') }}"><i class="fas fa-user me-2"></i> Profil</a></li>
                     <li>
-                        <form id="logout-form" method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button class="dropdown-item text-danger py-2" type="button" id="btnLogout">
-                    <i class="fas fa-sign-out-alt me-2"></i> Logout
-                </button>
-                        </form>
+                      <!-- Tombol logout desktop -->
+<form class="logout-form" method="POST" action="{{ route('logout') }}">
+    @csrf
+    <button class="dropdown-item text-danger py-2 btnLogout" type="button">
+        <i class="fas fa-sign-out-alt me-2"></i> Logout
+    </button>
+</form>
+
                     </li>
                 </ul>
             </div>
@@ -216,6 +218,28 @@
 
 <!-- Sidebar Toggle and Logout -->
 <script>
+    // Konfirmasi logout untuk semua tombol logout
+document.querySelectorAll('.btnLogout').forEach(btn => {
+    btn.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        Swal.fire({
+            title: 'Yakin ingin logout?',
+            text: "Kamu akan keluar dari halaman ini.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, logout',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.closest('form').submit();
+            }
+        });
+    });
+});
+
     const toggleBtnDesktop = document.getElementById('toggleSidebarDesktop');
     const toggleBtnMobile = document.getElementById('toggleSidebarMobile');
     const sidebar = document.getElementById('sidebar');
