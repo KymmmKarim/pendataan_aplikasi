@@ -240,8 +240,8 @@
     if (window.innerWidth <= 991.98) {
         const sidebarLinks = document.querySelectorAll('.menu-toggle').forEach(el => {
     el.addEventListener('click', function(e) {
-        e.preventDefault();      // cegah link
-        e.stopPropagation();     // cegah trigger close sidebar
+        e.preventDefault();    
+        e.stopPropagation();   
     });
 });
 
