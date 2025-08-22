@@ -97,72 +97,70 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        $(document).ready(function () {
-       const table = $('#unitsTable').DataTable({
-    paging: true,
-    ordering: false,
-    info: true,
-    searching: false,
-    pageLength: 10,
-    responsive: {
-        details: {
-            type: 'column',
-            target: 0, // kolom pertama sebagai tombol expand
-            renderer: function ( api, rowIdx, columns ) {
-                return $.map(columns, function (col) {
-                    return col.hidden ?
-                        `<tr>
-                            <td class="fw-bold">${col.title}</td>
-                            <td>${col.data}</td>
-                        </tr>` : '';
-                }).join('');
-            }
-        }
-    },
-    columnDefs: [
-        { className: 'dtr-control', orderable: false, targets: 0 },
-        { responsivePriority: 1, targets: 1 }, // No
-        { responsivePriority: 2, targets: 2 }, // Nama
-        { responsivePriority: 3, targets: -1 }, // Aksi
-        { responsivePriority: 10001, targets: [3, 4, 5, 6] }
-    ],
-    language: {
-        lengthMenu: "Tampilkan _MENU_ data",
-        info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
-        paginate: {
-            previous: "<",
-            next: ">"
-        }
-    }
-});
-
-
-
-            $('#search-unit-input').on('input', function () {
-                const keyword = $(this).val().toLowerCase().trim();
-                $('#units-table-body tr').each(function () {
-                    const rowText = $(this).text().toLowerCase();
-                    $(this).toggle(rowText.includes(keyword));
-                });
-            });
-
-            $(document).on('click', '.btn-delete', function () {
-                const unitId = $(this).data('id');
-                Swal.fire({
-                    title: 'Yakin mau dihapus?',
-                    text: "Data yang dihapus tidak bisa dikembalikan!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#6c757d',
-                    confirmButtonText: 'Ya, hapus',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $('#delete-unit-' + unitId).submit();
+    $(document).ready(function () {
+        const table = $('#unitsTable').DataTable({
+            paging: true,
+            ordering: false,
+            info: true,
+            searching: true, // tetap aktif biar search API jalan
+            pageLength: 10,
+            responsive: {
+                details: {
+                    type: 'column',
+                    target: 0, // kolom pertama sebagai tombol expand
+                    renderer: function ( api, rowIdx, columns ) {
+                        return $.map(columns, function (col) {
+                            return col.hidden ?
+                                `<tr>
+                                    <td class="fw-bold">${col.title}</td>
+                                    <td>${col.data}</td>
+                                </tr>` : '';
+                        }).join('');
                     }
-                });
+                }
+            },
+            dom: 'lrtip', // hilangkan search box default bawaan datatables
+            columnDefs: [
+                { className: 'dtr-control', orderable: false, targets: 0 },
+                { responsivePriority: 1, targets: 1 }, // No
+                { responsivePriority: 2, targets: 2 }, // Nama
+                { responsivePriority: 3, targets: -1 }, // Aksi
+                { responsivePriority: 10001, targets: [3, 4, 5, 6] }
+            ],
+            language: {
+                lengthMenu: "Tampilkan _MENU_ data",
+                info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                zeroRecords: "Data tidak ditemukan",
+                paginate: {
+                    previous: "<",
+                    next: ">"
+                }
+            }
+        });
+
+        // 🔍 Hubungkan input custom dengan search DataTables
+        $('#search-unit-input').on('keyup', function () {
+            table.search(this.value).draw();
+        });
+
+        // 🗑️ SweetAlert untuk hapus data
+        $(document).on('click', '.btn-delete', function () {
+            const unitId = $(this).data('id');
+            Swal.fire({
+                title: 'Yakin mau dihapus?',
+                text: "Data yang dihapus tidak bisa dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, hapus',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#delete-unit-' + unitId).submit();
+                }
             });
         });
-    </script>
+    });
+</script>
 </x-app-layout>
