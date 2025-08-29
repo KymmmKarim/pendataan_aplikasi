@@ -13,45 +13,7 @@
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 
     <style>
-        :root {
-            --sidebar-width: 250px;
-        }
-
-        .logo-section {
-            width: var(--sidebar-width);
-            background-color: white;
-            z-index: 1030;
-            height: 70px;
-        }
-
-        #sidebar {
-            width: var(--sidebar-width);
-        }
-
-        #main-content {
-    margin-left: var(--sidebar-width);
-    transition: margin-left 0.3s ease;
-}
-
-.hidden {
-        display: none !important;
-    }
-
-@media (max-width: 991.98px) {
-    #main-content {
-        margin-left: 0 !important;
-    }
-
-    #sidebar {
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
-    }
-
-    #sidebar.show {
-        transform: translateX(0);
-    }
-}
-
+     
     </style>
 </head>
 <body>
