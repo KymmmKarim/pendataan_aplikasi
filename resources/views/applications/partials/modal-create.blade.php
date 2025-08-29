@@ -103,20 +103,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-<style>
-.select2-container--default .select2-selection--single {
-    height: 38px !important;
-    border: 1px solid #000 !important;
-    border-radius: 0.375rem !important;
-    padding: 6px 12px;
-}
-.select2-container--default .select2-selection--single .select2-selection__rendered {
-    line-height: 24px !important;
-}
-.select2-container--default .select2-selection--single .select2-selection__arrow {
-    height: 36px !important;
-}
-</style>
+
 
 <script>
 $(document).ready(function () {
