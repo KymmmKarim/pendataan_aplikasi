@@ -14,18 +14,9 @@
                         <input type="text" name="nama_aplikasi" id="nama_aplikasi_{{ $app->id }}" value="{{ $app->nama_aplikasi }}" class="form-control border-dark" placeholder="Masukkan Nama Aplikasi" required>
                     </div>
                     <div class="col-md-6">
-    <label for="harga_{{ $app->id }}" class="form-label fw-semibold">Harga <span class="text-danger">*</span></label>
-    <input 
-        type="text" 
-        name="harga" 
-        id="harga_{{ $app->id }}" 
-        value="{{ number_format($app->harga, 0, ',', '.') }}" 
-        class="form-control border-dark" 
-        placeholder="Masukkan Harga" 
-        required
-        oninput="formatHarga(this)"
-    >
-</div>
+                        <label for="harga_{{ $app->id }}" class="form-label fw-semibold">Harga <span class="text-danger">*</span></label>
+                        <input type="text" name="harga" id="harga_{{ $app->id }}" value="{{ number_format($app->harga, 0, ',', '.') }}" class="form-control border-dark" placeholder="Masukkan Harga" required oninput="formatHarga(this)">
+                    </div>
 
                     <div class="col-md-6">
                         <label for="versi_{{ $app->id }}" class="form-label fw-semibold">Versi <span class="text-danger">*</span></label>
@@ -105,20 +96,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    <style>
-        .select2-container--default .select2-selection--single {
-            height: 38px !important;
-            border: 1px solid #000 !important;
-            border-radius: 0.375rem !important;
-            padding: 6px 12px;
-        }
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            line-height: 24px !important;
-        }
-        .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: 36px !important;
-        }
-    </style>
 
     <script>
         $(document).ready(function () {
