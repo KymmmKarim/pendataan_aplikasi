@@ -14,19 +14,12 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    /**
-     * Tampilkan form profil pengguna.
-     */
     public function edit(Request $request): View
     {
         return view('profile.edit', [
             'user' => $request->user(),
         ]);
     }
-
-    /**
-     * Perbarui informasi profil pengguna.
-     */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $user = $request->user();
@@ -38,21 +31,16 @@ class ProfileController extends Controller
         try {
             DB::beginTransaction();
 
-            // Update field dasar (nama, email, dll)
             $user->fill($request->validated());
 
             if ($user->isDirty('email')) {
                 $user->email_verified_at = null;
             }
 
-            // Jika ada upload foto
             if ($request->hasFile('photo')) {
-                // Hapus foto lama jika ada
                 if ($user->photo && Storage::disk('public')->exists($user->photo)) {
                     Storage::disk('public')->delete($user->photo);
                 }
-
-                // Simpan foto baru
                 $path = $request->file('photo')->store('photos', 'public');
                 $user->photo = $path;
             }
@@ -70,9 +58,6 @@ class ProfileController extends Controller
         }
     }
 
-    /**
-     * Hapus foto profil pengguna.
-     */
     public function deletePhoto(Request $request): RedirectResponse
     {
         $user = $request->user();
@@ -97,9 +82,6 @@ class ProfileController extends Controller
         }
     }
 
-    /**
-     * Hapus akun pengguna secara permanen.
-     */
     public function destroy(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [
@@ -111,7 +93,6 @@ class ProfileController extends Controller
 
             Auth::logout();
 
-            // Hapus foto jika ada
             if ($user->photo && Storage::disk('public')->exists($user->photo)) {
                 Storage::disk('public')->delete($user->photo);
             }

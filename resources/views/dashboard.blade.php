@@ -26,9 +26,7 @@
         @endforeach
     </div>
 
-    <!-- Chart & Aplikasi Hampir Expired -->
     <div class="row g-4">
-        <!-- Line Chart -->
         <div class="col-12 col-lg-8">
             <div class="chart-card h-100">
                 <h5>Penambahan Aplikasi per Bulan ({{ date('Y') }})</h5>
@@ -38,7 +36,6 @@
             </div>
         </div>
 
-        <!-- Aplikasi Hampir Expired -->
         <div class="col-12 col-lg-4 d-flex flex-column">
             <div class="chart-card h-100">
                 <h5 class="mb-3">Aplikasi Hampir Expired</h5>
@@ -79,7 +76,6 @@
     </div>
 
     <div class="row mt-4">
-        <!-- Top Lokasi Pembelian -->
         <div class="col-12 col-lg-8 mb-4">
             <div class="card shadow-sm p-4">
                 <h5 class="mb-4 fw-bold text-primary">Top 2 Lokasi Pembelian Terbanyak</h5>
@@ -89,7 +85,6 @@
             </div>
         </div>
 
-        <!-- Aplikasi Terbaru -->
         <div class="col-12 col-lg-4 mb-4">
             <div class="chart-card">
                 <h5>Aplikasi Terbaru</h5>
@@ -111,7 +106,6 @@
     @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Line Chart: Penambahan Aplikasi
         const bulanLabels = @json($dataBulan);
         const jumlahData = @json($dataJumlah);
 
@@ -151,7 +145,6 @@
             }
         });
 
-        // Bar Chart: Top Lokasi Pembelian
         new Chart(document.getElementById('lokasiChart'), {
             type: 'bar',
             data: {

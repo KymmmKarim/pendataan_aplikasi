@@ -6,14 +6,12 @@
     <div class="container mt-4">
         <h4 class="fw-bold mb-4">Informasi Pribadi</h4>
 
-        <!-- Form Update Profil -->
         <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
 
             <div class="card mb-4">
                 <div class="card-body d-flex flex-wrap align-items-start">
-                    <!-- Foto -->
                     <div class="me-4 text-center">
                         <img
                             id="preview-image"
@@ -25,7 +23,6 @@
                             alt="Foto Profil">
                     </div>
 
-                    <!-- Nama dan aksi -->
                     <div class="flex-grow-1">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <p class="fw-semibold mb-0" id="display-name">{{ Auth::user()->name }}</p>
@@ -52,7 +49,6 @@
                             @endif
                         </div>
 
-                        <!-- Hidden File Input -->
                         <input type="file" name="photo" id="photo" class="d-none" accept="image/*" onchange="previewImage(event)">
                         @error('photo')
                         <div class="text-danger small mt-1">{{ $message }}</div>
@@ -66,7 +62,6 @@
             </div>
         </form>
 
-        <!-- Informasi Profil -->
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <span><strong>Informasi Profil</strong></span>
@@ -119,7 +114,7 @@
                     emailDisplay.classList.add('d-none');
                     emailInput.classList.remove('d-none');
                     saveButton.classList.remove('d-none');
-                    this.classList.add('d-none'); // sembunyikan tombol edit
+                    this.classList.add('d-none'); 
                 }
             });
 

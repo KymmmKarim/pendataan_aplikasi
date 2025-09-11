@@ -66,21 +66,17 @@
         </div>
     </div>
 
-    {{-- DataTables --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
-    {{-- SweetAlert --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    {{-- Bootstrap Icons --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
     <script>
         $(document).ready(function () {
-            // Inisialisasi DataTables tanpa search bawaan
             const table = $('#lokasiTable').DataTable({
                 paging: true,
                 ordering: false,
@@ -97,7 +93,6 @@
                 }
             });
 
-            // Custom search
             $('#search-lokasi-input').on('input', function () {
                 const keyword = $(this).val().toLowerCase().trim();
                 $('#lokasi-table-body tr').each(function () {
@@ -106,7 +101,6 @@
                 });
             });
 
-            // SweetAlert untuk hapus
             $('.btn-delete').click(function () {
                 const id = $(this).data('id');
                 Swal.fire({

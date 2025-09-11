@@ -26,7 +26,7 @@
                     <table class="table table-bordered table-hover align-middle w-100" id="usersTable">
                         <thead class="table-light text-center text-dark">
                             <tr>
-                                <th></th> <!-- Toggle -->
+                                <th></th> 
                                 <th>No</th>
                                 <th>Nama</th>
                                 <th>Email</th>
@@ -39,7 +39,7 @@
                         <tbody>
                             @foreach ($users as $index => $user)
                                 <tr>
-                                    <td></td> <!-- Toggle -->
+                                    <td></td> 
                                     <td class="text-center">{{ $index + 1 }}</td>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
@@ -73,7 +73,6 @@
         </div>
     </div>
 
-    <!-- Custom CSS -->
     <style>
         .btn-tambah-custom {
             padding: 4px 10px;
@@ -82,18 +81,15 @@
         }
     </style>
 
-    <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
 
-    <!-- jQuery & DataTables JS -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
 
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
@@ -112,9 +108,9 @@
                 },
                 columnDefs: [
                     { className: 'dtr-control', orderable: false, targets: 0 },
-                    { responsivePriority: 1, targets: 1 }, // No
-                    { responsivePriority: 2, targets: 2 }, // Nama
-                    { responsivePriority: 3, targets: -1 }, // Aksi
+                    { responsivePriority: 1, targets: 1 }, 
+                    { responsivePriority: 2, targets: 2 }, 
+                    { responsivePriority: 3, targets: -1 }, 
                     { responsivePriority: 10001, targets: [3, 4, 5, 6] }
                 ],
                 language: {
@@ -127,7 +123,6 @@
                 }
             });
 
-            // SweetAlert konfirmasi hapus
             $(document).on('click', '.btn-delete-user', function () {
                 const userId = $(this).data('id');
                 Swal.fire({

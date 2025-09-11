@@ -10,7 +10,6 @@
                     @csrf
                     @method('PUT')
 
-                    <!-- Role Section -->
                     <h5 class="fw-bold">1. Data Role</h5>
                     <div class="row mb-4">
                         <div class="col-md-6">
@@ -77,7 +76,6 @@
         </div>
     </div>
 
-    <!-- Modal Tambah Permission -->
     <div class="modal fade" id="addPermissionModal" tabindex="-1" aria-labelledby="addPermissionModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <form id="addPermissionForm">
@@ -103,10 +101,8 @@
         </div>
     </div>
 
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Tambah Permission via AJAX -->
     <script>
         document.getElementById('addPermissionForm').addEventListener('submit', function(e) {
             e.preventDefault();
