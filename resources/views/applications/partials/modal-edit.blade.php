@@ -1,4 +1,3 @@
-<!-- Modal Edit Data -->
 <div class="modal fade" id="modalEdit{{ $app->id }}" tabindex="-1" aria-labelledby="modalEditLabel{{ $app->id }}" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content p-4 border-0 shadow">
@@ -115,7 +114,7 @@
 
 
     function formatHarga(input) {
-        let value = input.value.replace(/\D/g, ''); // Hanya angka
+        let value = input.value.replace(/\D/g, ''); 
         if (!value) {
             input.value = '';
             return;
@@ -123,7 +122,6 @@
         input.value = new Intl.NumberFormat('id-ID').format(value);
     }
 
-    // Cegah huruf diketik (khusus input harga)
     document.querySelectorAll('input[name="harga"]').forEach(input => {
         input.addEventListener('keypress', function (e) {
             if (!/[0-9]/.test(e.key)) {

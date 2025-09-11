@@ -117,7 +117,6 @@ class ApplicationController extends Controller
                 abort(403, 'Unauthorized access.');
             }
 
-            // ✅ Auto-update status jika masa berlaku sudah lewat
             if ($application->status === 'Aktif' && $application->masa_berlaku && $application->masa_berlaku < now()->toDateString()) {
                 $application->update(['status' => 'Non-Aktif']);
             }

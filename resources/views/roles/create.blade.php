@@ -9,7 +9,6 @@
                 <form action="{{ route('roles.store') }}" method="POST">
                     @csrf
 
-                    <!-- Role Section -->
                     <h5 class="fw-bold">1. Data Role</h5>
                     <div class="row mb-4">
                         <div class="col-md-6">
@@ -30,7 +29,6 @@
 
                     <hr>
 
-                    <!-- Permissions Section -->
                     <h5 class="fw-bold">2. Hak Akses (Permissions)</h5>
 
                     <button type="button" class="btn btn-sm btn-outline-primary mb-3" data-bs-toggle="modal" data-bs-target="#addPermissionModal">
@@ -75,7 +73,6 @@
         </div>
     </div>
 
-    <!-- Modal Tambah Permission -->
     <div class="modal fade" id="addPermissionModal" tabindex="-1" aria-labelledby="addPermissionModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <form id="addPermissionForm">
@@ -101,10 +98,8 @@
         </div>
     </div>
 
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Script Tambah Permission via AJAX -->
     <script>
         document.getElementById('addPermissionForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -166,7 +161,6 @@
         });
     </script>
 
-    <!-- Script Hapus Permission dengan SweetAlert -->
     <script>
         document.addEventListener('click', function (e) {
             if (e.target.classList.contains('btn-delete-permission')) {

@@ -3,24 +3,22 @@
         Application List
     </x-slot>
 
-    {{-- optional: bootstrap icons (masukkan jika belum ada di layout utama) --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
     <style>
-        /* ---------- Styling untuk dropdown icon (icon saja, tanpa kotak) ---------- */
        .toggle-detail-btn {
-            background: none;      /* hilangkan background */
-            border: none;          /* hilangkan border */
-            padding: 0;            /* hilangkan padding ekstra */
+            background: none;      
+            border: none;          
+            padding: 0;            
             margin: 0;
-            font-size: 12px;       /* kecilkan ukuran icon */
+            font-size: 12px;       
             line-height: 1;
-            color: #6b6b6b;        /* warna icon */
-            cursor: pointer;       /* pointer saat hover */
+            color: #6b6b6b;        
+            cursor: pointer;       
         }
 
         .toggle-detail-btn i {
-            font-size: 12px;       /* kecilkan icon */
+            font-size: 12px;       
             display: inline-block;
             vertical-align: middle;
         }
@@ -29,9 +27,8 @@
             box-shadow: none;
         }
 
-        /* ---------- Detail row (default hidden); only toggled on mobile ---------- */
         .detail-row {
-            display: none; /* default: hidden */
+            display: none; 
         }
         .detail-cell {
             padding: 10px 12px;
@@ -39,30 +36,25 @@
             background-color: #f8f9fa;
         }
 
-        /* ---------- Mobile adjustments (<=768px) ---------- */
         @media (max-width: 768px) {
-            /* Sembunyikan kolom yang tidak diinginkan pada baris utama (Versi, Masa Berlaku, Unit) */
             .col-versi,
             .col-masa,
             .col-unit {
                 display: none !important;
             }
 
-            /* Tampilkan detail-row ketika diberi class .show (JS akan toggle class ini) */
             .detail-row.show {
                 display: table-row;
             }
 
-            /* Buat tabel lebih rapih di mobile (opsional) */
             table.table {
                 font-size: 14px;
             }
         }
 
-        /* Pastikan pada layar besar detail-row tetap tersembunyi */
         @media (min-width: 769px) {
             .detail-row { display: none !important; }
-            .toggle-detail-btn { display: none !important; } /* hide toggle icon on desktop */
+            .toggle-detail-btn { display: none !important; } 
         }
     </style>
 
@@ -114,12 +106,9 @@
                         </thead>
                         <tbody id="applications-table-body">
                             @forelse ($applications as $app)
-                                {{-- Baris utama (pajang nama aplikasi di baris utama) --}}
                                 <tr class="main-row" data-id="{{ $app->id }}">
                                     <td>
                                         <span class="me-1">{{ $loop->iteration }}</span>
-
-                                        {{-- Tombol icon (hanya icon, tanpa kotak), berada di sebelah kanan nomor --}}
                                         <button
                                             type="button"
                                             class="toggle-detail-btn d-md-none"
@@ -132,17 +121,14 @@
                                         </button>
                                     </td>
 
-                                    {{-- Nama Aplikasi tetap terlihat di main row --}}
                                     <td>{{ $app->nama_aplikasi }}</td>
 
-                                    {{-- Kolom lain (disembunyikan di mobile via class col-*) --}}
                                     <td class="col-versi">{{ $app->versi }}</td>
                                     <td class="col-masa">
                                         {{ $app->masa_berlaku ? \Carbon\Carbon::parse($app->masa_berlaku)->translatedFormat('d F Y') : '-' }}
                                     </td>
                                     <td class="col-unit text-center">{{ $app->unit->nama ?? '-' }}</td>
 
-                                    {{-- Aksi tetap terlihat di baris utama --}}
                                     <td class="text-center">
                                         <div class="d-inline-flex gap-1">
                                             <a href="{{ route('applications.show', $app->id) }}" class="btn btn-sm btn-outline-dark" title="Lihat Detail">
@@ -164,19 +150,15 @@
                                     </td>
                                 </tr>
 
-                                {{-- Baris detail (muncul di bawah baris utama ketika tombol icon diklik — hanya di mobile) --}}
                                 <tr class="detail-row" id="detail-{{ $app->id }}">
                                     <td colspan="6" class="detail-cell">
                                         <div><strong>Versi:</strong> {{ $app->versi }}</div>
                                         <div><strong>Masa Berlaku:</strong> {{ $app->masa_berlaku ? \Carbon\Carbon::parse($app->masa_berlaku)->translatedFormat('d F Y') : '-' }}</div>
                                         <div><strong>Unit:</strong> {{ $app->unit->nama ?? '-' }}</div>
 
-                                        {{-- Pada bagian detail kita juga tampilkan tombol aksi (opsional), 
-                                            tapi karena kamu ingin aksi tetap terlihat di baris utama, saya tidak duplikasi tombol aksi di sini. --}}
                                     </td>
                                 </tr>
 
-                                {{-- Modal Edit per item (tetap include) --}}
                                 @include('applications.partials.modal-edit', ['app' => $app])
                             @empty
                                 <tr>
@@ -190,15 +172,12 @@
         </div>
     </div>
 
-    {{-- Modal Tambah --}}
     @include('applications.partials.modal-create')
 
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Cari (hanya memfilter main-rows; detail-row akan disembunyikan saat filter)
             const searchInput = document.getElementById('search-input');
             const mainRows = document.querySelectorAll('#applications-table-body tr.main-row');
 
@@ -212,10 +191,8 @@
 
                     if (keyword === '' || rowText.includes(keyword)) {
                         row.style.display = '';
-                        // saat menampilkan main row, tetap sembunyikan detailnya (default)
                         if (detailRow) {
                             detailRow.classList.remove('show');
-                            // reset icon
                             const toggleBtn = row.querySelector('.toggle-detail-btn');
                             if (toggleBtn) toggleBtn.innerHTML = '<i class="bi-caret-down-fill"></i>';
                             if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
@@ -227,7 +204,6 @@
                 });
             });
 
-            // Konfirmasi hapus (event delegation)
             document.body.addEventListener('click', function (event) {
                 const delBtn = event.target.closest('.btn-delete-app');
                 if (delBtn) {
@@ -251,17 +227,15 @@
                 }
             });
 
-            // Toggle detail row (ikon di sebelah kanan nomor)
             document.querySelectorAll('.toggle-detail-btn').forEach(function (btn) {
                 btn.addEventListener('click', function () {
                     const id = this.getAttribute('data-id');
                     const detailRow = document.getElementById('detail-' + id);
                     if (!detailRow) return;
 
-                    const isShown = detailRow.classList.toggle('show'); // toggle class .show
+                    const isShown = detailRow.classList.toggle('show');
                     this.setAttribute('aria-expanded', isShown ? 'true' : 'false');
 
-                    // ubah ikon accordingly
                     this.innerHTML = isShown ? '<i class="bi-caret-up-fill"></i>' : '<i class="bi-caret-down-fill"></i>';
                 });
             });

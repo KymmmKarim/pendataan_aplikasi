@@ -17,25 +17,20 @@ class DashboardController extends Controller
             $isAdminUnit = $user->hasRole('admin-unit');
             $unitId = $user->unit_id;
 
-            // Base query: jika admin-unit, hanya aplikasi dari unit-nya sendiri
             $query = Application::query();
             if ($isAdminUnit) {
                 $query->where('unit_id', $unitId);
             }
 
-            // ✅ Otomatis nonaktifkan aplikasi yang sudah expired
             (clone $query)
                 ->whereDate('masa_berlaku', '<', now())
                 ->where('status', '!=', 'non-aktif')
                 ->update(['status' => 'non-aktif']);
 
-            // Statistik utama
             $totalBiaya = (clone $query)->sum('harga');
             $totalAplikasi = (clone $query)->count();
             $aplikasiAktif = (clone $query)->where('status', 'aktif')->count();
             $aplikasiNonaktif = (clone $query)->where('status', 'non-aktif')->count();
-
-            // Grafik: Penambahan Aplikasi per Bulan (Tahun ini)
             $aplikasiPerBulan = (clone $query)
                 ->selectRaw('MONTH(created_at) as bulan, COUNT(*) as total')
                 ->whereYear('created_at', now()->year)
@@ -52,7 +47,6 @@ class DashboardController extends Controller
                 $dataJumlah[] = $aplikasiPerBulan[$i] ?? 0;
             }
 
-            // Grafik: Top 2 Lokasi Pembelian Terbanyak
             $topLokasi = (clone $query)
                 ->selectRaw('lokasi_pembelian_id, COUNT(*) as total')
                 ->with('lokasiPembelian')
@@ -65,8 +59,6 @@ class DashboardController extends Controller
                 return $item->lokasiPembelian->nama ?? 'N/A';
             })->toArray();
             $topLokasiData = $topLokasi->pluck('total')->toArray();
-
-            // Aplikasi Hampir Expired (<= 11 hari lagi)
             $aplikasiHampirExpired = (clone $query)
                 ->whereDate('masa_berlaku', '<=', now()->addDays(11))
                 ->orderBy('masa_berlaku')
@@ -75,8 +67,6 @@ class DashboardController extends Controller
                     $app->sisa_hari = Carbon::parse($app->masa_berlaku)->diffInDays(now(), false);
                     return $app;
                 });
-
-            // Aplikasi Terbaru (Top 3)
             $latestApps = (clone $query)->latest()->take(3)->get();
 
             return view('dashboard', compact(

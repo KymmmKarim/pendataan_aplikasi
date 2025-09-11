@@ -3,7 +3,6 @@
         Tambah Pengguna
     </x-slot>
 
-    <!-- Select2 CSS & JS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -14,7 +13,6 @@
                 <form action="{{ route('users.store') }}" method="POST">
                     @csrf
 
-                    <!-- Data Diri -->
                     <h6 class="fw-bold mb-3">1. Data Diri</h6>
                     <div class="row mb-3">
                         <div class="col-md-6 mb-3">
@@ -35,7 +33,6 @@
                             <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
                         </div>
 
-                        <!-- Kolom Unit -->
                         <div class="col-md-6 mb-3" id="unit-select-container" style="display: none;">
                             <label for="unit" class="form-label">Pilih Unit <span class="text-danger">*</span></label>
                             <select class="form-select select2" id="unit" name="unit">
@@ -83,7 +80,6 @@
             const roleRadios = document.querySelectorAll('input[name="role"]');
             const unitSelectContainer = document.getElementById('unit-select-container');
 
-            // Inisialisasi Select2
             $(document).ready(function () {
                 $('#unit').select2({
                     placeholder: " Pilih Unit ",
@@ -106,7 +102,7 @@
                 radio.addEventListener('change', toggleUnitSelect);
             });
 
-            toggleUnitSelect(); // jalankan sekali saat halaman load
+            toggleUnitSelect(); 
         });
 
         

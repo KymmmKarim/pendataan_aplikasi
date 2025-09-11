@@ -4,7 +4,6 @@
     </x-slot>
 
     <div class="container mt-4">
-        <!-- Tabs -->
         <ul class="nav nav-tabs mb-3 border-bottom">
             <li class="nav-item">
                 <a id="tabDetail" class="nav-link active custom-tab text-primary" href="#" onclick="showTab('detail')">
@@ -18,7 +17,6 @@
             </li>
         </ul>
 
-        <!-- Detail Tab -->
         <div id="tabContentDetail">
             <div class="card shadow-sm">
                 <div class="card-body p-4">
@@ -70,7 +68,6 @@
             </div>
         </div>
 
-        <!-- Bukti Pembelian Tab -->
         <div id="tabContentBukti" style="display: none;">
             <div class="card shadow-sm">
                 <div class="card-body p-4 text-center">

@@ -35,7 +35,7 @@
                     <table class="table table-bordered table-hover align-middle w-100" id="unitsTable">
                         <thead>
                             <tr>
-                                <th></th> <!-- kolom untuk expand -->
+                                <th></th> 
                                 <th>No</th>
                                 <th>Nama</th>
                                 <th>Singkatan</th>
@@ -82,7 +82,6 @@
         </div>
     </div>
 
-    {{-- DataTables + Responsive --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
 
@@ -92,7 +91,6 @@
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
 
-    {{-- SweetAlert --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
@@ -101,12 +99,12 @@
                 paging: true,
                 ordering: false,
                 info: true,
-                searching: true, // tetap aktif biar search API jalan
+                searching: true, 
                 pageLength: 10,
                 responsive: {
                     details: {
                         type: 'column',
-                        target: 0, // kolom pertama sebagai tombol expand
+                        target: 0, 
                         renderer: function (api, rowIdx, columns) {
                             return $.map(columns, function (col) {
                                 return col.hidden
@@ -119,12 +117,12 @@
                         }
                     }
                 },
-                dom: 'lrtip', // hilangkan search box default bawaan datatables
+                dom: 'lrtip', 
                 columnDefs: [
                     { className: 'dtr-control', orderable: false, targets: 0 },
-                    { responsivePriority: 1, targets: 1 }, // No
-                    { responsivePriority: 2, targets: 2 }, // Nama
-                    { responsivePriority: 3, targets: -1 }, // Aksi
+                    { responsivePriority: 1, targets: 1 }, 
+                    { responsivePriority: 2, targets: 2 }, 
+                    { responsivePriority: 3, targets: -1 }, 
                     { responsivePriority: 10001, targets: [3, 4, 5, 6] }
                 ],
                 language: {
@@ -138,12 +136,10 @@
                 }
             });
 
-            // 🔍 Hubungkan input custom dengan search DataTables
             $('#search-unit-input').on('keyup', function () {
                 table.search(this.value).draw();
             });
 
-            // 🗑️ SweetAlert untuk hapus data
             $(document).on('click', '.btn-delete', function () {
                 const unitId = $(this).data('id');
                 Swal.fire({

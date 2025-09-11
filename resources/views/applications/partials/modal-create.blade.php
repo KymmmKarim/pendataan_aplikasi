@@ -1,4 +1,3 @@
-<!-- Modal Tambah Data -->
 <div class="modal fade" id="tambahData" tabindex="-1" aria-labelledby="tambahDataLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content p-4 border-0 shadow">
@@ -7,25 +6,21 @@
             <form id="formTambah" method="POST" action="{{ route('applications.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="row g-4">
-                    <!-- Nama Aplikasi -->
                     <div class="col-md-6">
                         <label for="nama_aplikasi" class="form-label fw-semibold">Nama Aplikasi <span class="text-danger">*</span></label>
                         <input type="text" name="nama_aplikasi" id="nama_aplikasi" class="form-control border-dark" placeholder="Masukkan Nama Aplikasi" required>
                     </div>
 
-                    <!-- Harga -->
                     <div class="col-md-6">
                         <label for="harga" class="form-label fw-semibold">Harga <span class="text-danger">*</span></label>
                         <input type="text" name="harga" id="harga" class="form-control border-dark" placeholder="Masukkan Harga" required>
                     </div>
 
-                    <!-- Versi -->
                     <div class="col-md-6">
                         <label for="versi" class="form-label fw-semibold">Versi <span class="text-danger">*</span></label>
                         <input type="text" name="versi" id="versi" class="form-control border-dark" placeholder="Masukkan Versi" required>
                     </div>
 
-                    <!-- Lokasi Pembelian -->
                     <div class="col-md-6">
                         <label for="lokasi_pembelian_id" class="form-label fw-semibold">Lokasi Pembelian <span class="text-danger">*</span></label>
                         <select name="lokasi_pembelian_id" id="lokasi_pembelian_id" class="form-control border-dark" required>
@@ -36,19 +31,16 @@
                         </select>
                     </div>
 
-                    <!-- Masa Berlaku -->
                     <div class="col-md-6">
                         <label for="masa_berlaku" class="form-label fw-semibold">Masa Berlaku <span class="text-danger">*</span></label>
                         <input type="date" name="masa_berlaku" id="masa_berlaku" class="form-control border-dark" required>
                     </div>
 
-                    <!-- Tanggal Pembelian -->
                     <div class="col-md-6">
                         <label for="tanggal_pembelian" class="form-label fw-semibold">Tanggal Pembelian <span class="text-danger">*</span></label>
                         <input type="date" name="tanggal_pembelian" id="tanggal_pembelian" class="form-control border-dark" required>
                     </div>
 
-                    <!-- Status -->
                     <div class="col-md-6">
                         <label for="status" class="form-label fw-semibold">Status <span class="text-danger">*</span></label>
                         <select name="status" id="status" class="form-control border-dark" required>
@@ -58,19 +50,16 @@
                         </select>
                     </div>
 
-                    <!-- Bukti Pembelian -->
                     <div class="col-md-6">
                         <label for="bukti_pembelian" class="form-label fw-semibold">Bukti Pembelian <span class="text-danger">*</span></label>
                         <input type="file" name="bukti_pembelian" id="bukti_pembelian" class="form-control border-dark" accept=".jpg,.jpeg,.png,.pdf" required>
                     </div>
 
-                    <!-- Deskripsi -->
                     <div class="col-md-6">
                         <label for="deskripsi" class="form-label fw-semibold">Deskripsi <span class="text-danger">*</span></label>
                         <input type="text" name="deskripsi" id="deskripsi" class="form-control border-dark" placeholder="Masukkan Deskripsi" required>
                     </div>
 
-                    <!-- Unit -->
                     <div class="col-md-6">
                         <label for="unit_id" class="form-label fw-semibold">Pilih Unit <span class="text-danger">*</span></label>
                         @role('admin-unit')
@@ -107,7 +96,6 @@
 
 <script>
 $(document).ready(function () {
-    // Format harga
     $('#harga').on('input', function () {
         let value = this.value.replace(/\D/g, '');
         this.value = value ? new Intl.NumberFormat('id-ID').format(value) : '';
@@ -117,7 +105,6 @@ $(document).ready(function () {
         if (!/[0-9]/.test(e.key)) e.preventDefault();
     });
 
-    // Inisialisasi select2 saat modal tampil
     $('#tambahData').on('shown.bs.modal', function () {
         const $unit = $('#unit_id');
         const $lokasi = $('#lokasi_pembelian_id');
@@ -150,13 +137,13 @@ $(document).ready(function () {
         }
     });
 
-    // Deteksi lokasi baru sebelum submit
+
     $('#formTambah').on('submit', function (e) {
         var selected = $('#lokasi_pembelian_id').val();
         var form = this;
 
         if (selected && selected.startsWith('new:')) {
-            e.preventDefault(); // tahan submit
+            e.preventDefault();
             let namaBaru = selected.slice(4);
 
             $.ajax({
@@ -170,7 +157,7 @@ $(document).ready(function () {
                     if (res.status === 'success') {
                         let newOption = new Option(res.lokasi.nama, res.lokasi.id, true, true);
                         $('#lokasi_pembelian_id').append(newOption).trigger('change');
-                        form.submit(); // submit ulang dengan value baru
+                        form.submit(); 
                     } else {
                         alert('Gagal menambahkan lokasi baru.');
                     }
